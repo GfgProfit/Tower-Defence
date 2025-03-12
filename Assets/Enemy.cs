@@ -1,11 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private Image _healthImage;
+
+    [Space]
     [SerializeField] private float _speed = 2.0f;
+    [SerializeField] private float _currentHealth = 5.0f;
 
     private Transform[] _waypoints;
     private int _waypointIndex = 0;
+    private float _maxHealth;
+
+    private void Awake()
+    {
+        _maxHealth = _currentHealth;
+    }
 
     public void SetPath(Transform[] path)
     {
@@ -15,10 +26,10 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        _healthImage.transform.rotation = Quaternion.LookRotation((_healthImage.transform.position - Camera.main.transform.position).normalized);
+
         if (_waypoints == null || _waypointIndex >= _waypoints.Length)
         {
-            Destroy(gameObject);
-            
             return;
         }
 
@@ -28,5 +39,21 @@ public class Enemy : MonoBehaviour
         {
             _waypointIndex++;
         }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _currentHealth -= damage;
+        _healthImage.fillAmount = _currentHealth / _maxHealth;
+
+        if (_currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        Destroy(gameObject);
     }
 }

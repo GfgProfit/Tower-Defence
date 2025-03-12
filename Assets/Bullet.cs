@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Transform _target;
+    private Enemy _target;
     private float _speed = 0;
     private float _damage = 0;
 
-    public void Setup(Transform enemy, float damage, float speed)
+    public void Setup(Enemy enemy, float damage, float speed)
     {
         _target = enemy;
         _damage = damage;
@@ -20,11 +20,12 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject); return;
         }
 
-        transform.position = Vector3.MoveTowards(transform.position, _target.position, _speed * Time.deltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, _target.transform.position, _speed * Time.deltaTime);
 
-        if (Vector3.Distance(transform.position, _target.position) < 0.05f)
+        if (Vector3.Distance(transform.position, _target.transform.position) < 0.05f)
         {
-            //target.GetComponent<Enemy>().TakeDamage(damage);
+            _target.TakeDamage(_damage);
+
             Destroy(gameObject);
         }
     }

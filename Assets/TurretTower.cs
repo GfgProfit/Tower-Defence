@@ -12,6 +12,6 @@ public class TurretTower : Tower
     {
         Bullet bullet = Instantiate(_bulletPrefab, _firePoint.position, Quaternion.identity);
 
-        bullet.Setup(_currentTarget.transform, _damage, _speed);
+        bullet.Setup(_currentTarget, _damage, _speed);
     }
 }
