@@ -7,7 +7,7 @@ public abstract class Tower : MonoBehaviour
     [Space]
     [SerializeField] private float _rotationSpeed = 5.0f;
     [SerializeField] private float _detectionRange = 3.0f;
-    [SerializeField] private float _fireRate = 150.0f; //Выстрелов в минуту
+    [SerializeField] private float _fireRate = 150.0f; // Выстрелов в минуту
     [SerializeField] protected Transform _firePoint;
 
     [Space]
@@ -15,6 +15,8 @@ public abstract class Tower : MonoBehaviour
 
     protected Enemy _currentTarget;
     private float _fireCooldown = 0f;
+
+    protected abstract void Fire();
 
     private void Update()
     {
@@ -64,12 +66,6 @@ public abstract class Tower : MonoBehaviour
         _towerHead.localRotation = Quaternion.Slerp(_towerHead.localRotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = _gizmoColor;
-        Gizmos.DrawSphere(transform.position, _detectionRange);
-    }
-
     private void Shoot()
     {
         if (_fireCooldown <= 0f)
@@ -82,5 +78,9 @@ public abstract class Tower : MonoBehaviour
         _fireCooldown -= Time.deltaTime;
     }
 
-    protected abstract void Fire();
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = _gizmoColor;
+        Gizmos.DrawSphere(transform.position, _detectionRange);
+    }
 }
