@@ -6,9 +6,6 @@ public class Portal : MonoBehaviour
     [SerializeField] private int _portalHealth = 10;
     [SerializeField] private TMP_Text _healthText;
 
-    [Space]
-    [SerializeField] private Color _gizmosColor = Color.white;
-
     private void Awake()
     {
         _healthText.text = $"{_portalHealth}";
@@ -34,12 +31,5 @@ public class Portal : MonoBehaviour
                 Destroy(enemy.gameObject);
             }
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = _gizmosColor;
-
-        Gizmos.DrawCube(transform.position, Vector3.one);
     }
 }
