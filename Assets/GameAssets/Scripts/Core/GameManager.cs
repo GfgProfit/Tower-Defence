@@ -21,6 +21,6 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        EventBus = new();
+        EventBus = new(this);
     }
 }

@@ -9,17 +9,24 @@ public abstract class Health : MonoBehaviour
     protected abstract void DisplayHealth();
     protected abstract void Die();
 
-    private void Awake() => _maxHealth = _currentHealth;
+    private void Awake()
+    {
+        _maxHealth = _currentHealth;
+        
+        DisplayHealth();
+    }
 
     public void TakeDamage(float damage)
     {
         _currentHealth -= damage;
 
-        DisplayHealth();
-
         if (_currentHealth <= 0)
         {
+            _currentHealth = 0;
+
             Die();
         }
+
+        DisplayHealth();
     }
 }

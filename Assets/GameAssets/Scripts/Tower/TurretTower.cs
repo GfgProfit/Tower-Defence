@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TurretTower : Tower
 {
+    [Header("Turret Tower")]
     [SerializeField] private Bullet _bulletPrefab;
 
     [Space]

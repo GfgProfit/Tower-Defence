@@ -2,13 +2,14 @@ using UnityEngine;
 
 public abstract class Tower : MonoBehaviour
 {
+    [Header("Base Tower")]
     [SerializeField] private Transform _towerHead;
+    [SerializeField] protected Transform _firePoint;
 
     [Space]
     [SerializeField] private float _rotationSpeed = 5.0f;
     [SerializeField] private float _detectionRange = 3.0f;
     [SerializeField] private float _fireRate = 150.0f; // Выстрелов в минуту
-    [SerializeField] protected Transform _firePoint;
 
     [Space]
     [SerializeField] private Color _gizmoColor = Color.white;
@@ -29,7 +30,13 @@ public abstract class Tower : MonoBehaviour
         {
             RotateTowards(_currentTarget.transform);
 
-            Shoot();
+            if (Physics.Raycast(_firePoint.position, _firePoint.forward, out RaycastHit hit, 100.0f))
+            {
+                if (hit.collider.GetComponent<Enemy>())
+                {
+                    Shoot();
+                }
+            }
         }
     }
 

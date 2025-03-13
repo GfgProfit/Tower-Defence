@@ -3,13 +3,7 @@ using UnityEngine;
 
 public class Portal : MonoBehaviour
 {
-    [SerializeField] private int _portalHealth = 10;
-    [SerializeField] private TMP_Text _healthText;
-
-    private void Awake()
-    {
-        _healthText.text = $"{_portalHealth}";
-    }
+    [SerializeField] private Health _portalHealth;
 
     private void Update()
     {
@@ -19,14 +13,7 @@ public class Portal : MonoBehaviour
         {
             if (collider.TryGetComponent(out Enemy enemy))
             {
-                _portalHealth--;
-
-                if (_portalHealth <= 0)
-                {
-                    _portalHealth = 0;
-                }
-
-                _healthText.text = $"{_portalHealth}";
+                _portalHealth.TakeDamage(enemy.GetDamage());
 
                 Destroy(enemy.gameObject);
             }

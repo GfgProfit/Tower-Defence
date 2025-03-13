@@ -7,14 +7,26 @@ public class EnemySpawner : MonoBehaviour
     public Path path;
     public float spawnRate = 2.0f;
 
+    private bool _isGameOvered = false;
+
     private void Start()
     {
         StartCoroutine(SpawnEnemies());
     }
 
+    private void OnEnable()
+    {
+        GameManager.Instance.EventBus.OnGameOver += GameOver;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.EventBus.OnGameOver -= GameOver;
+    }
+
     private IEnumerator SpawnEnemies()
     {
-        while (true)
+        while (_isGameOvered == false)
         {
             Enemy enemy = Instantiate(enemyPrefab);
             enemy.SetPath(path.GetWaypoints());
@@ -22,4 +34,6 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForSeconds(spawnRate);
         }
     }
+
+    private void GameOver() => _isGameOvered = true;
 }

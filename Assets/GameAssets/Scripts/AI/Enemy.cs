@@ -2,8 +2,14 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] private float _speed = 2.0f;
     [SerializeField] private Health _enemyHealth;
+
+    [Space]
+    [SerializeField] private float _speed = 2.0f;
+    [SerializeField] private float _damage = 1.0f;
+
+    [Space]
+    [SerializeField] private int _moneyGathering = 10;
 
     private Transform[] _waypoints;
     private int _waypointIndex = 0;
@@ -35,4 +41,6 @@ public class Enemy : MonoBehaviour
     }
 
     public Health GetHealthComponent() => _enemyHealth;
+    public float GetDamage() => _damage;
+    public int GetMoneyGathering() => _moneyGathering;
 }
