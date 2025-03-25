@@ -1,15 +1,16 @@
 using UnityEngine;
 using System.Collections;
+using GameAssets.Global.Core;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public Enemy enemyPrefab;
-    public Path path;
-    public float spawnRate = 2.0f;
+    [SerializeField] private Enemy _enemyPrefab;
+    [SerializeField] private Path _path;
+    [SerializeField] private float _spawnRate = 2.0f;
 
     private bool _isGameOvered = false;
 
-    private void Start()
+    private void Awake()
     {
         StartCoroutine(SpawnEnemies());
     }
@@ -28,10 +29,10 @@ public class EnemySpawner : MonoBehaviour
     {
         while (_isGameOvered == false)
         {
-            Enemy enemy = Instantiate(enemyPrefab);
-            enemy.SetPath(path.GetWaypoints());
+            Enemy enemy = Instantiate(_enemyPrefab);
+            enemy.SetPath(_path.GetWaypoints());
 
-            yield return new WaitForSeconds(spawnRate);
+            yield return new WaitForSeconds(_spawnRate);
         }
     }
 

@@ -1,3 +1,4 @@
+using GameAssets.Global.Core;
 using TMPro;
 using UnityEngine;
 

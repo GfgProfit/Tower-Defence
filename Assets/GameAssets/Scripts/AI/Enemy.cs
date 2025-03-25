@@ -33,8 +33,10 @@ public class Enemy : MonoBehaviour
     private void MoveToPoint()
     {
         transform.position = Vector3.MoveTowards(transform.position, _waypoints[_waypointIndex].position, _speed * Time.deltaTime);
+        
+        float distance = Vector3.Distance(transform.position, _waypoints[_waypointIndex].position);
 
-        if (Vector3.Distance(transform.position, _waypoints[_waypointIndex].position) < 0.05f)
+        if (distance < 0.05f)
         {
             _waypointIndex++;
         }

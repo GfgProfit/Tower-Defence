@@ -1,15 +1,18 @@
 using System;
 
-public class EventBus
+namespace GameAssets.Global.Core
 {
-    private GameManager _gameManager;
-    
-    public EventBus(GameManager gameManager)
+    public class EventBus
     {
-        _gameManager = gameManager;
-    }
+        private GameManager _gameManager;
 
-    public Action OnGameOver;
-    public Action<int> OnMoneySpend;
-    public Action<int> OnMoneyGather;
+        public EventBus(GameManager gameManager)
+        {
+            _gameManager = gameManager;
+        }
+
+        public Action OnGameOver;
+        public Action<int> OnMoneySpend;
+        public Action<int> OnMoneyGather;
+    }
 }

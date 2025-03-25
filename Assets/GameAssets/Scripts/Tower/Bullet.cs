@@ -12,7 +12,8 @@ public class Bullet : MonoBehaviour
         _target = enemy;
         _damage = damage;
         _speed = speed;
-        StartCoroutine(MoveToEnemy()); // Запускаем корутину
+
+        StartCoroutine(MoveToEnemy());
     }
 
     private IEnumerator MoveToEnemy()
@@ -28,7 +29,7 @@ public class Bullet : MonoBehaviour
                 yield break;
             }
 
-            yield return null; // Ждем один кадр
+            yield return null;
         }
 
         Destroy(gameObject);

@@ -15,10 +15,12 @@ public class TowerTile : MonoBehaviour
     public void Select()
     {
         _renderer.material.color = Color.green;
+        transform.localScale = new(1.1f, 1.0f, 1.1f);
     }
 
     public void Deselect()
     {
         _renderer.material.color = _originalColor;
+        transform.localScale = Vector3.one;
     }
 }

@@ -1,26 +1,29 @@
 using UnityEngine;
 
-public class GameManager : MonoBehaviour
+namespace GameAssets.Global.Core
 {
-    private static GameManager _instance;
-
-    public static GameManager Instance
+    public class GameManager : MonoBehaviour
     {
-        get 
+        private static GameManager _instance;
+
+        public static GameManager Instance
         {
-            if (_instance == null)
+            get
             {
-                _instance = new GameObject("[Game Manager]").AddComponent<GameManager>();
+                if (_instance == null)
+                {
+                    _instance = new GameObject("[Game Manager]").AddComponent<GameManager>();
+                }
+
+                return _instance;
             }
-
-            return _instance;
         }
-    }
 
-    public EventBus EventBus;
+        public EventBus EventBus;
 
-    private void Awake()
-    {
-        EventBus = new(this);
+        private void Awake()
+        {
+            EventBus = new(this);
+        }
     }
 }
