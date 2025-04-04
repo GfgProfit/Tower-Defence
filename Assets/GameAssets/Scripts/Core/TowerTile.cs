@@ -4,6 +4,7 @@ public class TowerTile : MonoBehaviour
 {
     private Renderer _renderer;
     private Color _originalColor;
+    private readonly Tower _myTower;
 
     private void Start()
     {
@@ -23,4 +24,6 @@ public class TowerTile : MonoBehaviour
         _renderer.material.color = _originalColor;
         transform.localScale = Vector3.one;
     }
+
+    public Tower GetTowerInTile() => _myTower;
 }

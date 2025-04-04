@@ -6,7 +6,15 @@ public class MoneyHandler : MonoBehaviour
 {
     [SerializeField] private TMP_Text _moneyText;
 
+    [Space]
+    [SerializeField] private int _startedMoney = 100;
+
     public int Money { get; private set; }
+
+    private void Awake()
+    {
+        GatherMoney(_startedMoney);
+    }
 
     private void OnEnable()
     {

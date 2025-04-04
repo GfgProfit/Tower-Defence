@@ -265,6 +265,7 @@ MonoBehaviour:
   _enemyHealth: {fileID: -6501339955345133061}
   _speed: 1
   _damage: 1
+  _moneyGathering: 10
 --- !u!114 &-6501339955345133061
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,6 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentHealth: 5
+  _me: {fileID: 6516218693878649426}
   _healthImage: {fileID: 6951714751417475713}
   _healthHolder: {fileID: 6424535341180397184}
 --- !u!1 &5360901383010867262

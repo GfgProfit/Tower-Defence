@@ -38,4 +38,6 @@ public class TileSelector : MonoBehaviour
         _selectedTile = tile;
         _selectedTile.Select();
     }
+
+    public TowerTile GetSelectedTile() => _selectedTile;
 }

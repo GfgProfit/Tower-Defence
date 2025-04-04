@@ -1,3 +1,4 @@
+using GameAssets.Global.Core;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -14,10 +15,14 @@ public class Enemy : MonoBehaviour
     private Transform[] _waypoints;
     private int _waypointIndex = 0;
 
-    public void SetPath(Transform[] path)
+    private void OnEnable()
     {
-        _waypoints = path;
-        transform.position = _waypoints[0].position;
+        GameManager.Instance.EventBus.OnGameOver += GameOver;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.Instance.EventBus.OnGameOver -= GameOver;
     }
 
     private void Update()
@@ -30,16 +35,27 @@ public class Enemy : MonoBehaviour
         MoveToPoint();
     }
 
+    public void SetPath(Transform[] path)
+    {
+        _waypoints = path;
+        transform.position = _waypoints[0].position;
+    }
+
     private void MoveToPoint()
     {
         transform.position = Vector3.MoveTowards(transform.position, _waypoints[_waypointIndex].position, _speed * Time.deltaTime);
-        
+
         float distance = Vector3.Distance(transform.position, _waypoints[_waypointIndex].position);
 
         if (distance < 0.05f)
         {
             _waypointIndex++;
         }
+    }
+
+    private void GameOver()
+    {
+        Destroy(gameObject);
     }
 
     public Health GetHealthComponent() => _enemyHealth;

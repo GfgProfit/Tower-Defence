@@ -25,7 +25,9 @@ public class Bullet : MonoBehaviour
             if (Vector3.Distance(transform.position, _target.transform.position) < 0.05f)
             {
                 _target.GetHealthComponent().TakeDamage(_damage);
+
                 Destroy(gameObject);
+
                 yield break;
             }
 
