@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Path : MonoBehaviour
+public class PathPoints : MonoBehaviour
 {
     [SerializeField] private Transform[] _waypoints;
 

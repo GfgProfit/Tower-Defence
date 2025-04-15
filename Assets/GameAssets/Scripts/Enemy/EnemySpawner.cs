@@ -4,11 +4,13 @@ using GameAssets.Global.Core;
 
 public class EnemySpawner : MonoBehaviour
 {
-    [SerializeField] private Enemy _enemyPrefab;
-    [SerializeField] private Path _path;
+    [SerializeField] private EnemyController _enemyPrefab;
+    [SerializeField] private PathPoints _path;
+    
+    [Space]
     [SerializeField] private float _spawnRate = 2.0f;
 
-    private bool _isGameOvered = false;
+    private bool _isGameOver = false;
 
     private void Awake()
     {
@@ -17,24 +19,25 @@ public class EnemySpawner : MonoBehaviour
 
     private void OnEnable()
     {
-        GameManager.Instance.EventBus.OnGameOver += GameOver;
+        GameController.Instance.EventBus.OnGameOver += GameOver;
     }
 
     private void OnDisable()
     {
-        GameManager.Instance.EventBus.OnGameOver -= GameOver;
+        GameController.Instance.EventBus.OnGameOver -= GameOver;
     }
 
     private IEnumerator SpawnEnemies()
     {
-        while (_isGameOvered == false)
+        while (_isGameOver == false)
         {
-            Enemy enemy = Instantiate(_enemyPrefab);
+            EnemyController enemy = Instantiate(_enemyPrefab, _path.GetWaypoints()[0].position, Quaternion.identity);
+
             enemy.SetPath(_path.GetWaypoints());
 
             yield return new WaitForSeconds(_spawnRate);
         }
     }
 
-    private void GameOver() => _isGameOvered = true;
+    private void GameOver() => _isGameOver = true;
 }

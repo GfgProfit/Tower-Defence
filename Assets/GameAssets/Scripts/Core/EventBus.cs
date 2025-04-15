@@ -4,15 +4,16 @@ namespace GameAssets.Global.Core
 {
     public class EventBus
     {
-        private GameManager _gameManager;
+        public event Action OnGameOver;
+        public void RaiseGameOver() => OnGameOver?.Invoke();
 
-        public EventBus(GameManager gameManager)
-        {
-            _gameManager = gameManager;
-        }
-
-        public Action OnGameOver;
-        public Action<int> OnMoneySpend;
-        public Action<int> OnMoneyGather;
+        public event Action<int> OnMoneySpend;
+        public void RaiseMoneySpend(int amount) => OnMoneySpend?.Invoke(amount);
+        
+        public event Action<int> OnMoneyGather;
+        public void RaiseMoneyGather(int amount) => OnMoneyGather?.Invoke(amount);
+        
+        public event Action<float> OnPortalTakeDamage;
+        public void RaisePortalTakeDamage(float amount) => OnPortalTakeDamage?.Invoke(amount);
     }
 }

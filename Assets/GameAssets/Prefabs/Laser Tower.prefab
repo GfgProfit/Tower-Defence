@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 6863578653491141492}
   - component: {fileID: 8719252953530557059}
   - component: {fileID: 344532906840505740}
-  - component: {fileID: 309563712422265470}
+  - component: {fileID: 7285608249145101284}
   m_Layer: 0
-  m_Name: Turret Tower
+  m_Name: Laser Tower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 372292532774967382}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: 0.625, z: 3.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 0.25, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -88,7 +88,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &309563712422265470
+--- !u!114 &7285608249145101284
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,18 +97,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 372292532774967382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e7eba4660160f543b6818549d50b3e9, type: 3}
+  m_Script: {fileID: 11500000, guid: cc8f4c52039b3e447b09a5e7e682fe35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _towerHead: {fileID: 5242574039897158148}
+  _rotationSpeed: 15
+  _fireRate: 200
+  _visionRange: 3
+  _fieldOfViewAngle: 15
   _firePoint: {fileID: 1268557766138953845}
-  _rotationSpeed: 5
-  _detectionRange: 3
-  _fireRate: 150
-  _gizmoColor: {r: 0.90588236, g: 0, b: 0.084953256, a: 0.29411766}
-  _bulletPrefab: {fileID: 5510410456511243785, guid: d05ce4e411032db47b0a346487868339, type: 3}
   _damage: 1
-  _speed: 10
 --- !u!1 &3350087936577432100
 GameObject:
   m_ObjectHideFlags: 0

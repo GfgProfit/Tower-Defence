@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 4879209885437315372}
   - component: {fileID: -5591198793055470754}
   m_Layer: 0
-  m_Name: Node
+  m_Name: Tower Tile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

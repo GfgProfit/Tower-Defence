@@ -15,19 +15,14 @@ public class CustomButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     {
         DOTween.Sequence()
             .Append(transform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack))
-            .OnComplete(() =>
-            {
-                if (!_isHovered)
-                {
-                    transform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack);
-                }
-            })
-            .Append(transform.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack));
+            .Append(transform.DOScale(_isHovered ? 1.1f : 1.0f, 0.2f).SetEase(Ease.OutBack));
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         _isHovered = true;
+
+        transform.DOKill(true);
 
         transform.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack);
     }
@@ -35,6 +30,8 @@ public class CustomButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
     public void OnPointerExit(PointerEventData eventData)
     {
         _isHovered = false;
+
+        transform.DOKill(true);
 
         transform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack);
     }

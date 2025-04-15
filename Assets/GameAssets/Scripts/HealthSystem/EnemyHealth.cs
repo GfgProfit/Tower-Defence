@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine;
 
-public class EnemyHealth : Health
+public class EnemyHealth : HealthBase
 {
-    [SerializeField] private Enemy _me;
+    [SerializeField] private EnemyController _me;
 
     [Space]
     [SerializeField] private Image _healthImage;
@@ -13,15 +13,22 @@ public class EnemyHealth : Health
 
     protected override void Die()
     {
-        GameManager.Instance.EventBus.OnMoneyGather?.Invoke(_me.GetMoneyGathering());
+        GameController.Instance.EventBus.RaiseMoneyGather(_me.GetMoneyGathering());
 
         Destroy(gameObject);
     }
 
     protected override void DisplayHealth()
     {
+        if (_healthImage == null || _healthHolder == null)
+        {
+            return;
+        }
+
+        _healthImage.fillAmount = (float)_currentHealth / _maxHealth;
+        _healthImage.color = Color.Lerp(Color.red, Color.green, (float)_currentHealth / _maxHealth);
+        
         _healthHolder.gameObject.SetActive(_currentHealth < _maxHealth);
-        _healthImage.fillAmount = _currentHealth / _maxHealth;
     }
 
     protected override void ScaleAnimation()

@@ -2,14 +2,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Timescale : MonoBehaviour, IPointerClickHandler
+public class GameTimeController : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private TMP_Text _timescaleButtonText;
 
     [Space]
     [SerializeField] private float[] _times;
 
-    private int _index = 3;
+    private int _index;
+
+    private void Awake()
+    {
+        _index = System.Array.IndexOf(_times, 1f);
+        
+        if (_index == -1)
+        {
+            _index = 0;
+        }
+
+        ApplyTimescale();
+    }
 
     private void Up()
     {
@@ -35,7 +47,7 @@ public class Timescale : MonoBehaviour, IPointerClickHandler
         ApplyTimescale();
     }
 
-    private void Middle()
+    private void ResetTime()
     {
         _index = 0;
 
@@ -44,9 +56,15 @@ public class Timescale : MonoBehaviour, IPointerClickHandler
 
     private void ApplyTimescale()
     {
+        if (_times == null || _times.Length == 0)
+        {
+            return;
+        }
+
         Time.timeScale = _times[_index];
 
-        _timescaleButtonText.text = string.Format("TimeScale: {0}x", _times[_index]);
+        _timescaleButtonText.text = $"TimeScale: {_times[_index]:0.##}x";
+        _timescaleButtonText.color = _times[_index] == 1f ? Color.white : Color.yellow;
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -61,7 +79,7 @@ public class Timescale : MonoBehaviour, IPointerClickHandler
         }
         else if (eventData.button == PointerEventData.InputButton.Middle)
         {
-            Middle();
+            ResetTime();
         }
     }
 }
