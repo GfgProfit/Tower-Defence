@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class TileSelector : MonoBehaviour
 {
+    [SerializeField] private RectTransform _towersPanel;
+
     private TowerTile _selectedTile;
 
     private void Update()
@@ -14,15 +16,16 @@ public class TileSelector : MonoBehaviour
             {
                 if (hit.collider.TryGetComponent(out TowerTile tile))
                 {
+                    if (tile == _selectedTile)
+                    {
+                        _selectedTile.Deselect();
+                        _selectedTile = null;
+                        _towersPanel.gameObject.SetActive(false);
+
+                        return;
+                    }
+
                     SelectTile(tile);
-                }
-            }
-            else
-            {
-                if (_selectedTile != null)
-                {
-                    _selectedTile.Deselect();
-                    _selectedTile = null;
                 }
             }
         }
@@ -37,6 +40,8 @@ public class TileSelector : MonoBehaviour
 
         _selectedTile = tile;
         _selectedTile.Select();
+
+        _towersPanel.gameObject.SetActive(true);
     }
 
     public TowerTile GetSelectedTile() => _selectedTile;

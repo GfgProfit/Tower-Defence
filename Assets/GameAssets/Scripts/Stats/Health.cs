@@ -8,6 +8,7 @@ public abstract class Health : MonoBehaviour
 
     protected abstract void DisplayHealth();
     protected abstract void Die();
+    protected virtual void ScaleAnimation() { }
 
     private void Awake()
     {
@@ -28,5 +29,6 @@ public abstract class Health : MonoBehaviour
         }
 
         DisplayHealth();
+        ScaleAnimation();
     }
 }

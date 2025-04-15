@@ -2,9 +2,11 @@ using UnityEngine;
 
 public class TowerTile : MonoBehaviour
 {
+    [SerializeField] private Transform _towerSpawnPoint;
+
     private Renderer _renderer;
     private Color _originalColor;
-    private readonly Tower _myTower;
+    private Tower _myTower;
 
     private void Start()
     {
@@ -26,4 +28,6 @@ public class TowerTile : MonoBehaviour
     }
 
     public Tower GetTowerInTile() => _myTower;
+    public Transform GetTowerSpawnPoint() => _towerSpawnPoint;
+    public void SetTower(Tower tower) => _myTower = tower;
 }

@@ -1,6 +1,7 @@
 using GameAssets.Global.Core;
-using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
+using UnityEngine;
 
 public class EnemyHealth : Health
 {
@@ -21,5 +22,15 @@ public class EnemyHealth : Health
     {
         _healthHolder.gameObject.SetActive(_currentHealth < _maxHealth);
         _healthImage.fillAmount = _currentHealth / _maxHealth;
+    }
+
+    protected override void ScaleAnimation()
+    {
+        if (_me != null)
+        {
+            DOTween.Sequence()
+                .Append(_me.transform.DOScale(0.35f, 0.1f).SetEase(Ease.OutBack))
+                .Append(_me.transform.DOScale(0.45f, 0.1f).SetEase(Ease.OutBack));
+        }
     }
 }

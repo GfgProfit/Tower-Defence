@@ -1,3 +1,4 @@
+using DG.Tweening;
 using GameAssets.Global.Core;
 using TMPro;
 using UnityEngine;
@@ -37,6 +38,10 @@ public class MoneyHandler : MonoBehaviour
 
         Money -= value;
 
+        DOTween.Sequence()
+            .Append(_moneyText.rectTransform.DOScale(0.9f, 0.2f).SetEase(Ease.OutBack))
+            .Append(_moneyText.rectTransform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack));
+
         DisplayMoney();
     }
 
@@ -45,6 +50,10 @@ public class MoneyHandler : MonoBehaviour
         Money += value;
 
         DisplayMoney();
+
+        DOTween.Sequence()
+            .Append(_moneyText.rectTransform.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack))
+            .Append(_moneyText.rectTransform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack));
     }
 
     private void DisplayMoney()
