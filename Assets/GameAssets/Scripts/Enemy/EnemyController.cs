@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private HealthBase _enemyHealth;
+    [SerializeField] private RectTransform _canvasHolder;
 
     [Space]
     [SerializeField] private float _speed = 2.0f;
@@ -14,7 +15,13 @@ public class EnemyController : MonoBehaviour
 
     private Transform[] _waypoints;
     private int _waypointIndex = 0;
+    private Transform _mainCameraTransform;
     private const float REACH_THRESHOLD = 0.05f;
+
+    private void Awake()
+    {
+        _mainCameraTransform = Camera.main.transform;
+    }
 
     private void OnEnable()
     {
@@ -28,6 +35,8 @@ public class EnemyController : MonoBehaviour
 
     private void Update()
     {
+        _canvasHolder.transform.forward = _mainCameraTransform.forward;
+
         if (_waypoints == null || _waypointIndex >= _waypoints.Length)
         {
             return;
@@ -48,11 +57,26 @@ public class EnemyController : MonoBehaviour
         _waypointIndex = 0;
     }
 
+    private void RotateTowards(Transform target)
+    {
+        Vector3 direction = target.position - transform.position;
+        direction.y = 0f;
+
+        if (direction == Vector3.zero)
+        {
+            return;
+        }
+
+        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, 10.0f * Time.deltaTime);
+    }
+
     private void MoveToPoint()
     {
         if (_waypoints != null && _waypointIndex < _waypoints.Length && _waypoints[_waypointIndex] != null)
         {
             transform.position = Vector3.MoveTowards(transform.position, _waypoints[_waypointIndex].position, _speed * Time.deltaTime);
+            RotateTowards(_waypoints[_waypointIndex]);
         }
 
         float distance = Vector3.Distance(transform.position, _waypoints[_waypointIndex].position);
