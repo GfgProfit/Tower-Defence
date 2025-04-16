@@ -9,14 +9,23 @@ public abstract class TowerBase : MonoBehaviour
 
     [Header("Vision Settings")]
     [SerializeField] private float _visionRange = 10f;
-    [SerializeField] private float _fieldOfViewAngle = 60f;
+    [SerializeField] private float _fieldOfViewAngle = 20f;
 
     private float _fireCooldown;
-    private Transform _currentTarget;
+    protected Transform _currentTarget;
 
     protected IAttackBehavior _attackBehavior;
 
     protected abstract IAttackBehavior CreateAttackBehavior();
+    protected virtual void StartEffect() { }
+    protected virtual void StopEffect() { }
+    protected virtual void ApplyEffect() 
+    {
+        if (_currentTarget == null)
+        {
+            return;
+        }
+    }
 
     private void Start()
     {
@@ -26,23 +35,45 @@ public abstract class TowerBase : MonoBehaviour
     private void Shoot(Transform target)
     {
         _attackBehavior?.Attack(target);
+
+        ApplyEffect();
     }
 
     private void Update()
     {
         UpdateTarget();
 
-        if (_currentTarget == null) return;
+        if (_currentTarget == null)
+        {
+            StopEffect();
+            return;
+        }
 
         RotateTowards(_currentTarget);
 
-        if (IsInVisionCone(_currentTarget) && _fireCooldown <= 0f)
+        if (IsInVisionCone(_currentTarget))
         {
-            Shoot(_currentTarget);
-            _fireCooldown = 60f / _fireRate;
-        }
+            if (_fireRate > 0)
+            {
+                if (_fireCooldown <= 0f)
+                {
+                    Shoot(_currentTarget);
+                    _fireCooldown = 60f / _fireRate;
+                }
 
-        _fireCooldown -= Time.deltaTime;
+                _fireCooldown -= Time.deltaTime;
+            }
+            else if (_fireRate <= 0f)
+            {
+                Shoot(_currentTarget);
+            }
+
+            StartEffect();
+        }
+        else
+        {
+            StopEffect();
+        }
     }
 
     private void UpdateTarget()
@@ -55,31 +86,38 @@ public abstract class TowerBase : MonoBehaviour
 
     private bool IsTargetAlive(Transform target)
     {
-        if (target == null) return false;
+        if (target == null)
+        {
+            return false;
+        }
 
-        float distance = Vector3.Distance(transform.position, target.position);
+        float distance = Vector3.Distance(_towerHead.position, target.position);
+
         return distance <= _visionRange && target.GetComponent<EnemyController>() != null;
     }
 
     private Transform FindClosestEnemyInRange()
     {
-        Collider[] colliders = Physics.OverlapSphere(transform.position, _visionRange);
+        Collider[] colliders = Physics.OverlapSphere(_towerHead.position, _visionRange);
         Transform closest = null;
         float minDistance = float.MaxValue;
 
-        foreach (var col in colliders)
+        foreach (Collider collider in colliders)
         {
-            var enemy = col.GetComponent<EnemyController>();
-            if (enemy == null) continue;
+            if (!collider.TryGetComponent<EnemyController>(out var enemy))
+            {
+                continue;
+            }
 
             Vector3 direction = (enemy.transform.position - _towerHead.position).normalized;
             float distance = Vector3.Distance(_towerHead.position, enemy.transform.position);
 
-            // Проверка на прямую видимость
             if (Physics.Raycast(_towerHead.position, direction, out RaycastHit hit, _visionRange))
             {
                 if (hit.transform != enemy.transform)
-                    continue; // что-то мешает обзору
+                {
+                    continue;
+                }
 
                 if (distance < minDistance)
                 {
@@ -96,7 +134,8 @@ public abstract class TowerBase : MonoBehaviour
     {
         Vector3 directionToTarget = (target.position - _towerHead.position).normalized;
         float angle = Vector3.Angle(_towerHead.forward, directionToTarget);
-        return angle <= _fieldOfViewAngle / 2f;
+
+        return angle <= _fieldOfViewAngle;
     }
 
     private void RotateTowards(Transform target)
@@ -104,7 +143,10 @@ public abstract class TowerBase : MonoBehaviour
         Vector3 direction = target.position - _towerHead.position;
         direction.y = 0f;
 
-        if (direction == Vector3.zero) return;
+        if (direction == Vector3.zero)
+        {
+            return;
+        }
 
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         _towerHead.rotation = Quaternion.Slerp(_towerHead.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
@@ -112,16 +154,16 @@ public abstract class TowerBase : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, _visionRange);
-
         if (_towerHead != null)
         {
+            Gizmos.color = Color.white;
+            Gizmos.DrawWireSphere(_towerHead.position, _visionRange);
+
             Vector3 origin = _towerHead.position;
             Vector3 forward = _towerHead.forward;
 
-            Quaternion left = Quaternion.Euler(0, -_fieldOfViewAngle / 2f, 0);
-            Quaternion right = Quaternion.Euler(0, _fieldOfViewAngle / 2f, 0);
+            Quaternion left = Quaternion.Euler(0, -_fieldOfViewAngle, 0);
+            Quaternion right = Quaternion.Euler(0, _fieldOfViewAngle, 0);
 
             Vector3 leftDir = left * forward;
             Vector3 rightDir = right * forward;

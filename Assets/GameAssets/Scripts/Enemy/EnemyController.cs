@@ -50,7 +50,10 @@ public class EnemyController : MonoBehaviour
 
     private void MoveToPoint()
     {
-        transform.position = Vector3.MoveTowards(transform.position, _waypoints[_waypointIndex].position, _speed * Time.deltaTime);
+        if (_waypoints != null && _waypointIndex < _waypoints.Length && _waypoints[_waypointIndex] != null)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, _waypoints[_waypointIndex].position, _speed * Time.deltaTime);
+        }
 
         float distance = Vector3.Distance(transform.position, _waypoints[_waypointIndex].position);
 

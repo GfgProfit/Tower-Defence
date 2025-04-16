@@ -25,10 +25,10 @@ public class EnemyHealth : HealthBase
             return;
         }
 
-        _healthImage.fillAmount = (float)_currentHealth / _maxHealth;
-        _healthImage.color = Color.Lerp(Color.red, Color.green, (float)_currentHealth / _maxHealth);
+        _healthImage.fillAmount = _currentHealth / MaxHealth;
+        _healthImage.color = Color.Lerp(Color.red, Color.green, _currentHealth / MaxHealth);
         
-        _healthHolder.gameObject.SetActive(_currentHealth < _maxHealth);
+        _healthHolder.gameObject.SetActive(_currentHealth < MaxHealth);
     }
 
     protected override void ScaleAnimation()

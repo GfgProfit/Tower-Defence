@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace GameAssets.Global.Core
 {
@@ -7,6 +8,7 @@ namespace GameAssets.Global.Core
     public class GameController : MonoBehaviour
     {
         private static GameController _instance;
+        private static Bootstrapper _bootstrapper;
 
         public static GameController Instance => _instance;
 
@@ -35,7 +37,19 @@ namespace GameAssets.Global.Core
 
         private void Initialize()
         {
+            _bootstrapper = new(1);
+
             EventBus = new();
+        }
+    }
+
+    public class Bootstrapper
+    {
+        public Bootstrapper(int sceneId)
+        {
+            SceneManager.LoadScene(sceneId);
+
+            //etc services
         }
     }
 }

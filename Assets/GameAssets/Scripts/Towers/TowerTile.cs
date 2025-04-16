@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 public class TowerTile : MonoBehaviour
@@ -12,19 +13,22 @@ public class TowerTile : MonoBehaviour
     {
         _renderer = GetComponent<Renderer>();
 
-        _originalColor = _renderer.sharedMaterial.color;
+        _originalColor = _renderer.material.color;
     }
 
     public void Select()
     {
-        _renderer.sharedMaterial.color = Color.green;
-        transform.localScale = new(1.1f, 1.0f, 1.1f);
+        _renderer.material.color = Color.green;
+
+        transform.DOScaleX(1.1f, 0.1f).SetEase(Ease.OutBack);
+        transform.DOScaleZ(1.1f, 0.1f).SetEase(Ease.OutBack);
     }
 
     public void Deselect()
     {
-        _renderer.sharedMaterial.color = _originalColor;
-        transform.localScale = Vector3.one;
+        _renderer.material.color = _originalColor;
+
+        transform.DOScale(1.0f, 0.1f).SetEase(Ease.OutBack);
     }
 
     public TowerBase GetTowerInTile() => _myTower;

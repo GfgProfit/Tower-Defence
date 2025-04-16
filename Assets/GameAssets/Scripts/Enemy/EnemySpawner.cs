@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections;
 using GameAssets.Global.Core;
+using DG.Tweening;
 
 public class EnemySpawner : MonoBehaviour
 {
+    [SerializeField] private Transform _spawnerTransform;
     [SerializeField] private EnemyController _enemyPrefab;
     [SerializeField] private PathPoints _path;
     
@@ -34,6 +36,13 @@ public class EnemySpawner : MonoBehaviour
             EnemyController enemy = Instantiate(_enemyPrefab, _path.GetWaypoints()[0].position, Quaternion.identity);
 
             enemy.SetPath(_path.GetWaypoints());
+
+            if (_spawnerTransform != null)
+            {
+                DOTween.Sequence()
+                    .Append(_spawnerTransform.DOScale(1.1f, 0.125f).SetEase(Ease.OutBack))
+                    .Append(_spawnerTransform.DOScale(1.0f, 0.125f).SetEase(Ease.OutBack));
+            }
 
             yield return new WaitForSeconds(_spawnRate);
         }
