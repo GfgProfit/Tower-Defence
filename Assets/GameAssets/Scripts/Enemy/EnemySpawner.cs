@@ -14,7 +14,7 @@ public class EnemySpawner : MonoBehaviour
 
     private bool _isGameOver = false;
 
-    private void Awake()
+    private void Start()
     {
         StartCoroutine(SpawnEnemies());
     }
@@ -35,13 +35,12 @@ public class EnemySpawner : MonoBehaviour
         {
             EnemyController enemy = Instantiate(_enemyPrefab, _path.GetWaypoints()[0].position, Quaternion.identity);
 
+            enemy.name = "Enemy";
             enemy.SetPath(_path.GetWaypoints());
 
             if (_spawnerTransform != null)
             {
-                DOTween.Sequence()
-                    .Append(_spawnerTransform.DOScale(1.1f, 0.125f).SetEase(Ease.OutBack))
-                    .Append(_spawnerTransform.DOScale(1.0f, 0.125f).SetEase(Ease.OutBack));
+                _spawnerTransform.DOPunchScale(Vector3.one * 0.2f, 0.2f, 10, 1);
             }
 
             yield return new WaitForSeconds(_spawnRate);

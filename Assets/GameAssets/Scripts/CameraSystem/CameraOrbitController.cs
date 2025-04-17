@@ -33,8 +33,7 @@ public class CameraOrbitController : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Вращение камеры при зажатой СКМ
-        if (Input.GetMouseButton(2))
+        if (Input.GetKey(KeyCode.Mouse1))
         {
             _yaw += Input.GetAxis("Mouse X") * _sensitivity;
             _pitch -= Input.GetAxis("Mouse Y") * _sensitivity;
@@ -47,7 +46,6 @@ public class CameraOrbitController : MonoBehaviour
         transform.position = _target.position + offset;
         transform.LookAt(_target);
 
-        // Зум (FOV)
         float scroll = Input.GetAxis("Mouse ScrollWheel");
         if (Mathf.Abs(scroll) > 0.01f)
         {

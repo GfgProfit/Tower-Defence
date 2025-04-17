@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -40,6 +41,8 @@ namespace GameAssets.Global.Core
             _bootstrapper = new(1);
 
             EventBus = new();
+
+            DOTween.SetTweensCapacity(500, 200);
         }
     }
 

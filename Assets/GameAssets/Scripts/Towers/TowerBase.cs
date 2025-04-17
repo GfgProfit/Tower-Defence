@@ -1,79 +1,36 @@
+using UnityEditor;
 using UnityEngine;
 
 public abstract class TowerBase : MonoBehaviour
 {
     [Header("Tower Settings")]
     [SerializeField] private Transform _towerHead;
+    [SerializeField] private bool _rotateToEnemy = true;
     [SerializeField] private float _rotationSpeed = 5f;
-    [SerializeField] private float _fireRate = 60f;
 
     [Header("Vision Settings")]
-    [SerializeField] private float _visionRange = 10f;
-    [SerializeField] private float _fieldOfViewAngle = 20f;
+    [SerializeField] private float _visionRange = 5f;
+    [SerializeField, Range(0, 180)] private float _fieldOfViewAngle = 10f;
 
-    private float _fireCooldown;
     protected Transform _currentTarget;
+    protected bool CanAttack { get; private set; }
 
-    protected IAttackBehavior _attackBehavior;
-
-    protected abstract IAttackBehavior CreateAttackBehavior();
-    protected virtual void StartEffect() { }
-    protected virtual void StopEffect() { }
-    protected virtual void ApplyEffect() 
-    {
-        if (_currentTarget == null)
-        {
-            return;
-        }
-    }
-
-    private void Start()
-    {
-        _attackBehavior = CreateAttackBehavior();
-    }
-
-    private void Shoot(Transform target)
-    {
-        _attackBehavior?.Attack(target);
-
-        ApplyEffect();
-    }
-
-    private void Update()
+    protected virtual void Update()
     {
         UpdateTarget();
 
         if (_currentTarget == null)
         {
-            StopEffect();
+            CanAttack = false;
             return;
         }
 
-        RotateTowards(_currentTarget);
-
-        if (IsInVisionCone(_currentTarget))
+        if (_rotateToEnemy)
         {
-            if (_fireRate > 0)
-            {
-                if (_fireCooldown <= 0f)
-                {
-                    Shoot(_currentTarget);
-                    _fireCooldown = 60f / _fireRate;
-                }
-
-                _fireCooldown -= Time.deltaTime;
-            }
-            else if (_fireRate <= 0f)
-            {
-                Shoot(_currentTarget);
-            }
-
-            StartEffect();
+            RotateTowards(_currentTarget);
         }
-        else
-        {
-            StopEffect();
-        }
+
+        CanAttack = IsInVisionCone(_currentTarget);
     }
 
     private void UpdateTarget()
@@ -162,15 +119,26 @@ public abstract class TowerBase : MonoBehaviour
             Vector3 origin = _towerHead.position;
             Vector3 forward = _towerHead.forward;
 
-            Quaternion left = Quaternion.Euler(0, -_fieldOfViewAngle, 0);
-            Quaternion right = Quaternion.Euler(0, _fieldOfViewAngle, 0);
+            Quaternion leftRotation = Quaternion.Euler(0, -_fieldOfViewAngle, 0);
+            Quaternion rightRotation = Quaternion.Euler(0, _fieldOfViewAngle, 0);
 
-            Vector3 leftDir = left * forward;
-            Vector3 rightDir = right * forward;
+            Vector3 leftDir = leftRotation * forward;
+            Vector3 rightDir = rightRotation * forward;
 
-            Gizmos.color = Color.yellow;
+            Gizmos.color = new Color(231f / 255f, 74f / 255f, 0, 0.2f);
             Gizmos.DrawRay(origin, leftDir * _visionRange);
             Gizmos.DrawRay(origin, rightDir * _visionRange);
+
+#if UNITY_EDITOR
+            Handles.color = new Color(231f / 255f, 131f / 255f, 0, 0.2f);
+            Handles.DrawSolidArc(
+                origin,
+                Vector3.up,
+                leftDir,
+                _fieldOfViewAngle * 2f,
+                _visionRange
+            );
+#endif
         }
     }
 }

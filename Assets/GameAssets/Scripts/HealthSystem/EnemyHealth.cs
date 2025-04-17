@@ -6,16 +6,12 @@ using UnityEngine;
 public class EnemyHealth : HealthBase
 {
     [SerializeField] private EnemyController _me;
-
-    [Space]
     [SerializeField] private Image _healthImage;
     [SerializeField] private Transform _healthHolder;
 
     protected override void Die()
     {
         GameController.Instance.EventBus.RaiseMoneyGather(_me.GetMoneyGathering());
-
-        Destroy(gameObject);
     }
 
     protected override void DisplayHealth()
@@ -33,11 +29,14 @@ public class EnemyHealth : HealthBase
 
     protected override void ScaleAnimation()
     {
-        if (_me != null)
-        {
-            DOTween.Sequence()
-                .Append(_me.transform.DOScale(0.35f, 0.1f).SetEase(Ease.OutBack))
-                .Append(_me.transform.DOScale(0.45f, 0.1f).SetEase(Ease.OutBack));
-        }
+        transform.DOPunchScale(Vector3.one * 0.2f, 0.2f, 10, 1)
+            .OnComplete(() =>
+            {
+                if (_isDead)
+                {
+                    DOTween.Kill(transform);
+                    Destroy(gameObject);
+                }
+            });
     }
 }

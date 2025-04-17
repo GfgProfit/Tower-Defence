@@ -32,17 +32,13 @@ public class PortalHealth : HealthBase
             return;
         }
 
-        DOTween.Sequence()
-            .Append(_healthText.rectTransform.DOScale(0.9f, 0.2f).SetEase(Ease.OutBack))
-            .Append(_healthText.rectTransform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack));
+        _healthText.rectTransform.DOPunchScale(Vector3.one * -0.2f, 0.2f, 10, 1);
 
         if (_portalTransform == null)
         {
             return;
         }
 
-        DOTween.Sequence()
-            .Append(_portalTransform.DOScale(0.9f, 0.125f).SetEase(Ease.OutBack))
-            .Append(_portalTransform.DOScale(1.0f, 0.125f).SetEase(Ease.OutBack));
+        _portalTransform.DOPunchScale(Vector3.one * -0.2f, 0.2f, 10, 1);
     }
 }
