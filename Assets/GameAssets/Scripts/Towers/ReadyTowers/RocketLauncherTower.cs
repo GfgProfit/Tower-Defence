@@ -12,47 +12,116 @@ public class RocketLauncherTower : TowerBase, ITowerStats
 
     [Space]
     [SerializeField] private float _damagePerRocket = 1.5f;
-    [SerializeField] private float _delayBetweenLaunches = 0.2f; // Задержка между запуском ракет
-    [SerializeField] private float _riseHeight = 5f; // Средняя высота основной траектории
-    [SerializeField] private float _riseDuration = 0.5f; // Время подъема к контрольной точке
-    [SerializeField] private float _flyDuration = 1.0f; // Время полета до цели
-    [SerializeField] private float _initialRiseHeight = 2f; // Маленький подъем сразу после старта
-    [SerializeField] private float _lookAheadTime = 0.25f; // Плавное следование взгляда вдоль пути
+    [SerializeField] private float _delayBetweenRocketLaunches = 0.2f;
+    [SerializeField] private float _reloadTime = 2.0f;
+    [SerializeField] private float _afterReloadDelay = 0.5f;
+    [SerializeField] private float _flyDuration = 1.0f;
 
-    private int _nextRocketIndex = -1;
-    private float _cooldownBetweenLaunches = 0;
+    private int _nextRocketIndex = 0;
+    private float _launchTimer = 0f;
+    private float _reloadTimer = 0f;
+    private float _afterReloadTimer = 0f;
+    private bool _isReloading = false;
+    private bool _isWaitingAfterReload = false;
 
     protected override void Update()
     {
         base.Update();
 
-        UpdateRocketLaunchTimer();
+        if (_currentTarget == null)
+            return;
+
+        if (_isReloading)
+        {
+            UpdateReloadTimer();
+        }
+        else if (_isWaitingAfterReload)
+        {
+            UpdateAfterReloadTimer();
+        }
+        else
+        {
+            UpdateRocketLaunchTimer();
+        }
     }
 
     private void UpdateRocketLaunchTimer()
     {
-        if (_cooldownBetweenLaunches < _delayBetweenLaunches)
+        if (_nextRocketIndex >= _rockets.Length)
         {
-            _cooldownBetweenLaunches += Time.deltaTime;
-
+            StartReloading();
             return;
         }
 
-        _cooldownBetweenLaunches = 0f;
-        TryLaunchNextRocket();
+        _launchTimer += Time.deltaTime;
+
+        if (_launchTimer >= _delayBetweenRocketLaunches)
+        {
+            _launchTimer = 0f;
+            LaunchNextRocket();
+        }
     }
 
-    private void TryLaunchNextRocket()
+    private void UpdateReloadTimer()
     {
-        Rocket nextRocket = GetNextRocket();
-        LaunchRocket(nextRocket, _currentTarget);
+        _reloadTimer += Time.deltaTime;
+
+        if (_reloadTimer >= _reloadTime)
+        {
+            _reloadTimer = 0f;
+            _isReloading = false;
+            StartAfterReloadDelay();
+        }
     }
 
-    private Rocket GetNextRocket()
+    private void StartReloading()
     {
-        _nextRocketIndex = (_nextRocketIndex + 1) % _rockets.Length;
+        _isReloading = true;
+        _reloadTimer = 0f;
+    }
 
-        return _rockets[_nextRocketIndex];
+    private void StartAfterReloadDelay()
+    {
+        PrepareAllRockets();
+        _isWaitingAfterReload = true;
+        _afterReloadTimer = 0f;
+    }
+
+    private void UpdateAfterReloadTimer()
+    {
+        _afterReloadTimer += Time.deltaTime;
+
+        if (_afterReloadTimer >= _afterReloadDelay)
+        {
+            _afterReloadTimer = 0f;
+            _isWaitingAfterReload = false;
+            _nextRocketIndex = 0;
+        }
+    }
+
+    private void PrepareAllRockets()
+    {
+        foreach (Rocket rocket in _rockets)
+        {
+            if (rocket == null) continue;
+
+            rocket.RocketReadyToLaunch(false);
+            rocket.gameObject.SetActive(true);
+
+            AnimateRocketAppearance(rocket);
+        }
+    }
+
+    private void LaunchNextRocket()
+    {
+        Rocket rocket = _rockets[_nextRocketIndex];
+
+        if (rocket == null)
+            return;
+
+        LaunchRocket(rocket, _currentTarget);
+
+        _nextRocketIndex++;
     }
 
     public void LaunchRocket(Rocket rocket, Transform target)
@@ -64,11 +133,7 @@ public class RocketLauncherTower : TowerBase, ITowerStats
 
         PrepareRocket(rocket);
 
-        Vector3 startPoint = rocket.transform.position;
-        Vector3 risePoint = startPoint + Vector3.up * _initialRiseHeight;
-        Vector3[] path = CalculateRocketPath(risePoint, target.position);
-
-        MoveRocketAlongPath(rocket, path);
+        MoveRocketToTarget(rocket, target.position);
     }
 
     private bool CanLaunchRocket(Rocket rocket, Transform target)
@@ -82,39 +147,31 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         rocket.gameObject.SetActive(true);
     }
 
-    private Vector3[] CalculateRocketPath(Vector3 startPoint, Vector3 targetPosition)
-    {
-        float randomRiseHeight = _riseHeight + Random.Range(-1f, 1f);
-        Vector3 controlPoint = startPoint + Vector3.up * randomRiseHeight;
-        controlPoint += (targetPosition - startPoint) * 0.5f;
-
-        Vector3 randomOffset = new(Random.Range(-0.5f, 0.5f), 0f, Random.Range(-0.5f, 0.5f));
-        Vector3 finalTargetPosition = targetPosition + randomOffset;
-
-        return new Vector3[] { startPoint, controlPoint, finalTargetPosition };
-    }
-
-    private void MoveRocketAlongPath(Rocket rocket, Vector3[] path)
+    private void MoveRocketToTarget(Rocket rocket, Vector3 targetPosition)
     {
         Transform rocketTransform = rocket.transform;
 
-        DOTween.Sequence()
-            .Append(
-                rocketTransform.DOPath(path, _riseDuration + _flyDuration, PathType.CatmullRom)
-                    .SetEase(Ease.InQuint)
-                    .SetLookAt(_lookAheadTime)
-            )
+        rocketTransform
+            .DOMove(targetPosition, _flyDuration)
+            .SetEase(Ease.InQuart)
             .OnComplete(() =>
             {
                 rocket.TryDealDamage(_damagePerRocket);
 
                 ParticleSystem explosion = Instantiate(_rocketExplosionPrefab, rocket.transform.position, Quaternion.identity);
 
-                Destroy(explosion, 0.2f);
-
                 ResetRocket(rocket);
             })
             .SetLink(rocket.gameObject, LinkBehaviour.KillOnDestroy);
+
+        rocketTransform.LookAt(targetPosition);
+    }
+
+    private void AnimateRocketAppearance(Rocket rocket)
+    {
+        rocket.transform.localScale = Vector3.zero;
+
+        rocket.transform.DOScale(Vector3.one, _afterReloadDelay - 0.1f).SetEase(Ease.InSine);
     }
 
     private void ResetRocket(Rocket rocket)
@@ -129,9 +186,9 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         return new List<StatData>
         {
             new("Damage per Rocket", _damagePerRocket.ToString()),
-            new("Delay Between Launches", _delayBetweenLaunches.ToString()),
-            new("Rise Height", _riseHeight.ToString()),
-            new("Rise Duration", _riseDuration.ToString()),
+            new("Delay Between Rockets", _delayBetweenRocketLaunches.ToString()),
+            new("Reload Time", _reloadTime.ToString()),
+            new("After Reload Delay", _afterReloadDelay.ToString()),
             new("Fly To Target Duration", _flyDuration.ToString()),
             new("Radius", _visionRange.ToString())
         };

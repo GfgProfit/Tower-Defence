@@ -44,7 +44,7 @@ public class TowerTile : MonoBehaviour
         }
 
         _visualCircleTransform.gameObject.SetActive(value);
-        _visualCircleTransform.position = _towerSpawnPoint.position;
+        _visualCircleTransform.position = _towerSpawnPoint.position + new Vector3(0, 0.5125f, 0);
         _visualCircleTransform.localScale = Vector3.one * _myTower.GetVisionRange();
     }
 

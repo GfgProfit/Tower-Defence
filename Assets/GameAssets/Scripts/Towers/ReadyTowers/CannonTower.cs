@@ -1,11 +1,13 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
-public class LaserTower : TowerBase, ITowerStats
+public class CannonTower : TowerBase, ITowerStats
 {
-    [Header("Laser Tower Settings")]
-    [SerializeField] private LaserBeamEffect _laserBeamEffect;
+    [Header("Cannon Tower Settings")]
+    [SerializeField] private ParticleSystem _shotParticles;
     [SerializeField] private Transform _firePoint;
+    [SerializeField] private Transform _cannonPointTransform;
 
     [Space]
     [SerializeField] private int _damage = 1;
@@ -28,6 +30,11 @@ public class LaserTower : TowerBase, ITowerStats
         }
 
         HandleAttackCycle();
+
+        if (_currentTarget == null)
+        {
+            return;
+        }
     }
 
     private void HandleAttackCycle()
@@ -61,13 +68,18 @@ public class LaserTower : TowerBase, ITowerStats
             {
                 FireLaserAt(hit.point);
                 DealDamage(enemy);
+
+                DOTween.Sequence()
+                    .Append(_cannonPointTransform.DOLocalMoveZ(-0.2f, 0.2f))
+                    .Append(_cannonPointTransform.DOLocalMoveZ(0, 0.2f))
+                    .SetEase(Ease.OutQuart);
             }
         }
     }
 
     private Vector3 GetDirectionToTarget() => (_currentTarget.position - _firePoint.position).normalized;
 
-    private void FireLaserAt(Vector3 hitPoint) => _laserBeamEffect.FireLaser(_firePoint.position, hitPoint);
+    private void FireLaserAt(Vector3 hitPoint) => _shotParticles.Play();
 
     private void DealDamage(EnemyController enemy) => enemy.GetHealthComponent().TakeDamage(_damage);
 
