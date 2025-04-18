@@ -1,7 +1,8 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-public class RocketLauncherTower : TowerBase
+public class RocketLauncherTower : TowerBase, ITowerStats
 {
     [Header("Rocket Launcher Tower Settings")]
     [SerializeField] private ParticleSystem _rocketExplosionPrefab;
@@ -121,5 +122,18 @@ public class RocketLauncherTower : TowerBase
         rocket.transform.SetLocalPositionAndRotation(rocket.GetStartPoint(), rocket.GetStartRotation());
         rocket.RocketReadyToLaunch(false);
         rocket.gameObject.SetActive(false);
+    }
+
+    public List<StatData> GetStats()
+    {
+        return new List<StatData>
+        {
+            new("Damage per Rocket", _damagePerRocket.ToString()),
+            new("Delay Between Launches", _delayBetweenLaunches.ToString()),
+            new("Rise Height", _riseHeight.ToString()),
+            new("Rise Duration", _riseDuration.ToString()),
+            new("Fly To Target Duration", _flyDuration.ToString()),
+            new("Radius", _visionRange.ToString())
+        };
     }
 }

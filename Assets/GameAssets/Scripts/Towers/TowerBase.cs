@@ -6,11 +6,11 @@ public abstract class TowerBase : MonoBehaviour
     [Header("Tower Settings")]
     [SerializeField] private Transform _towerHead;
     [SerializeField] private bool _rotateToEnemy = true;
-    [SerializeField] private float _rotationSpeed = 5f;
+    [SerializeField] protected float _rotationSpeed = 5f;
 
     [Header("Vision Settings")]
-    [SerializeField] private float _visionRange = 5f;
-    [SerializeField, Range(0, 180)] private float _fieldOfViewAngle = 10f;
+    [SerializeField] protected float _visionRange = 5f;
+    [SerializeField, Range(0, 180)] protected float _fieldOfViewAngle = 10f;
 
     protected Transform _currentTarget;
     protected bool CanAttack { get; private set; }
@@ -108,6 +108,8 @@ public abstract class TowerBase : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         _towerHead.rotation = Quaternion.Slerp(_towerHead.rotation, targetRotation, _rotationSpeed * Time.deltaTime);
     }
+
+    public float GetVisionRange() => _visionRange;
 
     private void OnDrawGizmosSelected()
     {

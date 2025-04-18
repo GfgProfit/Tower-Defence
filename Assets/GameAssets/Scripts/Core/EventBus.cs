@@ -7,8 +7,8 @@ namespace GameAssets.Global.Core
         public event Action OnGameOver;
         public void RaiseGameOver() => OnGameOver?.Invoke();
 
-        public event Action<int> OnMoneySpend;
-        public void RaiseMoneySpend(int amount) => OnMoneySpend?.Invoke(amount);
+        public event Action<int, Action> OnMoneySpend;
+        public void RaiseMoneySpend(int amount, Action callback) => OnMoneySpend?.Invoke(amount, callback);
         
         public event Action<int> OnMoneyGather;
         public void RaiseMoneyGather(int amount) => OnMoneyGather?.Invoke(amount);

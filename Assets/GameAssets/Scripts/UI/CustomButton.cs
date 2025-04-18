@@ -1,10 +1,16 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class CustomButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    private bool _isHovered = false;
+    public UnityEvent OnClick { get; private set; }
+
+    private void Awake()
+    {
+        OnClick = new();
+    }
 
     private void OnDisable()
     {
@@ -13,15 +19,11 @@ public class CustomButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        DOTween.Sequence()
-            .Append(transform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack))
-            .Append(transform.DOScale(_isHovered ? 1.1f : 1.0f, 0.2f).SetEase(Ease.OutBack));
+        OnClick?.Invoke();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        _isHovered = true;
-
         transform.DOKill(true);
 
         transform.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack);
@@ -29,8 +31,6 @@ public class CustomButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        _isHovered = false;
-
         transform.DOKill(true);
 
         transform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack);

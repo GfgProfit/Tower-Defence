@@ -197,6 +197,12 @@ MonoBehaviour:
   _towerHead: {fileID: 5985710985091173962}
   _rotateToEnemy: 0
   _rotationSpeed: 15
+  _towerCard:
+    _towerName: Rocket Launcher Tower
+    _towerIcon: {fileID: 1088076854, guid: 218ef3eb9c0d82f46a48aac7bfd5bd21, type: 3}
+    _towerPrice: 250
+    _towerPrefab: {fileID: 2926967495312692006}
+    _towerNameColor: {r: 1, g: 0.6084906, b: 0.79486823, a: 1}
   _visionRange: 5
   _fieldOfViewAngle: 180
   _rocketExplosionPrefab: {fileID: 6395466642929260635, guid: 4852630efcfad3b47b7e84c4361f0329, type: 3}

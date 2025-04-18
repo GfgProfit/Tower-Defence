@@ -29,7 +29,7 @@ public class EnemyHealth : HealthBase
 
     protected override void ScaleAnimation()
     {
-        transform.DOPunchScale(Vector3.one * 0.2f, 0.2f, 10, 1)
+        transform.DOPunchScale(Vector3.one * 0.2f, _animationCooldown, 10, 1)
             .OnComplete(() =>
             {
                 if (_isDead)

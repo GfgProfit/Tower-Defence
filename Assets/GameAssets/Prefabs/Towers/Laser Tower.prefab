@@ -296,13 +296,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _towerHead: {fileID: 4853019156090388174}
+  _rotateToEnemy: 1
   _rotationSpeed: 10
-  _fireRate: 150
+  _towerCard:
+    _towerName: Laser Tower
+    _towerIcon: {fileID: 2056356054, guid: 218ef3eb9c0d82f46a48aac7bfd5bd21, type: 3}
+    _towerPrice: 50
+    _towerPrefab: {fileID: -4886244233741407423}
+    _towerNameColor: {r: 0.41037738, g: 1, b: 0.74549085, a: 1}
   _visionRange: 2.5
   _fieldOfViewAngle: 10
   _laserBeamEffect: {fileID: 8786700721511605876}
   _firePoint: {fileID: 9005153213301111338}
   _damage: 1
+  _fireRate: 150
 --- !u!1 &7770989565814772957
 GameObject:
   m_ObjectHideFlags: 0

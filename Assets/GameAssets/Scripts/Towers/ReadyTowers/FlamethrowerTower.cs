@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class FlamethrowerTower : TowerBase
+public class FlamethrowerTower : TowerBase, ITowerStats
 {
     [Header("Flamethrower Tower Settings")]
     [SerializeField] private ParticleSystem _fireParticles;
@@ -58,5 +59,15 @@ public class FlamethrowerTower : TowerBase
             _fireParticles.Stop();
             _isEffectPlaying = false;
         }
+    }
+
+    public List<StatData> GetStats()
+    {
+        return new List<StatData>
+        {
+            new("Damage Per Second", _damagePerSecond.ToString()),
+            new("Radius", _visionRange.ToString()),
+            new("Rotation Speed", _rotationSpeed.ToString())
+        };
     }
 }

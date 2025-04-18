@@ -1,3 +1,4 @@
+using System.Collections;
 using GameAssets.Global.Core;
 using UnityEngine;
 
@@ -17,10 +18,13 @@ public class EnemyController : MonoBehaviour
     private int _waypointIndex = 0;
     private Transform _mainCameraTransform;
     private const float REACH_THRESHOLD = 0.05f;
+    private Coroutine _slowCoroutine;
+    private float _currentSpeed;
 
     private void Awake()
     {
         _mainCameraTransform = Camera.main.transform;
+        _currentSpeed = _speed;
     }
 
     private void OnEnable()
@@ -57,6 +61,23 @@ public class EnemyController : MonoBehaviour
         _waypointIndex = 0;
     }
 
+    public void ApplySlow(float multiplier, float duration)
+    {
+        if (_slowCoroutine != null)
+        {
+            StopCoroutine(_slowCoroutine);
+        }
+
+        _slowCoroutine = StartCoroutine(SlowDownCoroutine(multiplier, duration));
+    }
+
+    private IEnumerator SlowDownCoroutine(float multiplier, float duration)
+    {
+        _currentSpeed = _speed / multiplier;
+        yield return new WaitForSeconds(duration);
+        _currentSpeed = _speed;
+    }
+
     private void RotateTowards(Transform target)
     {
         Vector3 direction = target.position - transform.position;
@@ -75,7 +96,7 @@ public class EnemyController : MonoBehaviour
     {
         if (_waypoints != null && _waypointIndex < _waypoints.Length && _waypoints[_waypointIndex] != null)
         {
-            transform.position = Vector3.MoveTowards(transform.position, _waypoints[_waypointIndex].position, _speed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, _waypoints[_waypointIndex].position, _currentSpeed * Time.deltaTime);
             RotateTowards(_waypoints[_waypointIndex]);
         }
 

@@ -9645,7 +9645,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _towerHead: {fileID: 5740258557204835626}
+  _rotateToEnemy: 1
   _rotationSpeed: 5
+  _towerCard:
+    _towerName: Flamethrower Tower
+    _towerIcon: {fileID: 529650844, guid: 218ef3eb9c0d82f46a48aac7bfd5bd21, type: 3}
+    _towerPrice: 100
+    _towerPrefab: {fileID: 3608720498664063592}
+    _towerNameColor: {r: 0.90588236, g: 0.5137255, b: 0, a: 1}
   _visionRange: 2
   _fieldOfViewAngle: 20
   _fireParticles: {fileID: 5437440517344357206}

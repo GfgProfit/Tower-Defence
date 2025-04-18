@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class TileSelector : MonoBehaviour
 {
-    [SerializeField] private RectTransform _towersPanel;
+    [SerializeField] private RectTransform _towerShopPanel;
+    [SerializeField] private RectTransform _towerStatsPanel;
 
     private TowerTile _selectedTile;
     private Camera _mainCamera;
@@ -66,14 +67,15 @@ public class TileSelector : MonoBehaviour
         _selectedTile = tile;
         _selectedTile.Select();
 
-        _towersPanel.gameObject.SetActive(true);
+        _towerShopPanel.gameObject.SetActive(true);
     }
 
     private void DeselectTile()
     {
         _selectedTile.Deselect();
         _selectedTile = null;
-        _towersPanel.gameObject.SetActive(false);
+        _towerShopPanel.gameObject.SetActive(false);
+        _towerStatsPanel.gameObject.SetActive(false);
     }
 
     public TowerTile GetSelectedTile() => _selectedTile;

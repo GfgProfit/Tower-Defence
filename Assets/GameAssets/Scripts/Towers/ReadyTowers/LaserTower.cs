@@ -1,6 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 
-public class LaserTower : TowerBase
+public class LaserTower : TowerBase, ITowerStats
 {
     [Header("Laser Tower Settings")]
     [SerializeField] private LaserBeamEffect _laserBeamEffect;
@@ -71,4 +72,15 @@ public class LaserTower : TowerBase
     private void DealDamage(EnemyController enemy) => enemy.GetHealthComponent().TakeDamage(_damage);
 
     private void ResetCooldown() => _fireCooldown = 60f / _fireRate;
+
+    public List<StatData> GetStats()
+    {
+        return new List<StatData>
+        {
+            new("Damage", _damage.ToString()),
+            new("Firerate", $"{_fireRate}/min"),
+            new("Radius", _visionRange.ToString()),
+            new("Rotation Speed", _rotationSpeed.ToString())
+        };
+    }
 }

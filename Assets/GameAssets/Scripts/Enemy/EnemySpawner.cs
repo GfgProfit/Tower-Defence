@@ -38,11 +38,6 @@ public class EnemySpawner : MonoBehaviour
             enemy.name = "Enemy";
             enemy.SetPath(_path.GetWaypoints());
 
-            if (_spawnerTransform != null)
-            {
-                _spawnerTransform.DOPunchScale(Vector3.one * 0.2f, 0.2f, 10, 1);
-            }
-
             yield return new WaitForSeconds(_spawnRate);
         }
     }
