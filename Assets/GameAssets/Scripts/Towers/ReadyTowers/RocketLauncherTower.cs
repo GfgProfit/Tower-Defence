@@ -1,14 +1,11 @@
 using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 
 public class RocketLauncherTower : TowerBase, ITowerStats
 {
     [Header("Rocket Launcher Tower Settings")]
     [SerializeField] private ParticleSystem _rocketExplosionPrefab;
-
-    [Space]
-    [SerializeField] private Rocket[] _rockets;
+    [SerializeField] private RocketProvider _rocketProvider;
 
     [Space]
     [SerializeField] private float _damagePerRocket = 1.5f;
@@ -17,12 +14,19 @@ public class RocketLauncherTower : TowerBase, ITowerStats
     [SerializeField] private float _afterReloadDelay = 0.5f;
     [SerializeField] private float _flyDuration = 1.0f;
 
+    private IRocket[] _rockets;
+
     private int _nextRocketIndex = 0;
     private float _launchTimer = 0f;
     private float _reloadTimer = 0f;
     private float _afterReloadTimer = 0f;
     private bool _isReloading = false;
     private bool _isWaitingAfterReload = false;
+
+    private void Start()
+    {
+        _rockets = _rocketProvider.GetAvailableRockets();
+    }
 
     protected override void Update()
     {
@@ -101,84 +105,49 @@ public class RocketLauncherTower : TowerBase, ITowerStats
 
     private void PrepareAllRockets()
     {
-        foreach (Rocket rocket in _rockets)
+        foreach (IRocket rocket in _rockets)
         {
-            if (rocket == null) continue;
+            if (rocket == null)
+            {
+                continue;
+            }
 
-            rocket.RocketReadyToLaunch(false);
-            rocket.gameObject.SetActive(true);
-
-            AnimateRocketAppearance(rocket);
+            rocket.PrepareForLaunch(_afterReloadDelay);
         }
     }
 
     private void LaunchNextRocket()
     {
-        Rocket rocket = _rockets[_nextRocketIndex];
+        IRocket rocket = _rockets[_nextRocketIndex];
 
         if (rocket == null)
+        {
             return;
+        }
 
         LaunchRocket(rocket, _currentTarget);
 
         _nextRocketIndex++;
     }
 
-    public void LaunchRocket(Rocket rocket, Transform target)
+    public void LaunchRocket(IRocket rocket, Transform target)
     {
         if (!CanLaunchRocket(rocket, target))
         {
             return;
         }
 
-        PrepareRocket(rocket);
-
-        MoveRocketToTarget(rocket, target.position);
+        rocket.Launch(
+            targetPosition: target.position,
+            flyDuration: _flyDuration,
+            damage: _damagePerRocket,
+            explosionPrefab: _rocketExplosionPrefab
+        );
     }
 
-    private bool CanLaunchRocket(Rocket rocket, Transform target)
+    private bool CanLaunchRocket(IRocket rocket, Transform target)
     {
         return target != null && !rocket.IsRocketReadyToLaunch;
-    }
-
-    private void PrepareRocket(Rocket rocket)
-    {
-        rocket.RocketReadyToLaunch(true);
-        rocket.gameObject.SetActive(true);
-    }
-
-    private void MoveRocketToTarget(Rocket rocket, Vector3 targetPosition)
-    {
-        Transform rocketTransform = rocket.transform;
-
-        rocketTransform
-            .DOMove(targetPosition, _flyDuration)
-            .SetEase(Ease.InQuart)
-            .OnComplete(() =>
-            {
-                rocket.TryDealDamage(_damagePerRocket);
-
-                ParticleSystem explosion = Instantiate(_rocketExplosionPrefab, rocket.transform.position, Quaternion.identity);
-
-                ResetRocket(rocket);
-            })
-            .SetLink(rocket.gameObject, LinkBehaviour.KillOnDestroy);
-
-        rocketTransform.LookAt(targetPosition);
-    }
-
-    private void AnimateRocketAppearance(Rocket rocket)
-    {
-        rocket.transform.localScale = Vector3.zero;
-
-        rocket.transform.DOScale(Vector3.one, _afterReloadDelay - 0.1f).SetEase(Ease.InSine);
-    }
-
-    private void ResetRocket(Rocket rocket)
-    {
-        rocket.transform.SetLocalPositionAndRotation(rocket.GetStartPoint(), rocket.GetStartRotation());
-        rocket.RocketReadyToLaunch(false);
-        rocket.gameObject.SetActive(false);
     }
 
     public List<StatData> GetStats()

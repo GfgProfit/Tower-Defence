@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class TowerBase : MonoBehaviour
 {
     [Header("Tower Settings")]
-    [SerializeField] private Transform _towerHead;
+    [SerializeField] protected Transform _towerHead;
     [SerializeField] private bool _rotateToEnemy = true;
     [SerializeField] protected float _rotationSpeed = 5f;
 

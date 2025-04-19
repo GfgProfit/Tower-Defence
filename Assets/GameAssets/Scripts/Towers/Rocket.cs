@@ -1,6 +1,7 @@
+using DG.Tweening;
 using UnityEngine;
 
-public class Rocket : MonoBehaviour
+public class Rocket : MonoBehaviour, IRocket
 {
     [SerializeField] private float _damageRadius = 1.0f;
 
@@ -14,9 +15,41 @@ public class Rocket : MonoBehaviour
         StartRotation = transform.localRotation;
     }
 
-    public void RocketReadyToLaunch(bool value) => IsRocketReadyToLaunch = value;
-    public Vector3 GetStartPoint() => StartPoint;
-    public Quaternion GetStartRotation() => StartRotation;
+    public void PrepareForLaunch(float appearanceDuration)
+    {
+        RocketReadyToLaunch(false);
+        gameObject.SetActive(true);
+
+        transform.localScale = Vector3.zero;
+        transform.DOScale(Vector3.one, appearanceDuration - 0.1f).SetEase(Ease.InSine);
+    }
+
+    public void Launch(Vector3 targetPosition, float flyDuration, float damage, ParticleSystem explosionPrefab)
+    {
+        RocketReadyToLaunch(true);
+
+        transform
+            .DOMove(targetPosition, flyDuration)
+            .SetEase(Ease.InQuart)
+            .OnComplete(() =>
+            {
+                TryDealDamage(damage);
+                Instantiate(explosionPrefab, transform.position, Quaternion.identity);
+                ResetRocket();
+            })
+            .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
+
+        transform.LookAt(targetPosition);
+    }
+
+    private void ResetRocket()
+    {
+        transform.SetLocalPositionAndRotation(StartPoint, StartRotation);
+        RocketReadyToLaunch(false);
+        gameObject.SetActive(false);
+    }
+
+    private void RocketReadyToLaunch(bool value) => IsRocketReadyToLaunch = value;
 
     public void TryDealDamage(float damage)
     {

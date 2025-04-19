@@ -9,6 +9,14 @@ public class EnemyHealth : HealthBase
     [SerializeField] private Image _healthImage;
     [SerializeField] private Transform _healthHolder;
 
+    private void Update()
+    {
+        if (_isDead)
+        {
+            Destroy(gameObject, 0.5f);
+        }
+    }
+
     protected override void Die()
     {
         GameController.Instance.EventBus.RaiseMoneyGather(_me.GetMoneyGathering());
@@ -37,6 +45,7 @@ public class EnemyHealth : HealthBase
                     DOTween.Kill(transform);
                     Destroy(gameObject);
                 }
-            });
+            })
+            .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
     }
 }

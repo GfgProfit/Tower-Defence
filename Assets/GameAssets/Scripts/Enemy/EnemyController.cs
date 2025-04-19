@@ -2,7 +2,7 @@ using System.Collections;
 using GameAssets.Global.Core;
 using UnityEngine;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IStunnable
 {
     [SerializeField] private HealthBase _enemyHealth;
     [SerializeField] private RectTransform _canvasHolder;
@@ -20,6 +20,8 @@ public class EnemyController : MonoBehaviour
     private const float REACH_THRESHOLD = 0.05f;
     private Coroutine _slowCoroutine;
     private float _currentSpeed;
+    private bool _isStunned;
+    private float _stunTimer;
 
     private void Awake()
     {
@@ -40,6 +42,16 @@ public class EnemyController : MonoBehaviour
     private void Update()
     {
         _canvasHolder.transform.forward = _mainCameraTransform.forward;
+
+        if (_isStunned)
+        {
+            _stunTimer -= Time.deltaTime;
+            if (_stunTimer <= 0f)
+            {
+                _isStunned = false;
+            }
+            return;
+        }
 
         if (_waypoints == null || _waypointIndex >= _waypoints.Length)
         {
@@ -94,7 +106,7 @@ public class EnemyController : MonoBehaviour
 
     private void MoveToPoint()
     {
-        if (_waypoints != null && _waypointIndex < _waypoints.Length && _waypoints[_waypointIndex] != null)
+        if (_waypoints != null && _waypointIndex < _waypoints.Length && _waypoints[_waypointIndex] != null && !_isStunned)
         {
             transform.position = Vector3.MoveTowards(transform.position, _waypoints[_waypointIndex].position, _currentSpeed * Time.deltaTime);
             RotateTowards(_waypoints[_waypointIndex]);
@@ -128,4 +140,10 @@ public class EnemyController : MonoBehaviour
 
     public HealthBase GetHealthComponent() => _enemyHealth;
     public int GetMoneyGathering() => _moneyGathering;
+
+    public void Stun(float duration)
+    {
+        _isStunned = true;
+        _stunTimer = duration;
+    }
 }
