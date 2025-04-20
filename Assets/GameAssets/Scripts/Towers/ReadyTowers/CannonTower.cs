@@ -91,8 +91,8 @@ public class CannonTower : TowerBase, ITowerStats
         {
             new("Damage", _damage.ToString()),
             new("Firerate", $"{_fireRate}/min"),
-            new("Radius", _visionRange.ToString()),
-            new("Rotation Speed", _rotationSpeed.ToString())
+            new("Rotation Speed", _rotationSpeed.ToString()),
+            new("Radius", _visionRange.ToString())
         };
     }
 }

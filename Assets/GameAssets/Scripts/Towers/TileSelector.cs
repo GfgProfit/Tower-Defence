@@ -1,12 +1,15 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TileSelector : MonoBehaviour
 {
-    [SerializeField] private RectTransform _towerShopPanel;
-    [SerializeField] private RectTransform _towerStatsPanel;
+    [SerializeField] private VisualCircle _visualCircle;
+    [SerializeField] private RectTransform _shopPanelTransform;
+    [SerializeField] private TowerStatsPanel _statsPanelTransform;
 
-    private TowerTile _selectedTile;
     private Camera _mainCamera;
+
+    public TowerTile SelectedTile { get; private set; }
 
     private void Awake()
     {
@@ -21,7 +24,7 @@ public class TileSelector : MonoBehaviour
 
     private void HandleEscapeInput()
     {
-        if (Input.GetKeyDown(KeyCode.Escape) && _selectedTile != null)
+        if (Input.GetKeyDown(KeyCode.Escape) && SelectedTile != null)
         {
             DeselectTile();
         }
@@ -47,7 +50,7 @@ public class TileSelector : MonoBehaviour
 
     private void ProcessTileClick(TowerTile tile)
     {
-        if (tile == _selectedTile)
+        if (tile == SelectedTile)
         {
             DeselectTile();
         }
@@ -59,24 +62,60 @@ public class TileSelector : MonoBehaviour
 
     private void SelectTile(TowerTile tile)
     {
-        if (_selectedTile != null)
+        if (SelectedTile != null)
         {
-            _selectedTile.Deselect();
+            DeselectTile();
         }
 
-        _selectedTile = tile;
-        _selectedTile.Select();
+        SelectedTile = tile;
+        SelectedTile.Select();
 
-        _towerShopPanel.gameObject.SetActive(true);
+        ShowVisualCircle();
+        ShowUI();
     }
 
     private void DeselectTile()
     {
-        _selectedTile.Deselect();
-        _selectedTile = null;
-        _towerShopPanel.gameObject.SetActive(false);
-        _towerStatsPanel.gameObject.SetActive(false);
+        SelectedTile.Deselect();
+        SelectedTile = null;
+
+        HideVisualCircle();
+        _shopPanelTransform.gameObject.SetActive(false);
+        CloseStatsPanel();
     }
 
-    public TowerTile GetSelectedTile() => _selectedTile;
+    public void ShowUI()
+    {
+        if (SelectedTile == null)
+        {
+            return;
+        }
+
+        bool hasTower = SelectedTile.MyTower != null;
+
+        _shopPanelTransform.gameObject.SetActive(!hasTower);
+
+        if (hasTower)
+        {
+            ShowStatsPanel(SelectedTile.MyTower.ShopItemConfig);
+        }
+    }
+
+    public void ShowStatsPanel(ShopItemConfig shopItemConfig)
+    {
+        List<StatData> statDatas = shopItemConfig.GetTowerStats();
+        string stats = string.Empty;
+        string towerName = $"<color={Utils.ColorToHex(shopItemConfig.NameColor)}>{shopItemConfig.Name}</color>";
+
+        foreach (StatData statData in statDatas)
+        {
+            stats += $"{statData.Name}: <color={Utils.ColorToHex(shopItemConfig.NameColor)}>{statData.Value}</color>\n";
+        }
+
+        _statsPanelTransform.Show(shopItemConfig.TowerIcon, towerName, stats);
+    }
+
+    public void CloseStatsPanel() => _statsPanelTransform.Hide();
+    public void ShowVisualCircle() => _visualCircle.Show(SelectedTile);
+    public void HideVisualCircle() => _visualCircle.Hide();
 }

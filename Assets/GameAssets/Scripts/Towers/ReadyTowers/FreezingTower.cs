@@ -33,6 +33,7 @@ public class FreezingTower : TowerBase, ITowerStats
         {
             new("Freeze Multiplier", _freezeMultiplier.ToString()),
             new("Freeze Duration", _freezeDuration.ToString()),
+            new("Rotation Speed", _rotationSpeed.ToString()),
             new("Radius", _visionRange.ToString())
         };
     }

@@ -159,6 +159,7 @@ public class RocketLauncherTower : TowerBase, ITowerStats
             new("Reload Time", _reloadTime.ToString()),
             new("After Reload Delay", _afterReloadDelay.ToString()),
             new("Fly To Target Duration", _flyDuration.ToString()),
+            new("Rotation Speed", _rotationSpeed.ToString()),
             new("Radius", _visionRange.ToString())
         };
     }

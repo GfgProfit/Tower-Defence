@@ -154,3 +154,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _towerSpawnPoint: {fileID: 4449475289696473901}
+  _tileRenderer: {fileID: 5557803383485066904}
+  _baseColor: {r: 1, g: 1, b: 1, a: 1}

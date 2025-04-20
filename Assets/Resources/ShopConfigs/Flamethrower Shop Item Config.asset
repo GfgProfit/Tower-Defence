@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e3f4bb3d3c3d0f4bbddf597261a68c8, type: 3}
+  m_Name: Flamethrower Shop Item Config
+  m_EditorClassIdentifier: 
+  _name: Flamethrower Tower
+  _towerIcon: {fileID: -1706739578, guid: 218ef3eb9c0d82f46a48aac7bfd5bd21, type: 3}
+  _nameColor: {r: 1, g: 0.69417804, b: 0.495283, a: 1}
+  _towerPrefab: {fileID: 6779513227476129995, guid: 9d400dcf0e91a1a42a88acee9d5c9e01, type: 3}
+  _price: 150

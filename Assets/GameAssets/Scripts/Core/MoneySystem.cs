@@ -1,4 +1,3 @@
-using System;
 using DG.Tweening;
 using GameAssets.Global.Core;
 using TMPro;
@@ -24,15 +23,19 @@ public class MoneySystem : MonoBehaviour
     {
         GameController.Instance.EventBus.OnMoneySpend += SpendMoney;
         GameController.Instance.EventBus.OnMoneyGather += GatherMoney;
+        GameController.Instance.EventBus.OnRequestMoney += HandleRequestMoney;
     }
 
     private void OnDisable()
     {
         GameController.Instance.EventBus.OnMoneySpend -= SpendMoney;
         GameController.Instance.EventBus.OnMoneyGather -= GatherMoney;
+        GameController.Instance.EventBus.OnRequestMoney -= HandleRequestMoney;
     }
 
-    private void SpendMoney(int value, Action callback)
+    private int HandleRequestMoney() => Money;
+
+    private void SpendMoney(int value)
     {
         if (Money < value)
         {
@@ -44,8 +47,6 @@ public class MoneySystem : MonoBehaviour
         AnimateMoneyText(0.9f);
 
         DisplayMoney();
-
-        callback?.Invoke();
     }
 
     private void GatherMoney(int value)

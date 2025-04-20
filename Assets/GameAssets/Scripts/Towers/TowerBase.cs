@@ -7,10 +7,13 @@ public abstract class TowerBase : MonoBehaviour
     [SerializeField] protected Transform _towerHead;
     [SerializeField] private bool _rotateToEnemy = true;
     [SerializeField] protected float _rotationSpeed = 5f;
+    [SerializeField] private ShopItemConfig _shopItemConfig;
 
     [Header("Vision Settings")]
     [SerializeField] protected float _visionRange = 5f;
     [SerializeField, Range(0, 180)] protected float _fieldOfViewAngle = 10f;
+
+    public ShopItemConfig ShopItemConfig => _shopItemConfig;
 
     protected Transform _currentTarget;
     protected bool CanAttack { get; private set; }

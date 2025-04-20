@@ -87,10 +87,10 @@ public class LaserTower : TowerBase, ITowerStats
         return new List<StatData>
         {
             new("Damage Per Second", _damagePerSecond.ToString("F1")),
-            new("Radius", _visionRange.ToString("F1")),
             new("Rotation Speed", _rotationSpeed.ToString("F1")),
             new("Damage Falloff (%)", _damageFalloffPercent.ToString("F0")),
-            new("Max Enemies Hit", _maxEnemiesHit.ToString())
+            new("Max Enemies Hit", _maxEnemiesHit.ToString()),
+            new("Radius", _visionRange.ToString("F1"))
         };
     }
 }

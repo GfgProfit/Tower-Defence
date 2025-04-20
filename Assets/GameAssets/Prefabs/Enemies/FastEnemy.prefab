@@ -149,7 +149,7 @@ MonoBehaviour:
   _canvasHolder: {fileID: 2408704093774334843}
   _speed: 5
   _damage: 2
-  _moneyGathering: 20
+  _moneyGathering: 15
 --- !u!114 &2122012315795491026
 MonoBehaviour:
   m_ObjectHideFlags: 0

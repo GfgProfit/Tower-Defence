@@ -174,6 +174,16 @@ public class TeslaTower : TowerBase, ITowerStats
 
     public List<StatData> GetStats()
     {
-        throw new System.NotImplementedException();
+        return new List<StatData>
+        {
+            new("Damage", _damage.ToString()),
+            new("Min Damage", _minDamage.ToString()),
+            new("Damage Falloff (%)", _damageFalloffPercent.ToString()),
+            new("Max Chains", _maxChainCount.ToString()),
+            new("Stun Duration", _stunDuration.ToString()),
+            new("Fire Rate", $"{_fireRate}/min"),
+            new("Rotation Speed", _rotationSpeed.ToString()),
+            new("Radius", _visionRange.ToString())
+        };
     }
 }
