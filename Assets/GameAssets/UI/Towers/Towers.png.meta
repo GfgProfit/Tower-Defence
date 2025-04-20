@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Freezing Tower
+      name: Flamethrower
       rect:
         serializedVersion: 2
         x: 0
@@ -105,7 +105,7 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -119,7 +119,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Flamethrower Tower
+      name: Anti Ai
       rect:
         serializedVersion: 2
         x: 1024
@@ -127,7 +127,7 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -141,7 +141,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Laser Tower
+      name: Tesla
       rect:
         serializedVersion: 2
         x: 2048
@@ -149,7 +149,7 @@ TextureImporter:
         width: 1024
         height: 1024
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -163,11 +163,55 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Rocket Launcher Tower
+      name: Cannon
       rect:
         serializedVersion: 2
         x: 3072
         y: 3072
+        width: 1024
+        height: 1024
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0f609aa1b007ade4f84dc99060d42d45
+      internalID: 1088076854
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Laser
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2048
+        width: 1024
+        height: 1024
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c9a2fca2043d3244d8f2a38b651ae707
+      internalID: -1557934677
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rocket Launcher
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 2048
         width: 1024
         height: 1024
       alignment: 0
@@ -178,8 +222,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0f609aa1b007ade4f84dc99060d42d45
-      internalID: 1088076854
+      spriteID: c7b8f57f6ec38014cbb2285e03212550
+      internalID: -90206794
       vertices: []
       indices: 
       edges: []
@@ -198,10 +242,12 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Flamethrower Tower: 529650844
-      Freezing Tower: -1706739578
-      Laser Tower: 2056356054
-      Rocket Launcher Tower: 1088076854
+      Anti Ai: 529650844
+      Cannon: 1088076854
+      Flamethrower: -1706739578
+      Laser: -1557934677
+      Rocket Launcher: -90206794
+      Tesla: 2056356054
       Towers_4: 520650176
       Towers_5: 972251297
   mipmapLimitGroupName: 
