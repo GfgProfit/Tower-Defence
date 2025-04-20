@@ -8,6 +8,7 @@ public class TowerStatsPanel : MonoBehaviour
     [SerializeField] private Image _iconImage;
     [SerializeField] private TMP_Text _nameText;
     [SerializeField] private TMP_Text _statsText;
+    [SerializeField] private TMP_Text _sellMoneyText;
 
     public void Show(Sprite icon, string towerName, string stats)
     {

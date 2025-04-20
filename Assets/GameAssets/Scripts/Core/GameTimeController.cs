@@ -1,33 +1,33 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class GameTimeController : MonoBehaviour, IPointerClickHandler
+public class GameTimeController : MonoBehaviour
 {
-    [SerializeField] private TMP_Text _timescaleButtonText;
+    [SerializeField] private TimeData[] _timeDatas;
 
     [Space]
-    [SerializeField] private float[] _times;
+    [SerializeField] private Image _timeFactorImage;
+    [SerializeField] private Image _pauseImage;
+    [SerializeField] private Sprite _pauseIcon;
+    [SerializeField] private Sprite _resumeIcon;
+    [SerializeField] private CustomButton _timeButton;
+    [SerializeField] private CustomButton _pauseButton;
 
     private int _index;
+    private bool _isPaused = false;
 
-    private void Awake()
+    private void Start()
     {
-        _index = System.Array.IndexOf(_times, 1f);
-        
-        if (_index == -1)
-        {
-            _index = 0;
-        }
-
-        ApplyTimescale();
+        _timeButton.OnClick.AddListener(() => ChangeTimeScale());
+        _pauseButton.OnClick.AddListener(() => Pause());
     }
 
-    private void Up()
+    private void ChangeTimeScale()
     {
         _index++;
 
-        if (_index > _times.Length - 1)
+        if (_index > _timeDatas.Length - 1)
         {
             _index = 0;
         }
@@ -35,51 +35,32 @@ public class GameTimeController : MonoBehaviour, IPointerClickHandler
         ApplyTimescale();
     }
 
-    private void Down()
+    private void Pause()
     {
-        _index--;
+        _isPaused = !_isPaused;
 
-        if (_index < 0)
-        {
-            _index = _times.Length - 1;
-        }
-
-        ApplyTimescale();
-    }
-
-    private void ResetTime()
-    {
-        _index = 0;
-
-        ApplyTimescale();
+        _pauseImage.sprite = _isPaused ? _resumeIcon : _pauseIcon;
+        Time.timeScale = _isPaused ? 0 : _timeDatas[_index].TimeFactor;
     }
 
     private void ApplyTimescale()
     {
-        if (_times == null || _times.Length == 0)
+        if (_timeDatas == null || _timeDatas.Length == 0 || _isPaused)
         {
             return;
         }
 
-        Time.timeScale = _times[_index];
-
-        _timescaleButtonText.text = $"TimeScale: {_times[_index]:0.##}x";
-        _timescaleButtonText.color = _times[_index] == 1f ? Color.white : Color.yellow;
+        Time.timeScale = _timeDatas[_index].TimeFactor;
+        _timeFactorImage.sprite = _timeDatas[_index].TimeIcon;
     }
+}
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            Up();
-        }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            Down();
-        }
-        else if (eventData.button == PointerEventData.InputButton.Middle)
-        {
-            ResetTime();
-        }
-    }
+[System.Serializable]
+public class TimeData
+{
+    [SerializeField] private Sprite _timeIcon;
+    [SerializeField] private int _timeFactor;
+
+    public Sprite TimeIcon => _timeIcon;
+    public int TimeFactor => _timeFactor;
 }

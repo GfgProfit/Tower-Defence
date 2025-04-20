@@ -15,6 +15,7 @@ public class ShopItemConfig : ScriptableObject
     public Color NameColor => _nameColor;
     public TowerBase TowerPrefab => _towerPrefab;
     public int Price => _price;
+    public int SellMoneyValue { get; private set; }
 
     public List<StatData> GetTowerStats()
     {

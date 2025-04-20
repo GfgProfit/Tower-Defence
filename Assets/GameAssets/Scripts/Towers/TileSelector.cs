@@ -103,6 +103,11 @@ public class TileSelector : MonoBehaviour
 
     public void ShowStatsPanel(ShopItemConfig shopItemConfig)
     {
+        if (shopItemConfig == null)
+        {
+            return;
+        }
+
         List<StatData> statDatas = shopItemConfig.GetTowerStats();
         string stats = string.Empty;
         string towerName = $"<color={Utils.ColorToHex(shopItemConfig.NameColor)}>{shopItemConfig.Name}</color>";

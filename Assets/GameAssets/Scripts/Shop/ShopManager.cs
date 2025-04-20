@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DG.Tweening;
 using GameAssets.Global.Core;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ public class ShopManager : MonoBehaviour
 
     public TileSelector TileSelector => _tileSelector;
 
-    private void Awake()
+    private void Start()
     {
         InitShop();
     }
@@ -44,6 +45,10 @@ public class ShopManager : MonoBehaviour
             GameController.Instance.EventBus.RaiseMoneySpend(shopItemConfig.Price);
 
             TowerBase towerBase = Instantiate(shopItemConfig.TowerPrefab, _tileSelector.SelectedTile.TowerSpawnPoint.position, Quaternion.identity);
+
+            towerBase.transform.localScale = Vector3.zero;
+            towerBase.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+
             _tileSelector.SelectedTile.SetTower(towerBase);
             _tileSelector.ShowVisualCircle();
             _tileSelector.ShowUI();
