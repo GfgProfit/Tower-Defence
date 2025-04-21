@@ -105,10 +105,10 @@ public class CannonTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Damage", _damage.ToString("F2")),
-            new("Fire Rate (min)", $"{_fireRate:F2}"),
-            new("Rotation Speed", _rotationSpeed.ToString("F2")),
-            new("Radius", _visionRange.ToString("F2"))
+            new("Damage\n", _damage.ToString("F2")),
+            new("Fire Rate (min)\n", $"{_fireRate:F2}"),
+            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
+            new("Radius\n", _visionRange.ToString("F2"))
         };
     }
 
@@ -120,14 +120,14 @@ public class CannonTower : TowerBase, ITowerStats
         float futureRotationSpeed = _rotationSpeed * _upgradeConfig.RotationSpeedMultiplier;
 
         string separator = "<color=#FFFFFF>>>></color>";
-        string upgradeColor = $"<color={Utils.ColorToHex(ShopItemConfig.NameColor)}>";
+        string upgradeColor = $"<color={Utils.ColorToHex(Color.green)}>";
 
         return new List<StatData>
         {
-            new("Damage", $"{_damage:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
-            new("Fire Rate (min)", $"{_fireRate:F2} {separator} {upgradeColor}{futureFireRate:F2}</color>"),
-            new("Rotation Speed", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
-            new("Radius", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
+            new("Damage\n", $"{_damage:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
+            new("Fire Rate (min)\n", $"{_fireRate:F2} {separator} {upgradeColor}{futureFireRate:F2}</color>"),
+            new("Rotation Speed\n", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
+            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
         };
     }
 }

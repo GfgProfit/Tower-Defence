@@ -78,7 +78,7 @@ public class TowerStatsPanel : MonoBehaviour
         string upgradedText = string.Empty;
         foreach (var stat in upgradeStats)
         {
-            upgradedText += $"{stat.Name}: <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{stat.Value}</color>\n";
+            upgradedText += $"{stat.Name} <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{stat.Value}</color>\n";
         }
 
         _statsText.text = upgradedText;
@@ -101,7 +101,7 @@ public class TowerStatsPanel : MonoBehaviour
         string stats = string.Empty;
         foreach (var statData in statDatas)
         {
-            stats += $"{statData.Name}: <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{statData.Value}</color>\n";
+            stats += $"{statData.Name} <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{statData.Value}</color>\n";
         }
 
         _currentStatsText = stats;

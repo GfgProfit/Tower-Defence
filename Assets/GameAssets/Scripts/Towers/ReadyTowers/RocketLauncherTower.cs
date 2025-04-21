@@ -173,13 +173,13 @@ public class RocketLauncherTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Damage per Rocket", _damagePerRocket.ToString("F2")),
-            new("Delay Between Rockets (s)", _delayBetweenRocketLaunches.ToString("F2")),
-            new("Reload Time (s)", _reloadTime.ToString("F2")),
-            new("After Reload Delay (s)", _afterReloadDelay.ToString("F2")),
-            new("Fly To Target Duration (s)", _flyDuration.ToString("F2")),
-            new("Rotation Speed", _rotationSpeed.ToString("F2")),
-            new("Radius", _visionRange.ToString("F2"))
+            new("Damage per Rocket\n", _damagePerRocket.ToString("F2")),
+            new("Rockets Delay (s)\n", _delayBetweenRocketLaunches.ToString("F2")),
+            new("Reload Time (s)\n", _reloadTime.ToString("F2")),
+            new("After Reload Delay (s)\n", _afterReloadDelay.ToString("F2")),
+            new("Fly To Target (s)\n", _flyDuration.ToString("F2")),
+            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
+            new("Radius\n", _visionRange.ToString("F2"))
         };
     }
 
@@ -194,17 +194,17 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         float futureFlyDuration = _flyDuration * _upgradeConfig.FlyDurationMultiplier;
 
         string separator = "<color=#FFFFFF>>>></color>";
-        string upgradeColor = $"<color={Utils.ColorToHex(ShopItemConfig.NameColor)}>";
+        string upgradeColor = $"<color={Utils.ColorToHex(Color.green)}>";
 
         return new List<StatData>
         {
-            new("Damage per Rocket", $"{_damagePerRocket:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
-            new("Delay Between Rockets (s)", $"{_delayBetweenRocketLaunches:F2} {separator} {upgradeColor}{futureDelayBetweenRockets:F2}</color>"),
-            new("Reload Time (s)", $"{_reloadTime:F2} {separator} {upgradeColor}{futureReloadTime:F2}</color>"),
-            new("After Reload Delay (s)", $"{_afterReloadDelay:F2} {separator} {upgradeColor}{futureAfterReloadDelay:F2}</color>"),
-            new("Fly To Target Duration (s)", $"{_flyDuration:F2} {separator} {upgradeColor}{futureFlyDuration:F2}</color>"),
-            new("Rotation Speed", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
-            new("Radius", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
+            new("Damage per Rocket\n", $"{_damagePerRocket:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
+            new("Rockets Delay (s)\n", $"{_delayBetweenRocketLaunches:F2} {separator} {upgradeColor}{futureDelayBetweenRockets:F2}</color>"),
+            new("Reload Time (s)\n", $"{_reloadTime:F2} {separator} {upgradeColor}{futureReloadTime:F2}</color>"),
+            new("After Reload Delay (s)\n", $"{_afterReloadDelay:F2} {separator} {upgradeColor}{futureAfterReloadDelay:F2}</color>"),
+            new("Fly To Target (s)\n", $"{_flyDuration:F2} {separator} {upgradeColor}{futureFlyDuration:F2}</color>"),
+            new("Rotation Speed\n", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
+            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
         };
     }
 }
