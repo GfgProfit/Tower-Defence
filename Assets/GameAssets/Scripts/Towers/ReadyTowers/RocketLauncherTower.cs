@@ -6,6 +6,7 @@ public class RocketLauncherTower : TowerBase, ITowerStats
     [Header("Rocket Launcher Tower Settings")]
     [SerializeField] private ParticleSystem _rocketExplosionPrefab;
     [SerializeField] private RocketProvider _rocketProvider;
+    [SerializeField] private RocketLauncherUpgradeConfig _upgradeConfig;
 
     [Space]
     [SerializeField] private float _damagePerRocket = 1.5f;
@@ -47,6 +48,24 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         {
             UpdateRocketLaunchTimer();
         }
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+
+        _upgradeConfig.ApplyUpgrade(this);
+    }
+
+    public void UpgradeRocketLauncherTower(float damageMult, float rangeMult, float rotationSpeedMult, float delayBetweenRocketLaunchesMult, float reloadTimeMult, float afterReloadDelayMult, float flyDurationMult)
+    {
+        _damagePerRocket *= damageMult;
+        _visionRange *= rangeMult;
+        _rotationSpeed *= rotationSpeedMult;
+        _delayBetweenRocketLaunches *= delayBetweenRocketLaunchesMult;
+        _reloadTime *= reloadTimeMult;
+        _afterReloadTimer *= afterReloadDelayMult;
+        _flyDuration *= flyDurationMult;
     }
 
     private void UpdateRocketLaunchTimer()
@@ -154,13 +173,38 @@ public class RocketLauncherTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Damage per Rocket", _damagePerRocket.ToString()),
-            new("Delay Between Rockets", _delayBetweenRocketLaunches.ToString()),
-            new("Reload Time", _reloadTime.ToString()),
-            new("After Reload Delay", _afterReloadDelay.ToString()),
-            new("Fly To Target Duration", _flyDuration.ToString()),
-            new("Rotation Speed", _rotationSpeed.ToString()),
-            new("Radius", _visionRange.ToString())
+            new("Damage per Rocket", _damagePerRocket.ToString("F2")),
+            new("Delay Between Rockets (s)", _delayBetweenRocketLaunches.ToString("F2")),
+            new("Reload Time (s)", _reloadTime.ToString("F2")),
+            new("After Reload Delay (s)", _afterReloadDelay.ToString("F2")),
+            new("Fly To Target Duration (s)", _flyDuration.ToString("F2")),
+            new("Rotation Speed", _rotationSpeed.ToString("F2")),
+            new("Radius", _visionRange.ToString("F2"))
+        };
+    }
+
+    public List<StatData> GetStatsAfterUpgrade()
+    {
+        float futureDamage = _damagePerRocket * _upgradeConfig.DamageMultiplier;
+        float futureRadius = _visionRange * _upgradeConfig.VisionRangeMultiplier;
+        float futureRotationSpeed = _rotationSpeed * _upgradeConfig.RotationSpeedMultiplier;
+        float futureDelayBetweenRockets = _delayBetweenRocketLaunches * _upgradeConfig.DelayBetweenRocketLaunchesMultiplier;
+        float futureReloadTime = _reloadTime * _upgradeConfig.ReloadTimeMultiplier;
+        float futureAfterReloadDelay = _afterReloadDelay * _upgradeConfig.AfterReloadDelayMultiplier;
+        float futureFlyDuration = _flyDuration * _upgradeConfig.FlyDurationMultiplier;
+
+        string separator = "<color=#FFFFFF>>>></color>";
+        string upgradeColor = $"<color={Utils.ColorToHex(ShopItemConfig.NameColor)}>";
+
+        return new List<StatData>
+        {
+            new("Damage per Rocket", $"{_damagePerRocket:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
+            new("Delay Between Rockets (s)", $"{_delayBetweenRocketLaunches:F2} {separator} {upgradeColor}{futureDelayBetweenRockets:F2}</color>"),
+            new("Reload Time (s)", $"{_reloadTime:F2} {separator} {upgradeColor}{futureReloadTime:F2}</color>"),
+            new("After Reload Delay (s)", $"{_afterReloadDelay:F2} {separator} {upgradeColor}{futureAfterReloadDelay:F2}</color>"),
+            new("Fly To Target Duration (s)", $"{_flyDuration:F2} {separator} {upgradeColor}{futureFlyDuration:F2}</color>"),
+            new("Rotation Speed", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
+            new("Radius", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
         };
     }
 }

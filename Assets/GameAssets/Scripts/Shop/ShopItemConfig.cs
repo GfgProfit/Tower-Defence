@@ -9,13 +9,14 @@ public class ShopItemConfig : ScriptableObject
     [SerializeField] private Color _nameColor = Color.white;
     [SerializeField] private TowerBase _towerPrefab;
     [SerializeField] private int _price;
+    [Range(0f, 1f)] private float _sellMultiplier = 0.3f;
 
     public string Name => _name;
     public Sprite TowerIcon => _towerIcon;
     public Color NameColor => _nameColor;
     public TowerBase TowerPrefab => _towerPrefab;
     public int Price => _price;
-    public int SellMoneyValue { get; private set; }
+    public float SellMultiplier => _sellMultiplier;
 
     public List<StatData> GetTowerStats()
     {

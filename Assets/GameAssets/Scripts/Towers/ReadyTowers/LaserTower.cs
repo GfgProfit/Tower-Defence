@@ -5,6 +5,9 @@ public class LaserTower : TowerBase, ITowerStats
 {
     [Header("Laser Tower Settings")]
     [SerializeField] private ParticleSystem _fireParticles;
+    [SerializeField] private FlamethrowerUpgradeConfig _upgradeConfig;
+
+    [Space]
     [SerializeField] private float _damagePerSecond = 10f;
     [SerializeField, Range(0f, 100f)] private float _damageFalloffPercent = 30f;
     [SerializeField, Min(1)] private int _maxEnemiesHit = 4;
@@ -24,6 +27,21 @@ public class LaserTower : TowerBase, ITowerStats
         {
             StopEffect();
         }
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+
+        _upgradeConfig.ApplyUpgrade(this);
+    }
+
+    public void UpgradeFlamethrowerTower(float damageMult, float rangeMult, float damageFalloffMult, float rotationSpeedMult)
+    {
+        _damagePerSecond *= damageMult;
+        _visionRange *= rangeMult;
+        _damageFalloffPercent *= damageFalloffMult;
+        _rotationSpeed *= rotationSpeedMult;
     }
 
     private void HandleAttack()
@@ -86,11 +104,31 @@ public class LaserTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Damage Per Second", _damagePerSecond.ToString("F1")),
-            new("Rotation Speed", _rotationSpeed.ToString("F1")),
-            new("Damage Falloff (%)", _damageFalloffPercent.ToString("F0")),
+            new("Damage Per Second", _damagePerSecond.ToString("F2")),
+            new("Rotation Speed", _rotationSpeed.ToString("F2")),
+            new("Damage Falloff (%)", _damageFalloffPercent.ToString("F2")),
             new("Max Enemies Hit", _maxEnemiesHit.ToString()),
-            new("Radius", _visionRange.ToString("F1"))
+            new("Radius", _visionRange.ToString("F2"))
+        };
+    }
+
+    public List<StatData> GetStatsAfterUpgrade()
+    {
+        float futureDamage = _damagePerSecond * _upgradeConfig.DamageMultiplier;
+        float futureRadius = _visionRange * _upgradeConfig.VisionRangeMultiplier;
+        float futureDamageFalloff = _damageFalloffPercent * _upgradeConfig.DamageFalloffMultiplier;
+        float futureRotationSpeed = _rotationSpeed * _upgradeConfig.RotationSpeedMultiplier;
+
+        string separator = "<color=#FFFFFF>>>></color>";
+        string upgradeColor = $"<color={Utils.ColorToHex(ShopItemConfig.NameColor)}>";
+
+        return new List<StatData>
+        {
+            new("Damage Per Second", $"{_damagePerSecond:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
+            new("Rotation Speed", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
+            new("Damage Falloff (%)", $"{_damageFalloffPercent:F2} {separator} {upgradeColor}{futureDamageFalloff:F2}</color>"),
+            new("Max Enemies Hit", _maxEnemiesHit.ToString()),
+            new("Radius", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
         };
     }
 }

@@ -37,4 +37,9 @@ public class FreezingTower : TowerBase, ITowerStats
             new("Radius", _visionRange.ToString())
         };
     }
+
+    public List<StatData> GetStatsAfterUpgrade()
+    {
+        throw new System.NotImplementedException();
+    }
 }

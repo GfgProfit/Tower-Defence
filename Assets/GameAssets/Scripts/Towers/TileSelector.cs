@@ -1,12 +1,8 @@
-using System.Collections.Generic;
 using UnityEngine;
+using GameAssets.Global.Core;
 
 public class TileSelector : MonoBehaviour
 {
-    [SerializeField] private VisualCircle _visualCircle;
-    [SerializeField] private RectTransform _shopPanelTransform;
-    [SerializeField] private TowerStatsPanel _statsPanelTransform;
-
     private Camera _mainCamera;
 
     public TowerTile SelectedTile { get; private set; }
@@ -60,7 +56,7 @@ public class TileSelector : MonoBehaviour
         }
     }
 
-    private void SelectTile(TowerTile tile)
+    public void SelectTile(TowerTile tile)
     {
         if (SelectedTile != null)
         {
@@ -70,57 +66,19 @@ public class TileSelector : MonoBehaviour
         SelectedTile = tile;
         SelectedTile.Select();
 
-        ShowVisualCircle();
-        ShowUI();
+        GameController.Instance.EventBus.RaiseTileSelected(SelectedTile);
     }
 
-    private void DeselectTile()
-    {
-        SelectedTile.Deselect();
-        SelectedTile = null;
-
-        HideVisualCircle();
-        _shopPanelTransform.gameObject.SetActive(false);
-        CloseStatsPanel();
-    }
-
-    public void ShowUI()
+    public void DeselectTile()
     {
         if (SelectedTile == null)
         {
             return;
         }
 
-        bool hasTower = SelectedTile.MyTower != null;
+        SelectedTile.Deselect();
 
-        _shopPanelTransform.gameObject.SetActive(!hasTower);
-
-        if (hasTower)
-        {
-            ShowStatsPanel(SelectedTile.MyTower.ShopItemConfig);
-        }
+        GameController.Instance.EventBus.RaiseTileDeselected(SelectedTile);
+        SelectedTile = null;
     }
-
-    public void ShowStatsPanel(ShopItemConfig shopItemConfig)
-    {
-        if (shopItemConfig == null)
-        {
-            return;
-        }
-
-        List<StatData> statDatas = shopItemConfig.GetTowerStats();
-        string stats = string.Empty;
-        string towerName = $"<color={Utils.ColorToHex(shopItemConfig.NameColor)}>{shopItemConfig.Name}</color>";
-
-        foreach (StatData statData in statDatas)
-        {
-            stats += $"{statData.Name}: <color={Utils.ColorToHex(shopItemConfig.NameColor)}>{statData.Value}</color>\n";
-        }
-
-        _statsPanelTransform.Show(shopItemConfig.TowerIcon, towerName, stats);
-    }
-
-    public void CloseStatsPanel() => _statsPanelTransform.Hide();
-    public void ShowVisualCircle() => _visualCircle.Show(SelectedTile);
-    public void HideVisualCircle() => _visualCircle.Hide();
 }

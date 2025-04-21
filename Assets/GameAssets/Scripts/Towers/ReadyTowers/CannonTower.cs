@@ -8,9 +8,10 @@ public class CannonTower : TowerBase, ITowerStats
     [SerializeField] private ParticleSystem _shotParticles;
     [SerializeField] private Transform _firePoint;
     [SerializeField] private Transform _cannonPointTransform;
+    [SerializeField] private CannonUpgradeConfig _upgradeConfig;
 
     [Space]
-    [SerializeField] private int _damage = 1;
+    [SerializeField] private float _damage = 1;
     [SerializeField] private float _fireRate = 60f;
     
     private float _fireCooldown;
@@ -35,6 +36,21 @@ public class CannonTower : TowerBase, ITowerStats
         {
             return;
         }
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+
+        _upgradeConfig.ApplyUpgrade(this);
+    }
+
+    public void UpgradeCannonTower(float damageMult, float fireRateMult, float rangeMult, float rotationSpeedMult)
+    {
+        _damage *= damageMult;
+        _fireRate *= fireRateMult;
+        _visionRange *= rangeMult;
+        _rotationSpeed *= rotationSpeedMult;
     }
 
     private void HandleAttackCycle()
@@ -89,10 +105,29 @@ public class CannonTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Damage", _damage.ToString()),
-            new("Firerate", $"{_fireRate}/min"),
-            new("Rotation Speed", _rotationSpeed.ToString()),
-            new("Radius", _visionRange.ToString())
+            new("Damage", _damage.ToString("F2")),
+            new("Fire Rate (min)", $"{_fireRate:F2}"),
+            new("Rotation Speed", _rotationSpeed.ToString("F2")),
+            new("Radius", _visionRange.ToString("F2"))
+        };
+    }
+
+    public List<StatData> GetStatsAfterUpgrade()
+    {
+        float futureDamage = _damage * _upgradeConfig.DamageMultiplier;
+        float futureFireRate = _fireRate * _upgradeConfig.FireRateMultiplier;
+        float futureRadius = _visionRange * _upgradeConfig.VisionRangeMultiplier;
+        float futureRotationSpeed = _rotationSpeed * _upgradeConfig.RotationSpeedMultiplier;
+
+        string separator = "<color=#FFFFFF>>>></color>";
+        string upgradeColor = $"<color={Utils.ColorToHex(ShopItemConfig.NameColor)}>";
+
+        return new List<StatData>
+        {
+            new("Damage", $"{_damage:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
+            new("Fire Rate (min)", $"{_fireRate:F2} {separator} {upgradeColor}{futureFireRate:F2}</color>"),
+            new("Rotation Speed", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
+            new("Radius", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
         };
     }
 }

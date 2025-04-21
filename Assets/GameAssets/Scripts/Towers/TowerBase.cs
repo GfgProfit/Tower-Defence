@@ -13,10 +13,19 @@ public abstract class TowerBase : MonoBehaviour
     [SerializeField] protected float _visionRange = 5f;
     [SerializeField, Range(0, 180)] protected float _fieldOfViewAngle = 10f;
 
+    [Header("Upgrade Settings")]
+    [SerializeField] private int _baseUpgradePrice;
+    [SerializeField] private float _upgradePriceMultiplier = 1.5f;
+
     public ShopItemConfig ShopItemConfig => _shopItemConfig;
+    public int UpgradeLevel => _upgradeLevel;
+    public int TotalInvested => _totalInvested;
 
     protected Transform _currentTarget;
     protected bool CanAttack { get; private set; }
+
+    private int _upgradeLevel = 0;
+    private int _totalInvested;
 
     protected virtual void Update()
     {
@@ -42,6 +51,11 @@ public abstract class TowerBase : MonoBehaviour
         {
             _currentTarget = FindClosestEnemyInRange();
         }
+    }
+
+    public void AddInvestment(int amount)
+    {
+        _totalInvested += amount;
     }
 
     private bool IsTargetAlive(Transform target)
@@ -113,6 +127,16 @@ public abstract class TowerBase : MonoBehaviour
     }
 
     public float GetVisionRange() => _visionRange;
+
+    public int GetNextUpgradePrice()
+    {
+        return Mathf.RoundToInt(_baseUpgradePrice * Mathf.Pow(_upgradePriceMultiplier, _upgradeLevel));
+    }
+
+    public virtual void Upgrade()
+    {
+        _upgradeLevel++;
+    }
 
     private void OnDrawGizmosSelected()
     {

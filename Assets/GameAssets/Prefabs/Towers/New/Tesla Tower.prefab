@@ -106,9 +106,11 @@ MonoBehaviour:
   _shopItemConfig: {fileID: 11400000, guid: d53a78a650bfe0742b8352ef298f828d, type: 2}
   _visionRange: 2
   _fieldOfViewAngle: 180
+  _baseUpgradePrice: 125
+  _upgradePriceMultiplier: 1.5
   _lineRendererPrefab: {fileID: 1850568144915767601, guid: 9a4225edfffd9224fbcb6393110ec233, type: 3}
+  _upgradeConfig: {fileID: 11400000, guid: 6a49b6a9a7aee3e49b7086bcf308b902, type: 2}
   _damage: 1.5
-  _minDamage: 0.2
   _damageFalloffPercent: 30
   _maxChainCount: 4
   _chainRadius: 3

@@ -5,12 +5,8 @@ using UnityEngine.EventSystems;
 
 public class CustomButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
-    public UnityEvent OnClick { get; private set; }
-
-    private void Awake()
-    {
-        OnClick = new();
-    }
+    [field: SerializeField]
+    public UnityEvent OnClick { get; private set; } = new UnityEvent();
 
     private void OnDisable()
     {
@@ -19,20 +15,33 @@ public class CustomButton : MonoBehaviour, IPointerClickHandler, IPointerEnterHa
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnClick?.Invoke();
+        InvokeClick();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         transform.DOKill(true);
-
         transform.DOScale(1.1f, 0.2f).SetEase(Ease.OutBack);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         transform.DOKill(true);
-
         transform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack);
+    }
+
+    public void AddListener(UnityAction action)
+    {
+        OnClick.AddListener(action);
+    }
+
+    public void RemoveListener(UnityAction action)
+    {
+        OnClick.RemoveListener(action);
+    }
+
+    public void InvokeClick()
+    {
+        OnClick?.Invoke();
     }
 }

@@ -1,57 +1,91 @@
-using System.Collections.Generic;
-using DG.Tweening;
-using GameAssets.Global.Core;
 using UnityEngine;
+using GameAssets.Global.Core;
+using DG.Tweening;
 
 public class ShopManager : MonoBehaviour
 {
-    [SerializeField] private ShopItemConfig[] _shopItemConfigs;
-
-    [Space]
-    [SerializeField] private RectTransform _shopPanelTransform;
-    [SerializeField] private ShopItemUI _shopItemUIPrefab;
+    [SerializeField] private ShopUIManager _shopUIManager;
     [SerializeField] private TileSelector _tileSelector;
 
-    public TileSelector TileSelector => _tileSelector;
-
-    private void Start()
+    private void OnEnable()
     {
-        InitShop();
+        GameController.Instance.EventBus.OnShopBuy += HandleShopBuy;
+        GameController.Instance.EventBus.OnSellTower += HandleSellTower;
+        GameController.Instance.EventBus.OnUpgradeTower += HandleUpgradeTower;
     }
 
-    private void OnEnable() => GameController.Instance.EventBus.OnShopBuy += Buy;
-    private void OnDisable() => GameController.Instance.EventBus.OnShopBuy -= Buy;
-
-    private void InitShop()
+    private void OnDisable()
     {
-        _shopPanelTransform.gameObject.SetActive(true);
-
-        for (int i = 0; i < _shopItemConfigs.Length; i++)
-        {
-            ShopItemUI shopItem = Instantiate(_shopItemUIPrefab, _shopPanelTransform);
-
-            shopItem.Setup(_shopItemConfigs[i]);
-        }
-
-        _shopPanelTransform.gameObject.SetActive(false);
+        GameController.Instance.EventBus.OnShopBuy -= HandleShopBuy;
+        GameController.Instance.EventBus.OnSellTower -= HandleSellTower;
+        GameController.Instance.EventBus.OnUpgradeTower -= HandleUpgradeTower;
     }
 
-    private void Buy(ShopItemConfig shopItemConfig)
+    private void HandleShopBuy(ShopItemConfig shopItemConfig)
     {
-        int money = GameController.Instance.EventBus.RaiseRequestMoney();
+        int currentMoney = GameController.Instance.EventBus.RaiseRequestMoney();
 
-        if (money >= shopItemConfig.Price)
+        if (currentMoney < shopItemConfig.Price)
         {
-            GameController.Instance.EventBus.RaiseMoneySpend(shopItemConfig.Price);
-
-            TowerBase towerBase = Instantiate(shopItemConfig.TowerPrefab, _tileSelector.SelectedTile.TowerSpawnPoint.position, Quaternion.identity);
-
-            towerBase.transform.localScale = Vector3.zero;
-            towerBase.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
-
-            _tileSelector.SelectedTile.SetTower(towerBase);
-            _tileSelector.ShowVisualCircle();
-            _tileSelector.ShowUI();
+            return;
         }
+
+        GameController.Instance.EventBus.RaiseMoneySpend(shopItemConfig.Price);
+
+        var tile = _tileSelector.SelectedTile;
+        if (tile == null)
+        {
+            return;
+        }
+
+        TowerBase tower = Instantiate(
+            shopItemConfig.TowerPrefab,
+            tile.TowerSpawnPoint.position,
+            Quaternion.identity
+        );
+
+        tower.transform.localScale = Vector3.zero;
+        tower.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+        tower.AddInvestment(shopItemConfig.Price);
+
+        tile.SetTower(tower);
+
+        GameController.Instance.EventBus.RaiseTileSelected(tile);
+    }
+
+    private void HandleSellTower(TowerTile tile)
+    {
+        if (tile == null || tile.MyTower == null)
+        {
+            return;
+        }
+
+        int sellPrice = Mathf.RoundToInt(tile.MyTower.TotalInvested * tile.MyTower.ShopItemConfig.SellMultiplier);
+
+        GameController.Instance.EventBus.RaiseMoneyGather(sellPrice);
+
+        Destroy(tile.MyTower.gameObject);
+        tile.SetTower(null);
+        _tileSelector.DeselectTile();
+
+        GameController.Instance.EventBus.RaiseTileDeselected(tile);
+    }
+
+    private void HandleUpgradeTower(TowerTile tile)
+    {
+        if (tile == null || tile.MyTower == null)
+            return;
+
+        int price = tile.MyTower.GetNextUpgradePrice();
+        int playerMoney = GameController.Instance.EventBus.RaiseRequestMoney();
+
+        if (playerMoney < price)
+            return;
+
+        GameController.Instance.EventBus.RaiseMoneySpend(price);
+        tile.MyTower.AddInvestment(price);
+        tile.MyTower.Upgrade();
+
+        GameController.Instance.EventBus.RaiseTileSelected(tile);
     }
 }

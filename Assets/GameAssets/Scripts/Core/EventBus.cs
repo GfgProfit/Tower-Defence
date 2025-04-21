@@ -21,5 +21,17 @@ namespace GameAssets.Global.Core
 
         public event Func<int> OnRequestMoney;
         public int RaiseRequestMoney() => OnRequestMoney?.Invoke() ?? 0;
+
+        public event Action<TowerTile> OnTileSelected;
+        public void RaiseTileSelected(TowerTile tile) => OnTileSelected?.Invoke(tile);
+
+        public event Action<TowerTile> OnTileDeselected;
+        public void RaiseTileDeselected(TowerTile tile) => OnTileDeselected?.Invoke(tile);
+
+        public event Action<TowerTile> OnSellTower;
+        public void RaiseSellTower(TowerTile tile) => OnSellTower?.Invoke(tile);
+
+        public event Action<TowerTile> OnUpgradeTower;
+        public void RaiseUpgradeTower(TowerTile tile) => OnUpgradeTower?.Invoke(tile);
     }
 }

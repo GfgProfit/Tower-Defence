@@ -7,10 +7,10 @@ public class TeslaTower : TowerBase, ITowerStats
 {
     [Header("Tesla Tower Settings")]
     [SerializeField] private LineRenderer _lineRendererPrefab;
+    [SerializeField] private TeslaUpgradeConfig _upgradeConfig;
 
     [Space]
     [SerializeField] private float _damage = 1f;
-    [SerializeField] private float _minDamage = 0.2f;
     [SerializeField, Range(0f, 100f)] private float _damageFalloffPercent = 30f;
     [SerializeField] private int _maxChainCount = 3;
     [SerializeField] private float _chainRadius = 5f;
@@ -35,6 +35,22 @@ public class TeslaTower : TowerBase, ITowerStats
         }
 
         HandleChainLightning();
+    }
+
+    public override void Upgrade()
+    {
+        base.Upgrade();
+
+        _upgradeConfig.ApplyUpgrade(this);
+    }
+
+    public void UpgradeTeslaTower(float damageMult, float fireRateMult, float rangeMult, float damageFalloffMult, float stunDurationMult)
+    {
+        _damage *= damageMult;
+        _fireRate *= fireRateMult;
+        _visionRange *= rangeMult;
+        _damageFalloffPercent *= damageFalloffMult;
+        _stunDuration *= stunDurationMult;
     }
 
     private void HandleChainLightning()
@@ -77,7 +93,6 @@ public class TeslaTower : TowerBase, ITowerStats
                 currentTarget = FindClosestEnemy(currentTarget.transform.position, hitEnemies);
 
                 currentDamage *= damageFalloff;
-                currentDamage = Mathf.Max(currentDamage, _minDamage);
 
                 yield return new WaitForSeconds(0.05f);
             }
@@ -176,14 +191,36 @@ public class TeslaTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Damage", _damage.ToString()),
-            new("Min Damage", _minDamage.ToString()),
-            new("Damage Falloff (%)", _damageFalloffPercent.ToString()),
-            new("Max Chains", _maxChainCount.ToString()),
-            new("Stun Duration", _stunDuration.ToString()),
-            new("Fire Rate", $"{_fireRate}/min"),
-            new("Rotation Speed", _rotationSpeed.ToString()),
-            new("Radius", _visionRange.ToString())
+            new("Damage", _damage.ToString("F2")),
+            new("Damage Falloff (%)", _damageFalloffPercent.ToString("F2")),
+            new("Max Chains", _maxChainCount.ToString("F2")),
+            new("Stun Duration (s)", $"{_stunDuration:F2}"),
+            new("Fire Rate (min)", $"{_fireRate:F2}"),
+            new("Rotation Speed", _rotationSpeed.ToString("F2")),
+            new("Radius", _visionRange.ToString("F2"))
+        };
+    }
+
+    public List<StatData> GetStatsAfterUpgrade()
+    {
+        float futureDamage = _damage * _upgradeConfig.DamageMultiplier;
+        float futureFireRate = _fireRate * _upgradeConfig.FireRateMultiplier;
+        float futureRadius = _visionRange * _upgradeConfig.VisionRangeMultiplier;
+        float futureDamageFalloff = _damageFalloffPercent * _upgradeConfig.DamageFalloffMultiplier;
+        float futureStunDuration = _stunDuration * _upgradeConfig.StunDurationMultiplier;
+
+        string separator = "<color=#FFFFFF>>>></color>";
+        string upgradeColor = $"<color={Utils.ColorToHex(ShopItemConfig.NameColor)}>";
+
+        return new List<StatData>
+        {
+            new("Damage", $"{_damage:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
+            new("Damage Falloff (%)", $"{_damageFalloffPercent:F2} {separator} {upgradeColor}{futureDamageFalloff:F2}</color>"),
+            new("Max Chains", _maxChainCount.ToString("F2")),
+            new("Stun Duration (s)", $"{_stunDuration:F2} {separator} {upgradeColor}>{futureStunDuration:F2}</color>"),
+            new("Fire Rate (min)", $"{_fireRate:F2} <{separator} {upgradeColor}{futureFireRate:F2}</color>"),
+            new("Rotation Speed", _rotationSpeed.ToString("F2")),
+            new("Radius", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
         };
     }
 }
