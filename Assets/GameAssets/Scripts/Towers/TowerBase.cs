@@ -135,7 +135,10 @@ public abstract class TowerBase : MonoBehaviour
 
     public virtual void Upgrade()
     {
-        _upgradeLevel++;
+        if (_upgradeLevel < 15)
+        {
+            _upgradeLevel++;
+        }
     }
 
     private void OnDrawGizmosSelected()

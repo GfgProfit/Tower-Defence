@@ -3,9 +3,13 @@ using TMPro;
 using UnityEngine.UI;
 using GameAssets.Global.Core;
 using System.Collections.Generic;
+using DG.Tweening;
 
 public class TowerStatsPanel : MonoBehaviour
 {
+    [SerializeField] private Image[] _upgradeProgressImages;
+
+    [Space]
     [SerializeField] private RectTransform _panel;
     [SerializeField] private Image _iconImage;
     [SerializeField] private TMP_Text _nameText;
@@ -15,7 +19,6 @@ public class TowerStatsPanel : MonoBehaviour
     [SerializeField] private CustomButton _sellButton;
     [SerializeField] private CustomButton _upgradeButton;
     [SerializeField] private UpgradeButtonHoverHandler _upgradeHoverHandler;
-
     private string _currentStatsText;
     private TowerTile _currentTile;
     private ITowerStats _currentTowerStats;
@@ -52,6 +55,8 @@ public class TowerStatsPanel : MonoBehaviour
             _sellMoneyText.text = "";
             _sellButton.gameObject.SetActive(false);
         }
+
+        UpdateUpgradeProgress();
     }
 
     public void Hide()
@@ -73,16 +78,23 @@ public class TowerStatsPanel : MonoBehaviour
         if (_currentTowerStats == null)
             return;
 
-        List<StatData> upgradeStats = _currentTowerStats.GetStatsAfterUpgrade();
-
-        string upgradedText = string.Empty;
-        foreach (var stat in upgradeStats)
+        if (_currentTile.MyTower.UpgradeLevel < 15)
         {
-            upgradedText += $"{stat.Name} <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{stat.Value}</color>\n";
-        }
+            List<StatData> upgradeStats = _currentTowerStats.GetStatsAfterUpgrade();
 
-        _statsText.text = upgradedText;
-        _upgradeMoneyText.text = $"<color=#FFC87F>$:</color> {Utils.FormatNumber(_currentTile.MyTower.GetNextUpgradePrice(), '.')}";
+            string upgradedText = string.Empty;
+            foreach (var stat in upgradeStats)
+            {
+                upgradedText += $"{stat.Name} <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{stat.Value}</color>\n";
+            }
+
+            _statsText.text = upgradedText;
+            _upgradeMoneyText.text = $"<color=#FFC87F>$:</color> {Utils.FormatNumber(_currentTile.MyTower.GetNextUpgradePrice(), '.')}";
+        }
+        else
+        {
+            _upgradeMoneyText.text = "MAX";
+        }
     }
 
     private void RestoreStats()
@@ -111,6 +123,22 @@ public class TowerStatsPanel : MonoBehaviour
         {
             _upgradeMoneyText.text = $"<color=#FFC87F>$:</color> {Utils.FormatNumber(_currentTile.MyTower.GetNextUpgradePrice(), '.')}";
             ShowUpgradePreview();
+        }
+    }
+
+    private void UpdateUpgradeProgress()
+    {
+        if (_currentTile == null || _currentTile.MyTower == null)
+            return;
+
+        int upgradeLevel = _currentTile.MyTower.UpgradeLevel;
+
+        for (int i = 0; i < _upgradeProgressImages.Length; i++)
+        {
+            if (i < upgradeLevel)
+                _upgradeProgressImages[i].color = Color.white;
+            else
+                _upgradeProgressImages[i].color = Color.gray;
         }
     }
 }

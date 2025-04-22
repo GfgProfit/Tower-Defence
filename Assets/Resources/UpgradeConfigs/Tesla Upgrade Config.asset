@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tesla Upgrade Config
   m_EditorClassIdentifier: 
   _damageMultiplier: 1.2
-  _fireRateMultiplier: 1.1
+  _fireRateMultiplier: 1.07
   _visionRangeMultiplier: 1.05
-  _damageFalloffMultiplier: 0.8
-  _stunDurationMultiplier: 1.2
+  _damageFalloffMultiplier: 0.9
+  _stunDurationMultiplier: 1.1

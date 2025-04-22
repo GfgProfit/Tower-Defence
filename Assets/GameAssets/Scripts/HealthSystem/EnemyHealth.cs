@@ -42,6 +42,7 @@ public class EnemyHealth : HealthBase
             {
                 if (_isDead)
                 {
+                    _me.OnDeath?.Invoke();
                     DOTween.Kill(transform);
                     Destroy(gameObject);
                 }

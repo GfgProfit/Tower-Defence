@@ -7,7 +7,7 @@ public class GameTimeController : MonoBehaviour
     [SerializeField] private TimeData[] _timeDatas;
 
     [Space]
-    [SerializeField] private Image _timeFactorImage;
+    [SerializeField] private TMP_Text _timeText;
     [SerializeField] private Image _pauseImage;
     [SerializeField] private Sprite _pauseIcon;
     [SerializeField] private Sprite _resumeIcon;
@@ -15,52 +15,65 @@ public class GameTimeController : MonoBehaviour
     [SerializeField] private CustomButton _pauseButton;
 
     private int _index;
-    private bool _isPaused = false;
+    private bool _isPaused;
 
     private void Start()
     {
-        _timeButton.OnClick.AddListener(() => ChangeTimeScale());
-        _pauseButton.OnClick.AddListener(() => Pause());
-    }
+        if (_timeButton != null)
+            _timeButton.OnClick.AddListener(ChangeTimeScale);
 
-    private void ChangeTimeScale()
-    {
-        _index++;
-
-        if (_index > _timeDatas.Length - 1)
-        {
-            _index = 0;
-        }
+        if (_pauseButton != null)
+            _pauseButton.OnClick.AddListener(TogglePause);
 
         ApplyTimescale();
     }
 
-    private void Pause()
+    private void ChangeTimeScale()
+    {
+        if (_timeDatas == null || _timeDatas.Length == 0)
+            return;
+
+        _index = (_index + 1) % _timeDatas.Length;
+
+        if (!_isPaused)
+        {
+            ApplyTimescale();
+        }
+    }
+
+    private void TogglePause()
     {
         _isPaused = !_isPaused;
 
-        _pauseImage.sprite = _isPaused ? _resumeIcon : _pauseIcon;
-        Time.timeScale = _isPaused ? 0 : _timeDatas[_index].TimeFactor;
+        UpdatePauseIcon();
+
+        Time.timeScale = _isPaused ? 0f : _timeDatas[_index].TimeFactor;
     }
 
     private void ApplyTimescale()
     {
-        if (_timeDatas == null || _timeDatas.Length == 0 || _isPaused)
-        {
+        if (_timeDatas == null || _timeDatas.Length == 0)
             return;
-        }
 
         Time.timeScale = _timeDatas[_index].TimeFactor;
-        _timeFactorImage.sprite = _timeDatas[_index].TimeIcon;
+
+        if (_timeText != null)
+            _timeText.text = _timeDatas[_index].TimeText;
+    }
+
+    private void UpdatePauseIcon()
+    {
+        if (_pauseImage != null)
+            _pauseImage.sprite = _isPaused ? _resumeIcon : _pauseIcon;
     }
 }
 
 [System.Serializable]
 public class TimeData
 {
-    [SerializeField] private Sprite _timeIcon;
-    [SerializeField] private int _timeFactor;
+    [SerializeField] private string _timeText;
+    [SerializeField] private float _timeFactor = 1f; // <-- Лучше float для Time.timeScale
 
-    public Sprite TimeIcon => _timeIcon;
-    public int TimeFactor => _timeFactor;
+    public string TimeText => _timeText;
+    public float TimeFactor => _timeFactor;
 }

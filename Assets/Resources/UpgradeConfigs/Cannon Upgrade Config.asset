@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 20072f71288b0704c98eb435545e3356, type: 3}
   m_Name: Cannon Upgrade Config
   m_EditorClassIdentifier: 
-  _damageMultiplier: 1.1
-  _fireRateMultiplier: 1.2
+  _damageMultiplier: 1.2
+  _fireRateMultiplier: 1.15
   _visionRangeMultiplier: 1.02
   _rotationSpeedMultiplier: 1.05

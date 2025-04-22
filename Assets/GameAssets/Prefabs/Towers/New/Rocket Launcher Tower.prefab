@@ -240,7 +240,7 @@ MonoBehaviour:
   _visionRange: 5
   _fieldOfViewAngle: 180
   _baseUpgradePrice: 100
-  _upgradePriceMultiplier: 1.5
+  _upgradePriceMultiplier: 1.4
   _rocketExplosionPrefab: {fileID: 6395466642929260635, guid: 4852630efcfad3b47b7e84c4361f0329, type: 3}
   _rocketProvider: {fileID: 1883129153000160051}
   _upgradeConfig: {fileID: 11400000, guid: afe4d74a066766c4a8bf8c3c0015312f, type: 2}

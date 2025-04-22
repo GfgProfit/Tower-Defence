@@ -16,14 +16,12 @@ public abstract class HealthBase : MonoBehaviour
 
     private void Awake()
     {
-        MaxHealth = _currentHealth;
-        
         DisplayHealth();
     }
 
     public void TakeDamage(float damage)
     {
-        if (damage <= 0f || _isDead)
+        if (_isDead)
         {
             return;
         }
@@ -54,6 +52,14 @@ public abstract class HealthBase : MonoBehaviour
         {
             _currentHealth = MaxHealth;
         }
+
+        DisplayHealth();
+    }
+
+    public void SetMaxHealth(float maxHealth)
+    {
+        MaxHealth = maxHealth;
+        _currentHealth = MaxHealth;
 
         DisplayHealth();
     }

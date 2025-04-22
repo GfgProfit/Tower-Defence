@@ -76,16 +76,19 @@ public class ShopManager : MonoBehaviour
         if (tile == null || tile.MyTower == null)
             return;
 
-        int price = tile.MyTower.GetNextUpgradePrice();
-        int playerMoney = GameController.Instance.EventBus.RaiseRequestMoney();
+        if (tile.MyTower.UpgradeLevel < 15)
+        {
+            int price = tile.MyTower.GetNextUpgradePrice();
+            int playerMoney = GameController.Instance.EventBus.RaiseRequestMoney();
 
-        if (playerMoney < price)
-            return;
+            if (playerMoney < price)
+                return;
 
-        GameController.Instance.EventBus.RaiseMoneySpend(price);
-        tile.MyTower.AddInvestment(price);
-        tile.MyTower.Upgrade();
+            GameController.Instance.EventBus.RaiseMoneySpend(price);
+            tile.MyTower.AddInvestment(price);
+            tile.MyTower.Upgrade();
 
-        GameController.Instance.EventBus.RaiseTileSelected(tile);
+            GameController.Instance.EventBus.RaiseTileSelected(tile);
+        }
     }
 }

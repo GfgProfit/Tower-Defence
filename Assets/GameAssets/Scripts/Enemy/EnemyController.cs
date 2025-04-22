@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using GameAssets.Global.Core;
 using UnityEngine;
@@ -8,11 +9,9 @@ public class EnemyController : MonoBehaviour, IStunnable
     [SerializeField] private RectTransform _canvasHolder;
 
     [Space]
-    [SerializeField] private float _speed = 2.0f;
     [SerializeField] private int _damage = 1;
 
-    [Space]
-    [SerializeField] private int _moneyGathering = 10;
+    public Action OnDeath;
 
     private Transform[] _waypoints;
     private int _waypointIndex = 0;
@@ -22,10 +21,20 @@ public class EnemyController : MonoBehaviour, IStunnable
     private float _currentSpeed;
     private bool _isStunned;
     private float _stunTimer;
+    private float _speed;
+    private int _moneyGathering;
 
     private void Awake()
     {
         _mainCameraTransform = Camera.main.transform;
+    }
+
+    public void Initialize(float speed, int money, float health)
+    {
+        _speed = speed;
+        _moneyGathering = money;
+        _enemyHealth.SetMaxHealth(health);
+
         _currentSpeed = _speed;
     }
 
@@ -134,6 +143,8 @@ public class EnemyController : MonoBehaviour, IStunnable
     private void ReachEnd()
     {
         GameController.Instance.EventBus.RaisePortalTakeDamage(_damage);
+
+        OnDeath?.Invoke();
 
         Destroy(gameObject);
     }
