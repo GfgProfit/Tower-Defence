@@ -174,12 +174,12 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         return new List<StatData>
         {
             new("Damage per Rocket\n", _damagePerRocket.ToString("F2")),
+            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
+            new("Radius\n", _visionRange.ToString("F2")),
             new("Rockets Delay (s)\n", _delayBetweenRocketLaunches.ToString("F2")),
             new("Reload Time (s)\n", _reloadTime.ToString("F2")),
             new("After Reload Delay (s)\n", _afterReloadDelay.ToString("F2")),
-            new("Fly To Target (s)\n", _flyDuration.ToString("F2")),
-            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
-            new("Radius\n", _visionRange.ToString("F2"))
+            new("Fly To Target (s)\n", _flyDuration.ToString("F2"))
         };
     }
 
@@ -199,12 +199,12 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         return new List<StatData>
         {
             new("Damage per Rocket\n", $"{_damagePerRocket:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
+            new("Rotation Speed\n", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
+            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>"),
             new("Rockets Delay (s)\n", $"{_delayBetweenRocketLaunches:F2} {separator} {upgradeColor}{futureDelayBetweenRockets:F2}</color>"),
             new("Reload Time (s)\n", $"{_reloadTime:F2} {separator} {upgradeColor}{futureReloadTime:F2}</color>"),
             new("After Reload Delay (s)\n", $"{_afterReloadDelay:F2} {separator} {upgradeColor}{futureAfterReloadDelay:F2}</color>"),
-            new("Fly To Target (s)\n", $"{_flyDuration:F2} {separator} {upgradeColor}{futureFlyDuration:F2}</color>"),
-            new("Rotation Speed\n", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
-            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
+            new("Fly To Target (s)\n", $"{_flyDuration:F2} {separator} {upgradeColor}{futureFlyDuration:F2}</color>")
         };
     }
 }

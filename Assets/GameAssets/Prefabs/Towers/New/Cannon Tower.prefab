@@ -9755,7 +9755,7 @@ MonoBehaviour:
   _shopItemConfig: {fileID: 11400000, guid: 6826907a7cd082e45bb13a93fb7f26e7, type: 2}
   _visionRange: 2.5
   _fieldOfViewAngle: 20
-  _baseUpgradePrice: 50
+  _baseUpgradePrice: 75
   _upgradePriceMultiplier: 1.35
   _shotParticles: {fileID: 7262720086130992932}
   _firePoint: {fileID: 8784751008954278183}

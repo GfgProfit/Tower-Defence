@@ -97,7 +97,7 @@ public class CannonTower : TowerBase, ITowerStats
 
     private void FireLaserAt(Vector3 hitPoint) => _shotParticles.Play();
 
-    private void DealDamage(EnemyController enemy) => enemy.GetHealthComponent().TakeDamage(_damage);
+    private void DealDamage(EnemyController enemy) => enemy.HealthComponent.TakeDamage(_damage);
 
     private void ResetCooldown() => _fireCooldown = 60f / _fireRate;
 
@@ -106,9 +106,9 @@ public class CannonTower : TowerBase, ITowerStats
         return new List<StatData>
         {
             new("Damage\n", _damage.ToString("F2")),
-            new("Fire Rate (min)\n", $"{_fireRate:F2}"),
             new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
-            new("Radius\n", _visionRange.ToString("F2"))
+            new("Radius\n", _visionRange.ToString("F2")),
+            new("Fire Rate (min)\n", $"{_fireRate:F2}")
         };
     }
 
@@ -125,9 +125,9 @@ public class CannonTower : TowerBase, ITowerStats
         return new List<StatData>
         {
             new("Damage\n", $"{_damage:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
-            new("Fire Rate (min)\n", $"{_fireRate:F2} {separator} {upgradeColor}{futureFireRate:F2}</color>"),
             new("Rotation Speed\n", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
-            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
+            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>"),
+            new("Fire Rate (min)\n", $"{_fireRate:F2} {separator} {upgradeColor}{futureFireRate:F2}</color>")
         };
     }
 }

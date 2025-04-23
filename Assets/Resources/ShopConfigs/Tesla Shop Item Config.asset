@@ -16,4 +16,4 @@ MonoBehaviour:
   _towerIcon: {fileID: 2056356054, guid: 218ef3eb9c0d82f46a48aac7bfd5bd21, type: 3}
   _nameColor: {r: 0.5990566, g: 0.956093, b: 1, a: 1}
   _towerPrefab: {fileID: 1321547529195318233, guid: 0625dec722cffc946a2912358f4108ea, type: 3}
-  _price: 125
+  _price: 150

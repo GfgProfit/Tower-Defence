@@ -59,7 +59,7 @@ public class Rocket : MonoBehaviour, IRocket
         {
             if (collider.TryGetComponent(out EnemyController enemy))
             {
-                enemy.GetHealthComponent().TakeDamage(damage);
+                enemy.HealthComponent.TakeDamage(damage);
             }
         }
     }

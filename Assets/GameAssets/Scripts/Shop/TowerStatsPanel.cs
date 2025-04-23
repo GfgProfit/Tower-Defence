@@ -3,7 +3,6 @@ using TMPro;
 using UnityEngine.UI;
 using GameAssets.Global.Core;
 using System.Collections.Generic;
-using DG.Tweening;
 
 public class TowerStatsPanel : MonoBehaviour
 {

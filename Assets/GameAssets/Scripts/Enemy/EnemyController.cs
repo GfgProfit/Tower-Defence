@@ -13,6 +13,9 @@ public class EnemyController : MonoBehaviour, IStunnable
 
     public Action OnDeath;
 
+    public HealthBase HealthComponent => _enemyHealth;
+    public int MoneyGathering => _moneyGathering;
+
     private Transform[] _waypoints;
     private int _waypointIndex = 0;
     private Transform _mainCameraTransform;
@@ -27,15 +30,6 @@ public class EnemyController : MonoBehaviour, IStunnable
     private void Awake()
     {
         _mainCameraTransform = Camera.main.transform;
-    }
-
-    public void Initialize(float speed, int money, float health)
-    {
-        _speed = speed;
-        _moneyGathering = money;
-        _enemyHealth.SetMaxHealth(health);
-
-        _currentSpeed = _speed;
     }
 
     private void OnEnable()
@@ -68,6 +62,15 @@ public class EnemyController : MonoBehaviour, IStunnable
         }
 
         MoveToPoint();
+    }
+
+    public void Initialize(float speed, int money, float health)
+    {
+        _speed = speed;
+        _moneyGathering = money;
+        _enemyHealth.SetMaxHealth(health);
+
+        _currentSpeed = _speed;
     }
 
     public void SetPath(Transform[] path)
@@ -148,9 +151,6 @@ public class EnemyController : MonoBehaviour, IStunnable
 
         Destroy(gameObject);
     }
-
-    public HealthBase GetHealthComponent() => _enemyHealth;
-    public int GetMoneyGathering() => _moneyGathering;
 
     public void Stun(float duration)
     {

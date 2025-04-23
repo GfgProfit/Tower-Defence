@@ -16,7 +16,6 @@ public class TeslaTower : TowerBase, ITowerStats
     [SerializeField] private float _chainRadius = 5f;
     [SerializeField] private float _stunDuration = 0.1f;
     [SerializeField] private float _fireRate = 60f;
-    [SerializeField] private int _lightningCount = 2;
     
     private float _fireCooldown;
 
@@ -106,49 +105,46 @@ public class TeslaTower : TowerBase, ITowerStats
 
     private void SpawnLightning(List<Vector3> points)
     {
-        for (int l = 0; l < _lightningCount; l++)
+        LineRenderer currentLineRenderer = Instantiate(_lineRendererPrefab);
+        currentLineRenderer.useWorldSpace = true;
+
+        List<Vector3> distortedPoints = new();
+
+        for (int i = 0; i < points.Count - 1; i++)
         {
-            LineRenderer currentLineRenderer = Instantiate(_lineRendererPrefab);
-            currentLineRenderer.useWorldSpace = true;
+            distortedPoints.Add(points[i]);
 
-            List<Vector3> distortedPoints = new();
+            Vector3 midPoint = (points[i] + points[i + 1]) / 2f;
 
-            for (int i = 0; i < points.Count - 1; i++)
-            {
-                distortedPoints.Add(points[i]);
+            midPoint += (1f + Random.Range(-0.2f, 0.2f)) * 0.5f * Random.insideUnitSphere;
 
-                Vector3 midPoint = (points[i] + points[i + 1]) / 2f;
-
-                midPoint += (1f + Random.Range(-0.2f, 0.2f)) * 0.5f * Random.insideUnitSphere;
-
-                distortedPoints.Add(midPoint);
-            }
-
-            distortedPoints.Add(points[^1]);
-
-            currentLineRenderer.positionCount = distortedPoints.Count;
-            currentLineRenderer.SetPositions(distortedPoints.ToArray());
-
-            currentLineRenderer.transform
-                .DOShakePosition(0.2f, 0.2f, 10, 90, false, true)
-                .SetEase(Ease.OutQuad);
-
-            Material materialInstance = new(currentLineRenderer.material);
-            currentLineRenderer.material = materialInstance;
-
-            materialInstance
-                .DOFade(0f, 0.2f)
-                .SetDelay(0.2f)
-                .OnComplete(() =>
-                {
-                    Destroy(currentLineRenderer.gameObject);
-                });
+            distortedPoints.Add(midPoint);
         }
+
+        distortedPoints.Add(points[^1]);
+
+        currentLineRenderer.positionCount = distortedPoints.Count;
+        currentLineRenderer.SetPositions(distortedPoints.ToArray());
+
+        currentLineRenderer.transform
+            .DOShakePosition(0.2f, 0.2f, 10, 90, false, true)
+            .SetEase(Ease.OutQuad);
+
+        Material materialInstance = new(currentLineRenderer.material);
+        currentLineRenderer.material = materialInstance;
+
+        materialInstance
+            .DOFade(0f, 0.2f)
+            .SetDelay(0.2f)
+            .OnComplete(() =>
+            {
+                Destroy(currentLineRenderer.gameObject);
+            });
     }
 
     private void DealDamage(EnemyController enemy, float damage)
     {
-        enemy.GetHealthComponent().TakeDamage(damage);
+        enemy.HealthComponent.TakeDamage(damage);
     }
 
     private void ResetCooldown() => _fireCooldown = 60f / _fireRate;
@@ -192,12 +188,12 @@ public class TeslaTower : TowerBase, ITowerStats
         return new List<StatData>
         {
             new("Damage\n", _damage.ToString("F2")),
+            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
+            new("Radius\n", _visionRange.ToString("F2")),
+            new("Fire Rate (min)\n", $"{_fireRate:F2}"),
             new("Damage Falloff (%)\n", _damageFalloffPercent.ToString("F2")),
             new("Max Chains\n", _maxChainCount.ToString("F2")),
-            new("Stun Duration (s)\n", $"{_stunDuration:F2}"),
-            new("Fire Rate (min)\n", $"{_fireRate:F2}"),
-            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
-            new("Radius\n", _visionRange.ToString("F2"))
+            new("Stun Duration (s)\n", $"{_stunDuration:F2}")
         };
     }
 
@@ -215,12 +211,12 @@ public class TeslaTower : TowerBase, ITowerStats
         return new List<StatData>
         {
             new("Damage\n", $"{_damage:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
+            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
+            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>"),
+            new("Fire Rate (min)\n", $"{_fireRate:F2} {separator} {upgradeColor}{futureFireRate:F2}</color>"),
             new("Damage Falloff (%)\n", $"{_damageFalloffPercent:F2} {separator} {upgradeColor}{futureDamageFalloff:F2}</color>"),
             new("Max Chains\n", _maxChainCount.ToString("F2")),
-            new("Stun Duration (s)\n", $"{_stunDuration:F2} {separator} {upgradeColor} {futureStunDuration:F2}</color>"),
-            new("Fire Rate (min)\n", $"{_fireRate:F2} {separator} {upgradeColor}{futureFireRate:F2}</color>"),
-            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
-            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
+            new("Stun Duration (s)\n", $"{_stunDuration:F2} {separator} {upgradeColor} {futureStunDuration:F2}</color>")
         };
     }
 }

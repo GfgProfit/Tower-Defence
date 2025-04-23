@@ -68,6 +68,7 @@ public partial class WaveGenerator : MonoBehaviour
 
         int enemiesCount = CalculateEnemiesCount();
         _aliveEnemies = enemiesCount;
+
         List<EnemyType> selectedTypes = GetEnemyTypesForWave(_currentWave);
 
         float spawnRate = Mathf.Max(0.1f, _baseSpawnRate - _spawnRateDecreasePerWave * _currentWave);

@@ -69,7 +69,7 @@ public class LaserTower : TowerBase, ITowerStats
         {
             if (hit.collider.TryGetComponent(out EnemyController enemy))
             {
-                enemy.GetHealthComponent().TakeDamage(currentDamage);
+                enemy.HealthComponent.TakeDamage(currentDamage);
 
                 currentDamage *= damageFalloff;
                 enemiesHit++;
@@ -106,9 +106,9 @@ public class LaserTower : TowerBase, ITowerStats
         {
             new("Damage Per Second\n", _damagePerSecond.ToString("F2")),
             new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
+            new("Radius\n", _visionRange.ToString("F2")),
             new("Damage Falloff (%)\n", _damageFalloffPercent.ToString("F2")),
-            new("Max Enemies Hit\n", _maxEnemiesHit.ToString("F2")),
-            new("Radius\n", _visionRange.ToString("F2"))
+            new("Max Enemies Hit\n", _maxEnemiesHit.ToString("F2"))
         };
     }
 
@@ -126,9 +126,9 @@ public class LaserTower : TowerBase, ITowerStats
         {
             new("Damage Per Second\n", $"{_damagePerSecond:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
             new("Rotation Speed\n", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
+            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>"),
             new("Damage Falloff (%)\n", $"{_damageFalloffPercent:F2} {separator} {upgradeColor}{futureDamageFalloff:F2}</color>"),
-            new("Max Enemies Hit\n", _maxEnemiesHit.ToString("F2")),
-            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>")
+            new("Max Enemies Hit\n", _maxEnemiesHit.ToString("F2"))
         };
     }
 }

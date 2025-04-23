@@ -1,6 +1,5 @@
 using GameAssets.Global.Core;
 using UnityEngine.UI;
-using DG.Tweening;
 using UnityEngine;
 
 public class EnemyHealth : HealthBase
@@ -9,17 +8,15 @@ public class EnemyHealth : HealthBase
     [SerializeField] private Image _healthImage;
     [SerializeField] private Transform _healthHolder;
 
-    private void Update()
-    {
-        if (_isDead)
-        {
-            Destroy(gameObject, 0.5f);
-        }
-    }
-
     protected override void Die()
     {
-        GameController.Instance.EventBus.RaiseMoneyGather(_me.GetMoneyGathering());
+        _isDead = true;
+
+        GameController.Instance.EventBus.RaiseMoneyGather(_me.MoneyGathering);
+
+        _me.OnDeath?.Invoke();
+
+        Destroy(gameObject);
     }
 
     protected override void DisplayHealth()
@@ -33,20 +30,5 @@ public class EnemyHealth : HealthBase
         _healthImage.color = Color.Lerp(Color.red, Color.green, _currentHealth / MaxHealth);
         
         _healthHolder.gameObject.SetActive(_currentHealth < MaxHealth);
-    }
-
-    protected override void ScaleAnimation()
-    {
-        transform.DOPunchScale(Vector3.one * 0.2f, _animationCooldown, 10, 1)
-            .OnComplete(() =>
-            {
-                if (_isDead)
-                {
-                    _me.OnDeath?.Invoke();
-                    DOTween.Kill(transform);
-                    Destroy(gameObject);
-                }
-            })
-            .SetLink(gameObject, LinkBehaviour.KillOnDestroy);
     }
 }

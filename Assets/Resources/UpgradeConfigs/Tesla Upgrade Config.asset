@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcec6703991502147a63bc5ec97a99c6, type: 3}
   m_Name: Tesla Upgrade Config
   m_EditorClassIdentifier: 
-  _damageMultiplier: 1.2
+  _damageMultiplier: 1.15
   _fireRateMultiplier: 1.07
   _visionRangeMultiplier: 1.05
   _damageFalloffMultiplier: 0.9
-  _stunDurationMultiplier: 1.1
+  _stunDurationMultiplier: 1.15
