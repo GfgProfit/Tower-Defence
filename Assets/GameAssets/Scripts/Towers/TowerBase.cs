@@ -20,10 +20,10 @@ public abstract class TowerBase : MonoBehaviour
     public ShopItemConfig ShopItemConfig => _shopItemConfig;
     public int UpgradeLevel => _upgradeLevel;
     public int TotalInvested => _totalInvested;
+    public float TotalDamageDeal { get; protected set; } = 0;
 
     protected Transform _currentTarget;
     protected bool CanAttack { get; private set; }
-
     private int _upgradeLevel = 0;
     private int _totalInvested;
 

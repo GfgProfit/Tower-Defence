@@ -3,6 +3,7 @@ using TMPro;
 using UnityEngine.UI;
 using GameAssets.Global.Core;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 public class TowerStatsPanel : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class TowerStatsPanel : MonoBehaviour
     [SerializeField] private TMP_Text _statsText;
     [SerializeField] private TMP_Text _sellMoneyText;
     [SerializeField] private TMP_Text _upgradeMoneyText;
+    [SerializeField] private TMP_Text _totalDamageDealText;
     [SerializeField] private CustomButton _sellButton;
     [SerializeField] private CustomButton _upgradeButton;
     [SerializeField] private UpgradeButtonHoverHandler _upgradeHoverHandler;
@@ -29,6 +31,16 @@ public class TowerStatsPanel : MonoBehaviour
 
         _upgradeHoverHandler.OnPointerEnterEvent += ShowUpgradePreview;
         _upgradeHoverHandler.OnPointerExitEvent += RestoreStats;
+    }
+
+    private void Update()
+    {
+        if (_currentTile == null)
+        {
+            return;
+        }
+
+        DisplayTotalDealDamage(_currentTile);
     }
 
     public void Show(Sprite icon, string towerName, string stats, TowerTile tile)
@@ -56,6 +68,11 @@ public class TowerStatsPanel : MonoBehaviour
         }
 
         UpdateUpgradeProgress();
+    }
+
+    private void DisplayTotalDealDamage(TowerTile tile)
+    {
+        _totalDamageDealText.text = Utils.FormatCompactNumber(tile.MyTower.TotalDamageDeal);
     }
 
     public void Hide()

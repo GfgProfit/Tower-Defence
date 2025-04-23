@@ -27,6 +27,11 @@ public class RocketLauncherTower : TowerBase, ITowerStats
     private void Start()
     {
         _rockets = _rocketProvider.GetAvailableRockets();
+
+        foreach (IRocket rocket in _rockets)
+        {
+            rocket.SetDamageCallback(OnRocketDamageDealt);
+        }
     }
 
     protected override void Update()
@@ -127,12 +132,15 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         foreach (IRocket rocket in _rockets)
         {
             if (rocket == null)
-            {
                 continue;
-            }
 
             rocket.PrepareForLaunch(_afterReloadDelay);
         }
+    }
+
+    private void OnRocketDamageDealt(float damage)
+    {
+        TotalDamageDeal += damage;
     }
 
     private void LaunchNextRocket()

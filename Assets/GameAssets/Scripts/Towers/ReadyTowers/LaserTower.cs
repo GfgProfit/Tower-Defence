@@ -50,7 +50,7 @@ public class LaserTower : TowerBase, ITowerStats
             return;
 
         Vector3 fireDirection = (_currentTarget.transform.position - _towerHead.position).normalized;
-        Ray ray = new Ray(_towerHead.position, fireDirection);
+        Ray ray = new(_towerHead.position, fireDirection);
 
         RaycastHit[] hits = Physics.RaycastAll(ray, _visionRange);
 
@@ -69,7 +69,8 @@ public class LaserTower : TowerBase, ITowerStats
         {
             if (hit.collider.TryGetComponent(out EnemyController enemy))
             {
-                enemy.HealthComponent.TakeDamage(currentDamage);
+                float actualDamage = enemy.HealthComponent.TakeDamage(_damagePerSecond);
+                TotalDamageDeal += actualDamage;
 
                 currentDamage *= damageFalloff;
                 enemiesHit++;

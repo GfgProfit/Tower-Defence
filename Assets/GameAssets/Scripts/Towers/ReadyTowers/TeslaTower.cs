@@ -144,7 +144,8 @@ public class TeslaTower : TowerBase, ITowerStats
 
     private void DealDamage(EnemyController enemy, float damage)
     {
-        enemy.HealthComponent.TakeDamage(damage);
+        float actualDamage = enemy.HealthComponent.TakeDamage(damage);
+        TotalDamageDeal += actualDamage;
     }
 
     private void ResetCooldown() => _fireCooldown = 60f / _fireRate;

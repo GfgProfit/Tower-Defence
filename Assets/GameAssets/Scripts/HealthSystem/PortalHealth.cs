@@ -25,4 +25,9 @@ public class PortalHealth : HealthBase
 
         _healthText.text = $"<color=#FF807A>HP:</color> {_currentHealth}";
     }
+
+    public void TakeDamageExtension(float damage)
+    {
+        TakeDamage(damage);
+    }
 }

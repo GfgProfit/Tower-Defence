@@ -63,4 +63,24 @@ public static class Utils
 
         return string.Join("", chars.ToArray()).Trim(separator);
     }
+
+    public static string FormatCompactNumber(float value)
+    {
+        if (value < 1_000f)
+        {
+            return value.ToString("F1");
+        }
+        else if (value < 1_000_000f)
+        {
+            return $"{value / 1_000f:F1}K";
+        }
+        else if (value < 1_000_000_000f)
+        {
+            return $"{value / 1_000_000f:F1}M";
+        }
+        else
+        {
+            return $"{value / 1_000_000_000f:F1}B";
+        }
+    }
 }

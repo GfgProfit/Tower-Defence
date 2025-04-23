@@ -16,14 +16,15 @@ public abstract class HealthBase : MonoBehaviour
         DisplayHealth();
     }
 
-    public void TakeDamage(float damage)
+    public float TakeDamage(float damage)
     {
         if (_isDead)
         {
-            return;
+            return 0f;
         }
 
-        _currentHealth -= damage;
+        float actualDamage = Mathf.Min(_currentHealth, damage);
+        _currentHealth -= actualDamage;
 
         if (_currentHealth <= 0f)
         {
@@ -32,6 +33,8 @@ public abstract class HealthBase : MonoBehaviour
         }
 
         DisplayHealth();
+
+        return actualDamage;
     }
 
     public void SetMaxHealth(float maxHealth)

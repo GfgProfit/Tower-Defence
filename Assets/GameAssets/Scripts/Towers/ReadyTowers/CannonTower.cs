@@ -82,7 +82,7 @@ public class CannonTower : TowerBase, ITowerStats
 
             if (hit.collider.TryGetComponent(out EnemyController enemy))
             {
-                FireLaserAt(hit.point);
+                PlayShotParticles();
                 DealDamage(enemy);
 
                 DOTween.Sequence()
@@ -95,9 +95,13 @@ public class CannonTower : TowerBase, ITowerStats
 
     private Vector3 GetDirectionToTarget() => (_currentTarget.position - _firePoint.position).normalized;
 
-    private void FireLaserAt(Vector3 hitPoint) => _shotParticles.Play();
+    private void PlayShotParticles() => _shotParticles.Play();
 
-    private void DealDamage(EnemyController enemy) => enemy.HealthComponent.TakeDamage(_damage);
+    private void DealDamage(EnemyController enemy)
+    {
+        float actualDamage = enemy.HealthComponent.TakeDamage(_damage);
+        TotalDamageDeal += actualDamage;
+    }
 
     private void ResetCooldown() => _fireCooldown = 60f / _fireRate;
 

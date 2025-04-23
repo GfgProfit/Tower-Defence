@@ -8,6 +8,7 @@ public class Rocket : MonoBehaviour, IRocket
     public bool IsRocketReadyToLaunch { get; private set; }
     public Vector3 StartPoint { get; private set; }
     public Quaternion StartRotation { get; private set; }
+    private System.Action<float> _onDamageDealt;
 
     private void Awake()
     {
@@ -54,14 +55,26 @@ public class Rocket : MonoBehaviour, IRocket
     public void TryDealDamage(float damage)
     {
         Collider[] colliders = Physics.OverlapSphere(transform.position, _damageRadius);
+        float totalActualDamage = 0f;
 
         foreach (Collider collider in colliders)
         {
             if (collider.TryGetComponent(out EnemyController enemy))
             {
-                enemy.HealthComponent.TakeDamage(damage);
+                float actualDamage = enemy.HealthComponent.TakeDamage(damage);
+                totalActualDamage += actualDamage;
             }
         }
+
+        if (totalActualDamage > 0)
+        {
+            _onDamageDealt?.Invoke(totalActualDamage);
+        }
+    }
+
+    public void SetDamageCallback(System.Action<float> onDamageDealt)
+    {
+        _onDamageDealt = onDamageDealt;
     }
 
     private void OnDrawGizmosSelected()
