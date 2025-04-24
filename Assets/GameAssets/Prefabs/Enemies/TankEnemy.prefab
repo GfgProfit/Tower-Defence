@@ -124,8 +124,10 @@ GameObject:
   - component: {fileID: 4649425001739677615}
   - component: {fileID: 6124360066707850024}
   - component: {fileID: 4348433189429789377}
-  - component: {fileID: 5037594763044673257}
+  - component: {fileID: 2787613729410741584}
   - component: {fileID: 6657377446456061316}
+  - component: {fileID: 8988650852391674773}
+  - component: {fileID: 68049647521208827}
   m_Layer: 0
   m_Name: TankEnemy
   m_TagString: Untagged
@@ -223,7 +225,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.5, y: 0.5, z: 0.5}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &5037594763044673257
+--- !u!114 &2787613729410741584
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -232,14 +234,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3870171386412441535}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2966a3aa44cf3a4d988f3c9c7fdb641, type: 3}
+  m_Script: {fileID: 11500000, guid: 736f5913aac296843b307dd907512d6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyHealth: {fileID: 6657377446456061316}
-  _canvasHolder: {fileID: 2805029373206095822}
-  _speed: 0.35
-  _damage: 2
-  _moneyGathering: 10
+  _damage: 1
 --- !u!114 &6657377446456061316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -253,10 +252,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentHealth: 15
-  _animationCooldown: 0.3
-  _me: {fileID: 5037594763044673257}
+  _me: {fileID: 2787613729410741584}
   _healthImage: {fileID: 4345215377376010016}
   _healthHolder: {fileID: 6681445292756409632}
+--- !u!114 &8988650852391674773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3870171386412441535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b38b8fb3159be449b063ba6cba3af49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _reachThreshold: 0.05
+--- !u!114 &68049647521208827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3870171386412441535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06b008855a195746bb01b2ce9a7650f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6439599635207658603
 GameObject:
   m_ObjectHideFlags: 0

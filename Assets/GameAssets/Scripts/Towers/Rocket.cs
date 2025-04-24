@@ -68,7 +68,7 @@ public class Rocket : MonoBehaviour, IRocket
 
         foreach (Collider collider in colliders)
         {
-            if (collider.TryGetComponent(out EnemyController enemy))
+            if (collider.TryGetComponent(out EnemyBase enemy))
             {
                 float actualDamage = enemy.HealthComponent.TakeDamage(damage, _owner);
                 totalActualDamage += actualDamage;

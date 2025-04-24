@@ -46,15 +46,15 @@ public class TowerStatsPanel : MonoBehaviour
         RefreshStats();
     }
 
-    public void Show(string towerName, string stats, TowerTile tile)
+    public void Show(TowerTile tile)
     {
         _panel.gameObject.SetActive(true);
 
-        _nameText.text = towerName;
-        _statsText.text = stats;
+        _nameText.text = $"<color={Utils.ColorToHex(tile.MyTower.ShopItemConfig.NameColor)}>{tile.MyTower.ShopItemConfig.Name}</color>";
+        _statsText.text = "";
+        _currentStatsText = "";
         _currentTile = tile;
-        _currentTowerStats = tile?.MyTower as ITowerStats;
-        _currentStatsText = stats;
+        _currentTowerStats = tile.MyTower as ITowerStats;
         _upgradeMoneyText.text = tile.MyTower.UpgradeLevel < tile.MyTower.MaxUpgrades ? Utils.FormatNumber(_currentTile.MyTower.GetNextUpgradePrice(), '.').ToString() : "MAX";
         _autoLevelText.text = $"L{tile.MyTower.AutomaticLevel}\n<size=18>{tile.MyTower.CurrentExpirience} / {tile.MyTower.ExpirienceToNextLevel} XP</size>";
 
@@ -104,7 +104,7 @@ public class TowerStatsPanel : MonoBehaviour
             string upgradedText = string.Empty;
             foreach (var stat in upgradeStats)
             {
-                upgradedText += $"{stat.Name} <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{stat.Value}</color>\n";
+                //upgradedText += $"{stat.Name} <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{stat.Value}</color>\n";
             }
 
             _statsText.text = upgradedText;
@@ -131,7 +131,7 @@ public class TowerStatsPanel : MonoBehaviour
         string stats = string.Empty;
         foreach (var statData in statDatas)
         {
-            stats += $"{statData.Name} <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{statData.Value}</color>\n";
+            //stats += $"{statData.Name} <color={Utils.ColorToHex(_currentTile.MyTower.ShopItemConfig.NameColor)}>{statData.Value}</color>\n";
         }
 
         _currentStatsText = stats;

@@ -86,7 +86,7 @@ public abstract class TowerBase : MonoBehaviour
 
         float distance = Vector3.Distance(_towerHead.position, target.position);
 
-        return distance <= _visionRange && target.GetComponent<EnemyController>() != null;
+        return distance <= _visionRange && target.GetComponent<EnemyBase>() != null;
     }
 
     private Transform FindClosestEnemyInRange()
@@ -97,7 +97,7 @@ public abstract class TowerBase : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if (!collider.TryGetComponent<EnemyController>(out var enemy))
+            if (!collider.TryGetComponent<EnemyBase>(out var enemy))
             {
                 continue;
             }

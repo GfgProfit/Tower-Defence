@@ -78,13 +78,13 @@ public class TeslaTower : TowerBase, ITowerStats
 
     private IEnumerator ChainLightningCoroutine(Transform startTarget)
     {
-        List<EnemyController> hitEnemies = new();
+        List<EnemyBase> hitEnemies = new();
         List<Vector3> points = new();
 
         float currentDamage = _damage;
         float damageFalloff = 1f - (_damageFalloffPercent / 100f);
 
-        if (startTarget.TryGetComponent(out EnemyController currentTarget))
+        if (startTarget.TryGetComponent(out EnemyBase currentTarget))
         {
             points.Add(_towerHead.position);
             points.Add(currentTarget.transform.position);
@@ -139,7 +139,7 @@ public class TeslaTower : TowerBase, ITowerStats
         Destroy(currentLineRenderer.gameObject, 0.2f);
     }
 
-    private void DealDamage(EnemyController enemy, float damage)
+    private void DealDamage(EnemyBase enemy, float damage)
     {
         float actualDamage = enemy.HealthComponent.TakeDamage(damage, this);
         TotalDamageDeal += actualDamage;
@@ -148,7 +148,7 @@ public class TeslaTower : TowerBase, ITowerStats
 
     private void ResetCooldown() => _fireCooldown = 60f / _fireRate;
 
-    private void StunEnemy(EnemyController enemy)
+    private void StunEnemy(EnemyBase enemy)
     {
         if (enemy.TryGetComponent(out IStunnable stunnable))
         {
@@ -156,16 +156,16 @@ public class TeslaTower : TowerBase, ITowerStats
         }
     }
 
-    private EnemyController FindClosestEnemy(Vector3 fromPosition, List<EnemyController> excludedEnemies)
+    private EnemyBase FindClosestEnemy(Vector3 fromPosition, List<EnemyBase> excludedEnemies)
     {
         Collider[] colliders = Physics.OverlapSphere(fromPosition, _chainRadius);
 
-        EnemyController closest = null;
+        EnemyBase closest = null;
         float minDistance = float.MaxValue;
 
         foreach (var collider in colliders)
         {
-            if (collider.TryGetComponent(out EnemyController enemy))
+            if (collider.TryGetComponent(out EnemyBase enemy))
             {
                 if (excludedEnemies.Contains(enemy))
                     continue;
@@ -186,36 +186,35 @@ public class TeslaTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Damage\n", _damage.ToString("F2")),
-            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
-            new("Radius\n", _visionRange.ToString("F2")),
-            new("Fire Rate (min)\n", $"{_fireRate:F2}"),
-            new("Damage Falloff (%)\n", _damageFalloffPercent.ToString("F2")),
-            new("Max Chains\n", _maxChainCount.ToString("F2")),
-            new("Stun Duration (s)\n", $"{_stunDuration:F2}")
+            new(_damage.ToString("F2")),
+            new(_visionRange.ToString("F2")),
+            new(_fireRate.ToString("F2")),
+            new(_damageFalloffPercent.ToString("F2")),
+            new(_stunDuration.ToString("F2")),
+            new(_rotationSpeed.ToString("F2")),
+            new(_maxChainCount.ToString("F2"))
         };
     }
 
     public List<StatData> GetStatsAfterUpgrade()
     {
-        float futureDamage = _damage * _upgradeConfig.DamageMultiplier;
-        float futureFireRate = _fireRate * _upgradeConfig.FireRateMultiplier;
-        float futureRadius = _visionRange * _upgradeConfig.VisionRangeMultiplier;
-        float futureDamageFalloff = _damageFalloffPercent * _upgradeConfig.DamageFalloffMultiplier;
-        float futureStunDuration = _stunDuration * _upgradeConfig.StunDurationMultiplier;
+        float futureDamage = (_damage * _upgradeConfig.DamageMultiplier) - _damage;
+        float futureFireRate = (_fireRate * _upgradeConfig.FireRateMultiplier) - _fireRate;
+        float futureRadius = (_visionRange * _upgradeConfig.VisionRangeMultiplier) - _visionRange;
+        float futureDamageFalloff = (_damageFalloffPercent * _upgradeConfig.DamageFalloffMultiplier) - _damageFalloffPercent;
+        float futureStunDuration = (_stunDuration * _upgradeConfig.StunDurationMultiplier) - _stunDuration;
 
-        string separator = "<color=#FFFFFF>>>></color>";
         string upgradeColor = $"<color={Utils.ColorToHex(Color.green)}>";
 
         return new List<StatData>
         {
-            new("Damage\n", $"{_damage:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
-            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
-            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>"),
-            new("Fire Rate (min)\n", $"{_fireRate:F2} {separator} {upgradeColor}{futureFireRate:F2}</color>"),
-            new("Damage Falloff (%)\n", $"{_damageFalloffPercent:F2} {separator} {upgradeColor}{futureDamageFalloff:F2}</color>"),
-            new("Max Chains\n", _maxChainCount.ToString("F2")),
-            new("Stun Duration (s)\n", $"{_stunDuration:F2} {separator} {upgradeColor} {futureStunDuration:F2}</color>")
+            new($"<b><size=20>{upgradeColor}+ {futureDamage:F2}</b></size></color>\n{_damage}"),
+            new($"<b><size=20>{upgradeColor}+ {futureFireRate:F2}</b></size></color>\n{_fireRate}"),
+            new($"<b><size=20>{upgradeColor}+ {futureRadius:F2}</b></size></color>\n{_visionRange}"),
+            new($"<b><size=20>{upgradeColor}+ {futureDamageFalloff:F2}</b></size></color>\n{_damageFalloffPercent}"),
+            new($"<b><size=20>{upgradeColor}+ {futureStunDuration:F2}</b></size></color>\n{_stunDuration}"),
+            new(_rotationSpeed.ToString("F2")),
+            new(_maxChainCount.ToString("F2"))
         };
     }
 }

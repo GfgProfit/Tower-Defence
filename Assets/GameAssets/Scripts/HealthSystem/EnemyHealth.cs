@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class EnemyHealth : HealthBase
 {
-    [SerializeField] private EnemyController _me;
+    [SerializeField] private EnemyBase _me;
     [SerializeField] private Image _healthImage;
     [SerializeField] private Transform _healthHolder;
 

@@ -14,7 +14,7 @@ public partial class WaveGenerator : MonoBehaviour
     [SerializeField] private TMP_Text _nextWaveTimerText;
 
     [Header("Enemy Types")]
-    [SerializeField] private List<EnemyType> _enemyTypes = new();
+    [SerializeField] private List<EnemyWaveType> _enemyTypes = new();
 
     [Header("Wave Settings")]
     [SerializeField] private int _baseEnemiesCount = 5;
@@ -66,13 +66,13 @@ public partial class WaveGenerator : MonoBehaviour
         int enemiesCount = CalculateEnemiesCount();
         _aliveEnemies = enemiesCount;
 
-        List<EnemyType> selectedTypes = GetEnemyTypesForWave(_currentWave);
+        List<EnemyWaveType> selectedTypes = GetEnemyTypesForWave(_currentWave);
 
         float spawnRate = Mathf.Max(0.1f, _baseSpawnRate - _spawnRateDecreasePerWave * _currentWave);
 
         for (int i = 0; i < enemiesCount; i++)
         {
-            EnemyType typeToSpawn = selectedTypes[UnityEngine.Random.Range(0, selectedTypes.Count)];
+            EnemyWaveType typeToSpawn = selectedTypes[UnityEngine.Random.Range(0, selectedTypes.Count)];
             SpawnEnemy(typeToSpawn);
             yield return new WaitForSeconds(spawnRate);
         }
@@ -82,9 +82,9 @@ public partial class WaveGenerator : MonoBehaviour
         _isSpawning = false;
     }
 
-    private void SpawnEnemy(EnemyType type)
+    private void SpawnEnemy(EnemyWaveType type)
     {
-        EnemyController enemy = Instantiate(type.EnemyPrefab, _pathPoints.GetWaypoints()[0].position, Quaternion.identity);
+        EnemyBase enemy = Instantiate(type.EnemyPrefab, _pathPoints.GetWaypoints()[0].position, Quaternion.identity);
 
         if (enemy != null)
         {
@@ -92,8 +92,10 @@ public partial class WaveGenerator : MonoBehaviour
             float speed = type.BaseSpeed * Mathf.Pow(type.SpeedGrowthFactor, _currentWave);
             int reward = Mathf.RoundToInt(type.BaseReward * Mathf.Pow(type.RewardGrowthFactor, _currentWave));
 
-            enemy.Initialize(speed, reward, health);
             enemy.name = type.Name;
+
+            enemy.Initialize(reward, health);
+            enemy.InitializeSpeed(speed);
             enemy.SetPath(_pathPoints.GetWaypoints());
 
             enemy.OnDeath += HandleEnemyDeath;
@@ -146,9 +148,9 @@ public partial class WaveGenerator : MonoBehaviour
         return enemiesCount;
     }
 
-    private List<EnemyType> GetEnemyTypesForWave(int wave)
+    private List<EnemyWaveType> GetEnemyTypesForWave(int wave)
     {
-        List<EnemyType> availableTypes = new();
+        List<EnemyWaveType> availableTypes = new();
 
         int typeCount = Mathf.Min(1 + wave / _wavesPerTypeChange, _enemyTypes.Count);
 

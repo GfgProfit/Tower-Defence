@@ -148,6 +148,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e61a5ffbcaa063a4c94e46d6d32920e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _weakEnemyPrefab: {fileID: 7402882779239320968, guid: ff4ba4810473a414982b9f09066cdda4, type: 3}
+  _fastEnemyPrefab: {fileID: 3457585247278321804, guid: b8d22b92be9784e4aac39a414975cf6d, type: 3}
+  _tankEnemyPrefab: {fileID: 2787613729410741584, guid: 8d5bb683c86233c49aef639e12fbc538, type: 3}
 --- !u!4 &1130104276
 Transform:
   m_ObjectHideFlags: 0

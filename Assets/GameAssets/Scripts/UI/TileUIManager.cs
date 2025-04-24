@@ -29,7 +29,7 @@ public class TileUIManager : MonoBehaviour
         else
         {
             _shopPanelTransform.gameObject.SetActive(false);
-            ShowStatsPanel(tile.MyTower.ShopItemConfig, tile);
+            ShowStatsPanel(tile);
         }
 
         _visualCircle.Show(tile);
@@ -41,22 +41,13 @@ public class TileUIManager : MonoBehaviour
         _visualCircle.Hide();
     }
 
-    private void ShowStatsPanel(ShopItemConfig shopItemConfig, TowerTile tile)
+    private void ShowStatsPanel(TowerTile tile)
     {
-        if (shopItemConfig == null)
+        if (tile == null)
         {
             return;
         }
 
-        var statDatas = shopItemConfig.GetTowerStats();
-        string towerName = $"<color={Utils.ColorToHex(shopItemConfig.NameColor)}>{shopItemConfig.Name}</color>";
-        string stats = string.Empty;
-
-        foreach (var statData in statDatas)
-        {
-            stats += $"{statData.Name}: <color={Utils.ColorToHex(shopItemConfig.NameColor)}>{statData.Value}</color>\n";
-        }
-
-        _statsPanelTransform.Show(towerName, stats, tile);
+        _statsPanelTransform.Show(tile);
     }
 }

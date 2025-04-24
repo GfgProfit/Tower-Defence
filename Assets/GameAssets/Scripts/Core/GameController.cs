@@ -8,10 +8,13 @@ namespace GameAssets.Global.Core
     [DefaultExecutionOrder(-100)]
     public class GameController : MonoBehaviour
     {
-        private static GameController _instance;
-        private static Bootstrapper _bootstrapper;
-
         public static GameController Instance => _instance;
+
+        [SerializeField] private WeakEnemy _weakEnemyPrefab;
+        [SerializeField] private FastEnemy _fastEnemyPrefab;
+        [SerializeField] private TankEnemy _tankEnemyPrefab;
+
+        private static GameController _instance;
 
         public EventBus EventBus { get; private set; }
 
@@ -38,21 +41,11 @@ namespace GameAssets.Global.Core
 
         private void Initialize()
         {
-            _bootstrapper = new(1);
-
-            EventBus = new();
+            SceneManager.LoadScene(1);
 
             DOTween.SetTweensCapacity(500, 200);
-        }
-    }
 
-    public class Bootstrapper
-    {
-        public Bootstrapper(int sceneId)
-        {
-            SceneManager.LoadScene(sceneId);
-
-            //etc services
+            EventBus = new();
         }
     }
 }

@@ -75,7 +75,7 @@ public class LaserTower : TowerBase, ITowerStats
 
         foreach (RaycastHit hit in hits)
         {
-            if (hit.collider.TryGetComponent(out EnemyController enemy))
+            if (hit.collider.TryGetComponent(out EnemyBase enemy))
             {
                 float actualDamage = enemy.HealthComponent.TakeDamage(_damagePerSecond, this);
                 TotalDamageDeal += actualDamage;
@@ -114,31 +114,30 @@ public class LaserTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Damage Per Second\n", _damagePerSecond.ToString("F2")),
-            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
-            new("Radius\n", _visionRange.ToString("F2")),
-            new("Damage Falloff (%)\n", _damageFalloffPercent.ToString("F2")),
-            new("Max Enemies Hit\n", _maxEnemiesHit.ToString("F2"))
+            new(_damagePerSecond.ToString("F2")),
+            new(_rotationSpeed.ToString("F2")),
+            new(_visionRange.ToString("F2")),
+            new(_damageFalloffPercent.ToString("F2")),
+            new(_maxEnemiesHit.ToString("F2"))
         };
     }
 
     public List<StatData> GetStatsAfterUpgrade()
     {
-        float futureDamage = _damagePerSecond * _upgradeConfig.DamageMultiplier;
-        float futureRadius = _visionRange * _upgradeConfig.VisionRangeMultiplier;
-        float futureDamageFalloff = _damageFalloffPercent * _upgradeConfig.DamageFalloffMultiplier;
-        float futureRotationSpeed = _rotationSpeed * _upgradeConfig.RotationSpeedMultiplier;
+        float futureDamage = (_damagePerSecond * _upgradeConfig.DamageMultiplier) - _damagePerSecond;
+        float futureRadius = (_visionRange * _upgradeConfig.VisionRangeMultiplier) - _visionRange;
+        float futureDamageFalloff = (_damageFalloffPercent * _upgradeConfig.DamageFalloffMultiplier) - _damageFalloffPercent;
+        float futureRotationSpeed = (_rotationSpeed * _upgradeConfig.RotationSpeedMultiplier) - _rotationSpeed;
 
-        string separator = "<color=#FFFFFF>>>></color>";
         string upgradeColor = $"<color={Utils.ColorToHex(Color.green)}>";
 
         return new List<StatData>
         {
-            new("Damage Per Second\n", $"{_damagePerSecond:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
-            new("Rotation Speed\n", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
-            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>"),
-            new("Damage Falloff (%)\n", $"{_damageFalloffPercent:F2} {separator} {upgradeColor}{futureDamageFalloff:F2}</color>"),
-            new("Max Enemies Hit\n", _maxEnemiesHit.ToString("F2"))
+            new($"<b><size=20>{upgradeColor}+ {futureDamage:F2}</b></size></color>\n{_damagePerSecond}"),
+            new($"<b><size=20>{upgradeColor}+ {futureRadius:F2}</b></size></color>\n{_visionRange}"),
+            new($"<b><size=20>{upgradeColor}+ {futureDamageFalloff:F2}</b></size></color>\n{_damageFalloffPercent}"),
+            new($"<b><size=20>{upgradeColor}+ {futureRotationSpeed:F2}</b></size></color>\n{_rotationSpeed}"),
+            new(_maxEnemiesHit.ToString("F2"))
         };
     }
 }

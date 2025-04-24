@@ -85,8 +85,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5631243331194220602}
   - component: {fileID: 7862848899382218678}
-  - component: {fileID: 2364991460625432785}
+  - component: {fileID: 3457585247278321804}
   - component: {fileID: 2122012315795491026}
+  - component: {fileID: 2344658340768303535}
+  - component: {fileID: 6749318705864199515}
   m_Layer: 0
   m_Name: FastEnemy
   m_TagString: Untagged
@@ -133,7 +135,7 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1569639411676948073, guid: aa0c21e20f595d3468cfc4f9d4125c41, type: 3}
---- !u!114 &2364991460625432785
+--- !u!114 &3457585247278321804
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -142,14 +144,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 6103537266332186724}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2966a3aa44cf3a4d988f3c9c7fdb641, type: 3}
+  m_Script: {fileID: 11500000, guid: c14f515c32506294fb65f5b8a67d10b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyHealth: {fileID: 2122012315795491026}
-  _canvasHolder: {fileID: 2408704093774334843}
-  _speed: 5
-  _damage: 2
-  _moneyGathering: 15
+  _damage: 1
 --- !u!114 &2122012315795491026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -163,10 +162,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentHealth: 3
-  _animationCooldown: 0.15
-  _me: {fileID: 2364991460625432785}
+  _me: {fileID: 3457585247278321804}
   _healthImage: {fileID: 1168197063129184621}
   _healthHolder: {fileID: 8789405351948758824}
+--- !u!114 &2344658340768303535
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6103537266332186724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b38b8fb3159be449b063ba6cba3af49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _reachThreshold: 0.05
+--- !u!114 &6749318705864199515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6103537266332186724}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b06b008855a195746bb01b2ce9a7650f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6329849706471004970
 GameObject:
   m_ObjectHideFlags: 0

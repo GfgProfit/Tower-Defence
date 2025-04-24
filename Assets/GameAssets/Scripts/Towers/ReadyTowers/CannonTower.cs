@@ -88,7 +88,7 @@ public class CannonTower : TowerBase, ITowerStats
         {
             Debug.DrawLine(_firePoint.position, hit.point, Color.red, 0.2f);
 
-            if (hit.collider.TryGetComponent(out EnemyController enemy))
+            if (hit.collider.TryGetComponent(out EnemyBase enemy))
             {
                 PlayShotParticles();
                 DealDamage(enemy);
@@ -105,7 +105,7 @@ public class CannonTower : TowerBase, ITowerStats
 
     private void PlayShotParticles() => _shotParticles.Play();
 
-    private void DealDamage(EnemyController enemy)
+    private void DealDamage(EnemyBase enemy)
     {
         float actualDamage = enemy.HealthComponent.TakeDamage(_damage, this);
         TotalDamageDeal += actualDamage;
@@ -118,29 +118,28 @@ public class CannonTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Damage\n", _damage.ToString("F2")),
-            new("Rotation Speed\n", _rotationSpeed.ToString("F2")),
-            new("Radius\n", _visionRange.ToString("F2")),
-            new("Fire Rate (min)\n", $"{_fireRate:F2}")
+            new(_damage.ToString("F2")),
+            new(_fireRate.ToString("F2")),
+            new(_visionRange.ToString("F2")),
+            new(_rotationSpeed.ToString("F2"))
         };
     }
 
     public List<StatData> GetStatsAfterUpgrade()
     {
-        float futureDamage = _damage * _upgradeConfig.DamageMultiplier;
-        float futureFireRate = _fireRate * _upgradeConfig.FireRateMultiplier;
-        float futureRadius = _visionRange * _upgradeConfig.VisionRangeMultiplier;
-        float futureRotationSpeed = _rotationSpeed * _upgradeConfig.RotationSpeedMultiplier;
+        float futureDamage = (_damage * _upgradeConfig.DamageMultiplier) - _damage;
+        float futureFireRate = (_fireRate * _upgradeConfig.FireRateMultiplier) - _fireRate;
+        float futureRadius = (_visionRange * _upgradeConfig.VisionRangeMultiplier) - _visionRange;
+        float futureRotationSpeed = (_rotationSpeed * _upgradeConfig.RotationSpeedMultiplier) - _rotationSpeed;
 
-        string separator = "<color=#FFFFFF>>>></color>";
         string upgradeColor = $"<color={Utils.ColorToHex(Color.green)}>";
 
         return new List<StatData>
         {
-            new("Damage\n", $"{_damage:F2} {separator} {upgradeColor}{futureDamage:F2}</color>"),
-            new("Rotation Speed\n", $"{_rotationSpeed:F2} {separator} {upgradeColor}{futureRotationSpeed:F2}</color>"),
-            new("Radius\n", $"{_visionRange:F2} {separator} {upgradeColor}{futureRadius:F2}</color>"),
-            new("Fire Rate (min)\n", $"{_fireRate:F2} {separator} {upgradeColor}{futureFireRate:F2}</color>")
+            new($"<b><size=20>{upgradeColor}+ {futureDamage:F2}</b></size></color>\n{_damage}"),
+            new($"<b><size=20>{upgradeColor}+ {futureFireRate:F2}</b></size></color>\n{_fireRate}"),
+            new($"<b><size=20>{upgradeColor}+ {futureRadius:F2}</b></size></color>\n{_visionRange}"),
+            new($"<b><size=20>{upgradeColor}+ {futureRotationSpeed:F2}</b></size></color>\n{_rotationSpeed}"),
         };
     }
 }

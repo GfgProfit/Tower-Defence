@@ -20,7 +20,7 @@ public class FreezingTower : TowerBase, ITowerStats
 
         foreach (Collider collider in colliders)
         {
-            if (collider.TryGetComponent(out EnemyController enemy))
+            if (collider.TryGetComponent(out EnemyBase enemy))
             {
                 enemy.ApplySlow(_freezeMultiplier, _freezeDuration);
             }
@@ -31,10 +31,10 @@ public class FreezingTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new("Freeze Multiplier", _freezeMultiplier.ToString()),
-            new("Freeze Duration", _freezeDuration.ToString()),
-            new("Rotation Speed", _rotationSpeed.ToString()),
-            new("Radius", _visionRange.ToString())
+            //new("Freeze Multiplier", _freezeMultiplier.ToString()),
+            //new("Freeze Duration", _freezeDuration.ToString()),
+            //new("Rotation Speed", _rotationSpeed.ToString()),
+            //new("Radius", _visionRange.ToString())
         };
     }
 
