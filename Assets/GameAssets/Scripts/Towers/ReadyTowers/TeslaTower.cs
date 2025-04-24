@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 using UnityEngine;
 
 public class TeslaTower : TowerBase, ITowerStats
@@ -43,6 +42,17 @@ public class TeslaTower : TowerBase, ITowerStats
         _upgradeConfig.ApplyUpgrade(this);
     }
 
+    protected override void UpgradeByAutoLevel()
+    {
+        base.UpgradeByAutoLevel();
+
+        _damage *= 1.06f;
+        _fireRate *= 1.05f;
+        _visionRange *= 1.03f;
+        _damageFalloffPercent *= 1.02f;
+        _stunDuration *= 1.02f;
+    }
+
     public void UpgradeTeslaTower(float damageMult, float fireRateMult, float rangeMult, float damageFalloffMult, float stunDurationMult)
     {
         _damage *= damageMult;
@@ -77,6 +87,12 @@ public class TeslaTower : TowerBase, ITowerStats
         if (startTarget.TryGetComponent(out EnemyController currentTarget))
         {
             points.Add(_towerHead.position);
+            points.Add(currentTarget.transform.position);
+
+            if (points.Count >= 2)
+            {
+                SpawnLightning(points);
+            }
 
             for (int i = 0; i < _maxChainCount; i++)
             {
@@ -87,18 +103,12 @@ public class TeslaTower : TowerBase, ITowerStats
                 StunEnemy(currentTarget);
 
                 hitEnemies.Add(currentTarget);
-                points.Add(currentTarget.transform.position);
 
                 currentTarget = FindClosestEnemy(currentTarget.transform.position, hitEnemies);
 
                 currentDamage *= damageFalloff;
 
                 yield return new WaitForSeconds(0.05f);
-            }
-
-            if (points.Count >= 2)
-            {
-                SpawnLightning(points);
             }
         }
     }
@@ -126,26 +136,14 @@ public class TeslaTower : TowerBase, ITowerStats
         currentLineRenderer.positionCount = distortedPoints.Count;
         currentLineRenderer.SetPositions(distortedPoints.ToArray());
 
-        currentLineRenderer.transform
-            .DOShakePosition(0.2f, 0.2f, 10, 90, false, true)
-            .SetEase(Ease.OutQuad);
-
-        Material materialInstance = new(currentLineRenderer.material);
-        currentLineRenderer.material = materialInstance;
-
-        materialInstance
-            .DOFade(0f, 0.2f)
-            .SetDelay(0.2f)
-            .OnComplete(() =>
-            {
-                Destroy(currentLineRenderer.gameObject);
-            });
+        Destroy(currentLineRenderer.gameObject, 0.2f);
     }
 
     private void DealDamage(EnemyController enemy, float damage)
     {
-        float actualDamage = enemy.HealthComponent.TakeDamage(damage);
+        float actualDamage = enemy.HealthComponent.TakeDamage(damage, this);
         TotalDamageDeal += actualDamage;
+        AddExpirience(Mathf.RoundToInt(actualDamage));
     }
 
     private void ResetCooldown() => _fireCooldown = 60f / _fireRate;

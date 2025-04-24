@@ -44,6 +44,14 @@ public class LaserTower : TowerBase, ITowerStats
         _rotationSpeed *= rotationSpeedMult;
     }
 
+    protected override void UpgradeByAutoLevel()
+    {
+        _damagePerSecond *= 1.04f;
+        _visionRange *= 1.01f;
+        _damageFalloffPercent *= 0.9f;
+        _rotationSpeed *= 1.015f;
+    }
+
     private void HandleAttack()
     {
         if (_currentTarget == null)
@@ -62,15 +70,16 @@ public class LaserTower : TowerBase, ITowerStats
         System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
 
         float currentDamage = _damagePerSecond * Time.deltaTime;
-        float damageFalloff = 1f - (_damageFalloffPercent / 100f); // Перевод процента в коэффициент
+        float damageFalloff = 1f - (_damageFalloffPercent / 100f);
         int enemiesHit = 0;
 
         foreach (RaycastHit hit in hits)
         {
             if (hit.collider.TryGetComponent(out EnemyController enemy))
             {
-                float actualDamage = enemy.HealthComponent.TakeDamage(_damagePerSecond);
+                float actualDamage = enemy.HealthComponent.TakeDamage(_damagePerSecond, this);
                 TotalDamageDeal += actualDamage;
+                AddExpirience(Mathf.RoundToInt(actualDamage));
 
                 currentDamage *= damageFalloff;
                 enemiesHit++;

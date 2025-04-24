@@ -107,7 +107,10 @@ MonoBehaviour:
   _visionRange: 4
   _fieldOfViewAngle: 15
   _baseUpgradePrice: 175
-  _upgradePriceMultiplier: 1.7
+  _upgradePriceMultiplier: 1.35
+  _maxUpgrades: 15
+  _baseExpToLevel: 50
+  _autoLevelMultiplier: 1.5
   _fireParticles: {fileID: 7161931477132428159}
   _upgradeConfig: {fileID: 11400000, guid: 62ddca9c235fc2a4bb5ac7682880df27, type: 2}
   _damagePerSecond: 3

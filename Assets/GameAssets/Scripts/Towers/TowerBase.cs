@@ -16,16 +16,33 @@ public abstract class TowerBase : MonoBehaviour
     [Header("Upgrade Settings")]
     [SerializeField] private int _baseUpgradePrice;
     [SerializeField] private float _upgradePriceMultiplier = 1.5f;
+    [SerializeField] private int _maxUpgrades = 15;
+
+    [Header("Automatic Level Settings")]
+    [SerializeField] private int _baseExpToLevel = 100;
+    [SerializeField] private float _autoLevelMultiplier = 1.02f;
 
     public ShopItemConfig ShopItemConfig => _shopItemConfig;
     public int UpgradeLevel => _upgradeLevel;
+    public int MaxUpgrades => _maxUpgrades;
+    public int AutomaticLevel { get; private set; } = 1;
+    public int CurrentExpirience { get; private set; } = 0;
+    public int ExpirienceToNextLevel { get; private set; } = 0;
+
     public int TotalInvested => _totalInvested;
-    public float TotalDamageDeal { get; protected set; } = 0;
+    public float TotalDamageDeal { get; protected set; } = 0.0f;
+    public int TotalEnemyKilled { get; protected set; } = 0;
 
     protected Transform _currentTarget;
     protected bool CanAttack { get; private set; }
+
     private int _upgradeLevel = 0;
     private int _totalInvested;
+
+    protected virtual void Awake()
+    {
+        ExpirienceToNextLevel = _baseExpToLevel;
+    }
 
     protected virtual void Update()
     {
@@ -44,6 +61,8 @@ public abstract class TowerBase : MonoBehaviour
 
         CanAttack = IsInVisionCone(_currentTarget);
     }
+
+    protected virtual void UpgradeByAutoLevel() { }
 
     private void UpdateTarget()
     {
@@ -135,10 +154,36 @@ public abstract class TowerBase : MonoBehaviour
 
     public virtual void Upgrade()
     {
-        if (_upgradeLevel < 15)
+        if (_upgradeLevel < MaxUpgrades)
         {
             _upgradeLevel++;
         }
+    }
+
+    public void NotifyKill()
+    {
+        TotalEnemyKilled++;
+    }
+
+    public void AddExpirience(int exp)
+    {
+        CurrentExpirience += exp;
+
+        if (CurrentExpirience >= ExpirienceToNextLevel)
+        {
+            int a = CurrentExpirience - ExpirienceToNextLevel;
+            CurrentExpirience = a;
+            AutomaticLevel++;
+
+            UpgradeByAutoLevel();
+        }
+
+        ExpirienceToNextLevel = CalcuteExpToNextLevel();
+    }
+
+    public int CalcuteExpToNextLevel()
+    {
+        return Mathf.RoundToInt(_baseExpToLevel * Mathf.Pow(_autoLevelMultiplier, AutomaticLevel));
     }
 
     private void OnDrawGizmosSelected()

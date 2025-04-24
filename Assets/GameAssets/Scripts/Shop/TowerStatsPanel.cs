@@ -3,31 +3,33 @@ using TMPro;
 using UnityEngine.UI;
 using GameAssets.Global.Core;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 public class TowerStatsPanel : MonoBehaviour
 {
-    [SerializeField] private Image[] _upgradeProgressImages;
-
-    [Space]
     [SerializeField] private RectTransform _panel;
-    [SerializeField] private Image _iconImage;
+    [SerializeField] private Slider _upgradeSlider;
+    [SerializeField] private Slider _levelSlider;
     [SerializeField] private TMP_Text _nameText;
     [SerializeField] private TMP_Text _statsText;
     [SerializeField] private TMP_Text _sellMoneyText;
     [SerializeField] private TMP_Text _upgradeMoneyText;
     [SerializeField] private TMP_Text _totalDamageDealText;
+    [SerializeField] private TMP_Text _totalEnemyKilledText;
+    [SerializeField] private TMP_Text _autoLevelText;
     [SerializeField] private CustomButton _sellButton;
     [SerializeField] private CustomButton _upgradeButton;
-    [SerializeField] private UpgradeButtonHoverHandler _upgradeHoverHandler;
+
     private string _currentStatsText;
     private TowerTile _currentTile;
     private ITowerStats _currentTowerStats;
+    private UpgradeButtonHoverHandler _upgradeHoverHandler;
 
     private void Awake()
     {
         _sellButton.OnClick.AddListener(OnSellButtonClicked);
         _upgradeButton.OnClick.AddListener(() => GameController.Instance.EventBus.RaiseUpgradeTower(_currentTile));
+
+        _upgradeHoverHandler = _upgradeButton.GetComponent<UpgradeButtonHoverHandler>();
 
         _upgradeHoverHandler.OnPointerEnterEvent += ShowUpgradePreview;
         _upgradeHoverHandler.OnPointerExitEvent += RestoreStats;
@@ -40,39 +42,40 @@ public class TowerStatsPanel : MonoBehaviour
             return;
         }
 
-        DisplayTotalDealDamage(_currentTile);
+        DisplayTotal(_currentTile);
+        RefreshStats();
     }
 
-    public void Show(Sprite icon, string towerName, string stats, TowerTile tile)
+    public void Show(string towerName, string stats, TowerTile tile)
     {
         _panel.gameObject.SetActive(true);
 
-        _iconImage.sprite = icon;
         _nameText.text = towerName;
         _statsText.text = stats;
         _currentTile = tile;
         _currentTowerStats = tile?.MyTower as ITowerStats;
         _currentStatsText = stats;
+        _upgradeMoneyText.text = tile.MyTower.UpgradeLevel < tile.MyTower.MaxUpgrades ? Utils.FormatNumber(_currentTile.MyTower.GetNextUpgradePrice(), '.').ToString() : "MAX";
+        _autoLevelText.text = $"L{tile.MyTower.AutomaticLevel}\n<size=18>{tile.MyTower.CurrentExpirience} / {tile.MyTower.ExpirienceToNextLevel} XP</size>";
 
         if (tile != null ? tile.MyTower : null != null && tile.MyTower.ShopItemConfig != null)
         {
             int sellPrice = Mathf.RoundToInt(tile.MyTower.TotalInvested * tile.MyTower.ShopItemConfig.SellMultiplier);
 
-            _sellMoneyText.text = $"<color=#FFC87F>$:</color> {Utils.FormatNumber(sellPrice, '.')}";
+            _sellMoneyText.text = Utils.FormatNumber(sellPrice, '.').ToString();
             _sellButton.gameObject.SetActive(true);
-        }
-        else
-        {
-            _sellMoneyText.text = "";
-            _sellButton.gameObject.SetActive(false);
         }
 
         UpdateUpgradeProgress();
     }
 
-    private void DisplayTotalDealDamage(TowerTile tile)
+    private void DisplayTotal(TowerTile tile)
     {
         _totalDamageDealText.text = Utils.FormatCompactNumber(tile.MyTower.TotalDamageDeal);
+        _totalEnemyKilledText.text = tile.MyTower.TotalEnemyKilled.ToString();
+        _autoLevelText.text = $"L{tile.MyTower.AutomaticLevel}\n<size=18>{tile.MyTower.CurrentExpirience} / {tile.MyTower.ExpirienceToNextLevel} XP</size>";
+        _levelSlider.maxValue = tile.MyTower.ExpirienceToNextLevel;
+        _levelSlider.value = tile.MyTower.CurrentExpirience;
     }
 
     public void Hide()
@@ -94,7 +97,7 @@ public class TowerStatsPanel : MonoBehaviour
         if (_currentTowerStats == null)
             return;
 
-        if (_currentTile.MyTower.UpgradeLevel < 15)
+        if (_currentTile.MyTower.UpgradeLevel < _currentTile.MyTower.MaxUpgrades)
         {
             List<StatData> upgradeStats = _currentTowerStats.GetStatsAfterUpgrade();
 
@@ -105,7 +108,7 @@ public class TowerStatsPanel : MonoBehaviour
             }
 
             _statsText.text = upgradedText;
-            _upgradeMoneyText.text = $"<color=#FFC87F>$:</color> {Utils.FormatNumber(_currentTile.MyTower.GetNextUpgradePrice(), '.')}";
+            _upgradeMoneyText.text = Utils.FormatNumber(_currentTile.MyTower.GetNextUpgradePrice(), '.').ToString();
         }
         else
         {
@@ -116,7 +119,6 @@ public class TowerStatsPanel : MonoBehaviour
     private void RestoreStats()
     {
         _statsText.text = _currentStatsText;
-        _upgradeMoneyText.text = string.Empty;
     }
 
     public void RefreshStats()
@@ -137,7 +139,7 @@ public class TowerStatsPanel : MonoBehaviour
 
         if (_upgradeHoverHandler != null && _upgradeHoverHandler.IsHovered)
         {
-            _upgradeMoneyText.text = $"<color=#FFC87F>$:</color> {Utils.FormatNumber(_currentTile.MyTower.GetNextUpgradePrice(), '.')}";
+            _upgradeMoneyText.text = Utils.FormatNumber(_currentTile.MyTower.GetNextUpgradePrice(), '.').ToString();
             ShowUpgradePreview();
         }
     }
@@ -147,14 +149,7 @@ public class TowerStatsPanel : MonoBehaviour
         if (_currentTile == null || _currentTile.MyTower == null)
             return;
 
-        int upgradeLevel = _currentTile.MyTower.UpgradeLevel;
-
-        for (int i = 0; i < _upgradeProgressImages.Length; i++)
-        {
-            if (i < upgradeLevel)
-                _upgradeProgressImages[i].color = Color.white;
-            else
-                _upgradeProgressImages[i].color = Color.gray;
-        }
+        _upgradeSlider.maxValue = _currentTile.MyTower.MaxUpgrades;
+        _upgradeSlider.value = _currentTile.MyTower.UpgradeLevel;
     }
 }

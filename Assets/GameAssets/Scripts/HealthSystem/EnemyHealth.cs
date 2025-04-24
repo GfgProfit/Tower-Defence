@@ -14,6 +14,11 @@ public class EnemyHealth : HealthBase
 
         GameController.Instance.EventBus.RaiseMoneyGather(_me.MoneyGathering);
 
+        if (_lastDamageSource is TowerBase tower)
+        {
+            tower.NotifyKill();
+        }
+
         _me.OnDeath?.Invoke();
 
         Destroy(gameObject);

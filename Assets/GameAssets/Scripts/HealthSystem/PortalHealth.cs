@@ -23,11 +23,11 @@ public class PortalHealth : HealthBase
             return;
         }
 
-        _healthText.text = $"<color=#FF807A>HP:</color> {_currentHealth}";
+        _healthText.text = _currentHealth.ToString();
     }
 
     public void TakeDamageExtension(float damage)
     {
-        TakeDamage(damage);
+        TakeDamage(damage, null);
     }
 }

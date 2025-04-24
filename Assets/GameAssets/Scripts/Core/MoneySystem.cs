@@ -44,8 +44,6 @@ public class MoneySystem : MonoBehaviour
 
         Money -= value;
 
-        AnimateMoneyText(0.9f);
-
         DisplayMoney();
     }
 
@@ -54,19 +52,10 @@ public class MoneySystem : MonoBehaviour
         Money += value;
 
         DisplayMoney();
-
-        AnimateMoneyText(1.1f);
     }
 
     private void DisplayMoney()
     {
-        _moneyText.text = $"<color=#FFC87F>$:</color> {Utils.FormatNumber(Money, '.')}";
-    }
-
-    private void AnimateMoneyText(float scale)
-    {
-        DOTween.Sequence()
-            .Append(_moneyText.rectTransform.DOScale(scale, 0.2f).SetEase(Ease.OutBack))
-            .Append(_moneyText.rectTransform.DOScale(1.0f, 0.2f).SetEase(Ease.OutBack));
+        _moneyText.text = Utils.FormatNumber(Money, '.').ToString();
     }
 }

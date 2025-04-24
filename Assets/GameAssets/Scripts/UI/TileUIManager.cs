@@ -30,7 +30,6 @@ public class TileUIManager : MonoBehaviour
         {
             _shopPanelTransform.gameObject.SetActive(false);
             ShowStatsPanel(tile.MyTower.ShopItemConfig, tile);
-            _statsPanelTransform.RefreshStats();
         }
 
         _visualCircle.Show(tile);
@@ -58,6 +57,6 @@ public class TileUIManager : MonoBehaviour
             stats += $"{statData.Name}: <color={Utils.ColorToHex(shopItemConfig.NameColor)}>{statData.Value}</color>\n";
         }
 
-        _statsPanelTransform.Show(shopItemConfig.TowerIcon, towerName, stats, tile);
+        _statsPanelTransform.Show(towerName, stats, tile);
     }
 }

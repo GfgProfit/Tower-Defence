@@ -15,7 +15,7 @@ public class ShopItemUI : MonoBehaviour
         _shopItemConfig = shopItemConfig;
 
         _iconImage.sprite = _shopItemConfig.TowerIcon;
-        _priceText.text = $"<color=#FFC87F>$:</color> {Utils.FormatNumber(_shopItemConfig.Price, '.')}";
+        _priceText.text = Utils.FormatNumber(_shopItemConfig.Price, '.').ToString();
 
         if (TryGetComponent(out CustomButton customButton))
         {

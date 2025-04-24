@@ -31,6 +31,8 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         foreach (IRocket rocket in _rockets)
         {
             rocket.SetDamageCallback(OnRocketDamageDealt);
+            rocket.SeeAddExpirienceCallback(OnAddExpirience);
+            rocket.SetOwner(this);
         }
     }
 
@@ -71,6 +73,17 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         _reloadTime *= reloadTimeMult;
         _afterReloadTimer *= afterReloadDelayMult;
         _flyDuration *= flyDurationMult;
+    }
+
+    protected override void UpgradeByAutoLevel()
+    {
+        _damagePerRocket *= 1.06f;
+        _visionRange *= 1.01f;
+        _rotationSpeed *= 1.01f;
+        _delayBetweenRocketLaunches *= 0.95f;
+        _reloadTime *= 0.95f;
+        _afterReloadTimer *= 0.95f;
+        _flyDuration *= 0.95f;
     }
 
     private void UpdateRocketLaunchTimer()
@@ -141,6 +154,11 @@ public class RocketLauncherTower : TowerBase, ITowerStats
     private void OnRocketDamageDealt(float damage)
     {
         TotalDamageDeal += damage;
+    }
+
+    private void OnAddExpirience(int exp)
+    {
+        AddExpirience(exp);
     }
 
     private void LaunchNextRocket()

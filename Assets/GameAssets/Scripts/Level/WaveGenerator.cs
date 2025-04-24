@@ -17,9 +17,6 @@ public partial class WaveGenerator : MonoBehaviour
     [SerializeField] private List<EnemyType> _enemyTypes = new();
 
     [Header("Wave Settings")]
-    [SerializeField] private float _healthGrowthFactor = 1.05f;
-    [SerializeField] private float _speedGrowthFactor = 1.02f;
-    [SerializeField] private float _rewardGrowthFactor = 1.04f;
     [SerializeField] private int _baseEnemiesCount = 5;
     [SerializeField] private float _enemiesGrowthRate = 1.2f;
 
@@ -91,9 +88,9 @@ public partial class WaveGenerator : MonoBehaviour
 
         if (enemy != null)
         {
-            float health = type.BaseHealth * Mathf.Pow(_healthGrowthFactor, _currentWave);
-            float speed = type.BaseSpeed * Mathf.Pow(_speedGrowthFactor, _currentWave);
-            int reward = Mathf.RoundToInt(type.BaseReward * Mathf.Pow(_rewardGrowthFactor, _currentWave));
+            float health = type.BaseHealth * Mathf.Pow(type.HealthGrowthFactor, _currentWave);
+            float speed = type.BaseSpeed * Mathf.Pow(type.SpeedGrowthFactor, _currentWave);
+            int reward = Mathf.RoundToInt(type.BaseReward * Mathf.Pow(type.RewardGrowthFactor, _currentWave));
 
             enemy.Initialize(speed, reward, health);
             enemy.name = type.Name;
@@ -122,8 +119,6 @@ public partial class WaveGenerator : MonoBehaviour
             timer -= Time.deltaTime;
             yield return null;
         }
-
-        UpdateNextWaveTimerUI(0f);
 
         if (!_isGameOver && !_isSpawning)
         {
@@ -167,11 +162,11 @@ public partial class WaveGenerator : MonoBehaviour
 
     private void UpdateWaveUI()
     {
-        _waveText.text = $"Wave: {_currentWave}";
+        _waveText.text = _currentWave.ToString();
     }
 
     private void UpdateNextWaveTimerUI(float timeLeft)
     {
-        _nextWaveTimerText.text = $"Next Wave In: {timeLeft:F1}s";
+        _nextWaveTimerText.text = timeLeft.ToString("F1");
     }
 }

@@ -108,6 +108,9 @@ MonoBehaviour:
   _fieldOfViewAngle: 180
   _baseUpgradePrice: 150
   _upgradePriceMultiplier: 1.45
+  _maxUpgrades: 15
+  _baseExpToLevel: 50
+  _autoLevelMultiplier: 1.5
   _lineRendererPrefab: {fileID: 1850568144915767601, guid: 9a4225edfffd9224fbcb6393110ec233, type: 3}
   _upgradeConfig: {fileID: 11400000, guid: 6a49b6a9a7aee3e49b7086bcf308b902, type: 2}
   _damage: 1

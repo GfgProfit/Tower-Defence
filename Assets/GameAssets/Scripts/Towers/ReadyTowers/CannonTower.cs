@@ -45,6 +45,14 @@ public class CannonTower : TowerBase, ITowerStats
         _upgradeConfig.ApplyUpgrade(this);
     }
 
+    protected override void UpgradeByAutoLevel()
+    {
+        _damage *= 1.05f;
+        _fireRate *= 1.08f;
+        _visionRange *= 1.01f;
+        _rotationSpeed *= 1.01f;
+    }
+
     public void UpgradeCannonTower(float damageMult, float fireRateMult, float rangeMult, float rotationSpeedMult)
     {
         _damage *= damageMult;
@@ -99,8 +107,9 @@ public class CannonTower : TowerBase, ITowerStats
 
     private void DealDamage(EnemyController enemy)
     {
-        float actualDamage = enemy.HealthComponent.TakeDamage(_damage);
+        float actualDamage = enemy.HealthComponent.TakeDamage(_damage, this);
         TotalDamageDeal += actualDamage;
+        AddExpirience(Mathf.RoundToInt(actualDamage));
     }
 
     private void ResetCooldown() => _fireCooldown = 60f / _fireRate;

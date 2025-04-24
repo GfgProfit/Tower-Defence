@@ -9757,6 +9757,9 @@ MonoBehaviour:
   _fieldOfViewAngle: 20
   _baseUpgradePrice: 75
   _upgradePriceMultiplier: 1.35
+  _maxUpgrades: 15
+  _baseExpToLevel: 50
+  _autoLevelMultiplier: 1.5
   _shotParticles: {fileID: 7262720086130992932}
   _firePoint: {fileID: 8784751008954278183}
   _cannonPointTransform: {fileID: 1495754078183807398}

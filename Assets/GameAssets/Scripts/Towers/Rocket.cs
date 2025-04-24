@@ -1,5 +1,7 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class Rocket : MonoBehaviour, IRocket
 {
@@ -8,12 +10,19 @@ public class Rocket : MonoBehaviour, IRocket
     public bool IsRocketReadyToLaunch { get; private set; }
     public Vector3 StartPoint { get; private set; }
     public Quaternion StartRotation { get; private set; }
-    private System.Action<float> _onDamageDealt;
+    private Action<float> _onDamageDealt;
+    private Action<int> _onExpAdd;
+    private TowerBase _owner;
 
     private void Awake()
     {
         StartPoint = transform.localPosition;
         StartRotation = transform.localRotation;
+    }
+
+    public void SetOwner(TowerBase owner)
+    {
+        _owner = owner;
     }
 
     public void PrepareForLaunch(float appearanceDuration)
@@ -61,8 +70,10 @@ public class Rocket : MonoBehaviour, IRocket
         {
             if (collider.TryGetComponent(out EnemyController enemy))
             {
-                float actualDamage = enemy.HealthComponent.TakeDamage(damage);
+                float actualDamage = enemy.HealthComponent.TakeDamage(damage, _owner);
                 totalActualDamage += actualDamage;
+
+                _onExpAdd?.Invoke(Mathf.RoundToInt(actualDamage));
             }
         }
 
@@ -72,9 +83,14 @@ public class Rocket : MonoBehaviour, IRocket
         }
     }
 
-    public void SetDamageCallback(System.Action<float> onDamageDealt)
+    public void SetDamageCallback(Action<float> onDamageDealt)
     {
         _onDamageDealt = onDamageDealt;
+    }
+
+    public void SeeAddExpirienceCallback(Action<int> onAddExp)
+    {
+        _onExpAdd = onAddExp;
     }
 
     private void OnDrawGizmosSelected()
