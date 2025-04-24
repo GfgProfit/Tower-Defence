@@ -17,6 +17,7 @@ namespace GameAssets.Global.Core
         private static GameController _instance;
 
         public EventBus EventBus { get; private set; }
+        public EnemyFactoryService EnemyFactoryService { get; private set; }
 
         private void Awake()
         {
@@ -46,6 +47,12 @@ namespace GameAssets.Global.Core
             DOTween.SetTweensCapacity(500, 200);
 
             EventBus = new();
+
+            EnemyFactoryService = new();
+
+            EnemyFactoryService.RegisterFactory(EnemyType.Tank, new TankEnemyFactory(_tankEnemyPrefab));
+            EnemyFactoryService.RegisterFactory(EnemyType.Fast, new FastEnemyFactory(_fastEnemyPrefab));
+            EnemyFactoryService.RegisterFactory(EnemyType.Weak, new WeakEnemyFactory(_weakEnemyPrefab));
         }
     }
 }

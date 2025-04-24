@@ -72,27 +72,25 @@ public partial class WaveGenerator : MonoBehaviour
 
         for (int i = 0; i < enemiesCount; i++)
         {
-            EnemyWaveType typeToSpawn = selectedTypes[UnityEngine.Random.Range(0, selectedTypes.Count)];
+            EnemyWaveType typeToSpawn = selectedTypes[Random.Range(0, selectedTypes.Count)];
             SpawnEnemy(typeToSpawn);
             yield return new WaitForSeconds(spawnRate);
         }
 
-        Debug.Log($"Spawned Wave {_currentWave} with {enemiesCount} enemies of types {string.Join("/", selectedTypes.ConvertAll(t => t.Name))}");
+        Debug.Log($"Spawned Wave {_currentWave} with {enemiesCount} enemies of types: {string.Join(", ", selectedTypes.ConvertAll(t => t.EnemyType))}");
 
         _isSpawning = false;
     }
 
     private void SpawnEnemy(EnemyWaveType type)
     {
-        EnemyBase enemy = Instantiate(type.EnemyPrefab, _pathPoints.GetWaypoints()[0].position, Quaternion.identity);
+        IEnemy enemy = GameController.Instance.EnemyFactoryService.CreateEnemy(type.EnemyType, _pathPoints.GetWaypoints()[0]);
 
         if (enemy != null)
         {
             float health = type.BaseHealth * Mathf.Pow(type.HealthGrowthFactor, _currentWave);
             float speed = type.BaseSpeed * Mathf.Pow(type.SpeedGrowthFactor, _currentWave);
             int reward = Mathf.RoundToInt(type.BaseReward * Mathf.Pow(type.RewardGrowthFactor, _currentWave));
-
-            enemy.name = type.Name;
 
             enemy.Initialize(reward, health);
             enemy.InitializeSpeed(speed);

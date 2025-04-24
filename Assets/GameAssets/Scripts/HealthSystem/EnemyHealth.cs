@@ -4,22 +4,30 @@ using UnityEngine;
 
 public class EnemyHealth : HealthBase
 {
-    [SerializeField] private EnemyBase _me;
     [SerializeField] private Image _healthImage;
     [SerializeField] private Transform _healthHolder;
+    
+    private EnemyBase _myEnemyBase;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _myEnemyBase = GetComponent<EnemyBase>();
+    }
 
     protected override void Die()
     {
         _isDead = true;
 
-        GameController.Instance.EventBus.RaiseMoneyGather(_me.MoneyGathering);
+        GameController.Instance.EventBus.RaiseMoneyGather(_myEnemyBase.MoneyGathering);
 
         if (_lastDamageSource is TowerBase tower)
         {
             tower.NotifyKill();
         }
 
-        _me.OnDeath?.Invoke();
+        _myEnemyBase.OnDeath?.Invoke();
 
         Destroy(gameObject);
     }

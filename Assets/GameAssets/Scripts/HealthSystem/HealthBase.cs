@@ -12,7 +12,7 @@ public abstract class HealthBase : MonoBehaviour
     protected abstract void DisplayHealth();
     protected abstract void Die();
 
-    private void Awake()
+    protected virtual void Awake()
     {
         DisplayHealth();
     }
@@ -43,6 +43,13 @@ public abstract class HealthBase : MonoBehaviour
     public void SetMaxHealth(float maxHealth)
     {
         MaxHealth = maxHealth;
+        _currentHealth = MaxHealth;
+
+        DisplayHealth();
+    }
+
+    public void ResetHealth()
+    {
         _currentHealth = MaxHealth;
 
         DisplayHealth();

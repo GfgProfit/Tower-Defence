@@ -4,6 +4,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] private float _reachThreshold = 0.05f;
+
     private Transform[] _waypoints;
     private int _waypointIndex;
     private float _speed;
@@ -55,4 +56,5 @@ public class EnemyMovement : MonoBehaviour
 
     public void SetSpeedMultiplier(float multiplier) => CurrentSpeed = _speed / multiplier;
     public void ResetSpeed() => CurrentSpeed = _speed;
+    public void ResetPath() => _waypointIndex = 0;
 }

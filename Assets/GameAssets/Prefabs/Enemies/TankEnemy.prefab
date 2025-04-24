@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 6657377446456061316}
   - component: {fileID: 8988650852391674773}
   - component: {fileID: 68049647521208827}
+  - component: {fileID: 2446561556636415858}
   m_Layer: 0
   m_Name: TankEnemy
   m_TagString: Untagged
@@ -237,7 +238,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 736f5913aac296843b307dd907512d6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyHealth: {fileID: 6657377446456061316}
+  _enemyType: 2
   _damage: 1
 --- !u!114 &6657377446456061316
 MonoBehaviour:
@@ -252,7 +253,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _currentHealth: 15
-  _me: {fileID: 2787613729410741584}
   _healthImage: {fileID: 4345215377376010016}
   _healthHolder: {fileID: 6681445292756409632}
 --- !u!114 &8988650852391674773
@@ -280,6 +280,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b06b008855a195746bb01b2ce9a7650f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2446561556636415858
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3870171386412441535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26f9110e60a78c045b0141f8df8d149c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _canvasHolder: {fileID: 6681445292756409632}
 --- !u!1 &6439599635207658603
 GameObject:
   m_ObjectHideFlags: 0

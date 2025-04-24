@@ -2,23 +2,23 @@ using System;
 using GameAssets.Global.Core;
 using UnityEngine;
 
-[RequireComponent(typeof(EnemyMovement), typeof(EnemyEffectsHandler))]
+[RequireComponent(typeof(EnemyHealth))]
+[RequireComponent(typeof(EnemyMovement))]
+[RequireComponent(typeof(EnemyEffectsHandler))]
 public abstract class EnemyBase : MonoBehaviour, IEnemy
 {
-    [SerializeField] private HealthBase _enemyHealth;
     [SerializeField] private int _damage = 1;
 
     public Action OnDeath { get; set; }
+    public HealthBase HealthComponent { get; private set; }
+    public int MoneyGathering { get; private set; }
 
     protected EnemyMovement _movement;
     protected EnemyEffectsHandler _effects;
-    protected int _moneyGathering;
-
-    public HealthBase HealthComponent => _enemyHealth;
-    public int MoneyGathering => _moneyGathering;
-
+ 
     protected virtual void Awake()
     {
+        HealthComponent = GetComponent<EnemyHealth>();
         _movement = GetComponent<EnemyMovement>();
         _effects = GetComponent<EnemyEffectsHandler>();
     }
@@ -37,14 +37,18 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected virtual void Update()
     {
-        if (_effects.IsStunned) return;
+        if (_effects.IsStunned)
+        {
+            return;
+        }
+
         _movement.Move(transform);
     }
 
     public virtual void Initialize(int money, float health)
     {
-        _moneyGathering = money;
-        _enemyHealth.SetMaxHealth(health);
+        MoneyGathering = money;
+        HealthComponent.SetMaxHealth(health);
     }
 
     public virtual void SetPath(Transform[] path)
@@ -55,6 +59,19 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
     public virtual void InitializeSpeed(float speed)
     {
         _movement.InitializeSpeed(speed);
+    }
+
+    public void Activate()
+    {
+        gameObject.SetActive(true);
+    }
+
+    public void Deactivate()
+    {
+        _movement.ResetPath();
+        HealthComponent.ResetHealth();
+        _effects.StopEffect();
+        gameObject.SetActive(false);
     }
 
     protected virtual void OnGameOver()
