@@ -5,6 +5,7 @@ public abstract class HealthBase : MonoBehaviour
     [SerializeField] protected float _currentHealth = 5;
 
     public float MaxHealth { get; private set; }
+    public bool IsDead => _isDead;
 
     protected bool _isDead;
     protected TowerBase _lastDamageSource;
@@ -54,4 +55,6 @@ public abstract class HealthBase : MonoBehaviour
 
         DisplayHealth();
     }
+
+    public void Dead(bool value) => _isDead = value;
 }

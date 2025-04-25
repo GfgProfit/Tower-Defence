@@ -20,4 +20,10 @@ public class TankEnemyFactory : IEnemyFactory
         TankEnemy enemyObj = Object.Instantiate(_prefab);
         return enemyObj.GetComponent<IEnemy>();
     }
+
+    public IEnemy CreateEnemyWithParent(Transform parent)
+    {
+        TankEnemy enemyObj = Object.Instantiate(_prefab, parent);
+        return enemyObj.GetComponent<IEnemy>();
+    }
 }

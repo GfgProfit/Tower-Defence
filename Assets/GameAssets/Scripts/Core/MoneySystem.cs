@@ -21,16 +21,16 @@ public class MoneySystem : MonoBehaviour
 
     private void OnEnable()
     {
-        GameController.Instance.EventBus.OnMoneySpend += SpendMoney;
-        GameController.Instance.EventBus.OnMoneyGather += GatherMoney;
-        GameController.Instance.EventBus.OnRequestMoney += HandleRequestMoney;
+        Bootstrapper.Instance.EventBus.OnMoneySpend += SpendMoney;
+        Bootstrapper.Instance.EventBus.OnMoneyGather += GatherMoney;
+        Bootstrapper.Instance.EventBus.OnRequestMoney += HandleRequestMoney;
     }
 
     private void OnDisable()
     {
-        GameController.Instance.EventBus.OnMoneySpend -= SpendMoney;
-        GameController.Instance.EventBus.OnMoneyGather -= GatherMoney;
-        GameController.Instance.EventBus.OnRequestMoney -= HandleRequestMoney;
+        Bootstrapper.Instance.EventBus.OnMoneySpend -= SpendMoney;
+        Bootstrapper.Instance.EventBus.OnMoneyGather -= GatherMoney;
+        Bootstrapper.Instance.EventBus.OnRequestMoney -= HandleRequestMoney;
     }
 
     private int HandleRequestMoney() => Money;

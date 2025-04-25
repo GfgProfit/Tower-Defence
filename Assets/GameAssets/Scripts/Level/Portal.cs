@@ -7,11 +7,11 @@ public class Portal : MonoBehaviour
 
     private void OnEnable()
     {
-        GameController.Instance.EventBus.OnPortalTakeDamage += _portalHealth.TakeDamageExtension;
+        Bootstrapper.Instance.EventBus.OnPortalTakeDamage += _portalHealth.TakeDamageExtension;
     }
 
     private void OnDisable()
     {
-        GameController.Instance.EventBus.OnPortalTakeDamage -= _portalHealth.TakeDamageExtension;
+        Bootstrapper.Instance.EventBus.OnPortalTakeDamage -= _portalHealth.TakeDamageExtension;
     }
 }

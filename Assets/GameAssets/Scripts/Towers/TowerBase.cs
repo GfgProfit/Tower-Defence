@@ -97,7 +97,7 @@ public abstract class TowerBase : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if (!collider.TryGetComponent<EnemyBase>(out var enemy))
+            if (!collider.TryGetComponent(out EnemyBase enemy))
             {
                 continue;
             }

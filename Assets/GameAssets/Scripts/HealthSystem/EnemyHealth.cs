@@ -20,7 +20,7 @@ public class EnemyHealth : HealthBase
     {
         _isDead = true;
 
-        GameController.Instance.EventBus.RaiseMoneyGather(_myEnemyBase.MoneyGathering);
+        Bootstrapper.Instance.EventBus.RaiseMoneyGather(_myEnemyBase.MoneyGathering);
 
         if (_lastDamageSource is TowerBase tower)
         {

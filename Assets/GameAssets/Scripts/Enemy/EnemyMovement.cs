@@ -16,6 +16,7 @@ public class EnemyMovement : MonoBehaviour
     {
         _waypoints = path;
         _waypointIndex = 0;
+        transform.position = _waypoints[_waypointIndex].position;
     }
 
     public void InitializeSpeed(float speed)

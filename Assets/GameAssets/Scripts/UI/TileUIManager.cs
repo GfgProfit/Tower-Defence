@@ -9,14 +9,14 @@ public class TileUIManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameController.Instance.EventBus.OnTileSelected += HandleTileSelected;
-        GameController.Instance.EventBus.OnTileDeselected += HandleTileDeselected;
+        Bootstrapper.Instance.EventBus.OnTileSelected += HandleTileSelected;
+        Bootstrapper.Instance.EventBus.OnTileDeselected += HandleTileDeselected;
     }
 
     private void OnDisable()
     {
-        GameController.Instance.EventBus.OnTileSelected -= HandleTileSelected;
-        GameController.Instance.EventBus.OnTileDeselected -= HandleTileDeselected;
+        Bootstrapper.Instance.EventBus.OnTileSelected -= HandleTileSelected;
+        Bootstrapper.Instance.EventBus.OnTileDeselected -= HandleTileDeselected;
     }
 
     private void HandleTileSelected(TowerTile tile)

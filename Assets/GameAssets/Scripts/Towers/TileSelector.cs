@@ -66,7 +66,7 @@ public class TileSelector : MonoBehaviour
         SelectedTile = tile;
         SelectedTile.Select();
 
-        GameController.Instance.EventBus.RaiseTileSelected(SelectedTile);
+        Bootstrapper.Instance.EventBus.RaiseTileSelected(SelectedTile);
     }
 
     public void DeselectTile()
@@ -78,7 +78,7 @@ public class TileSelector : MonoBehaviour
 
         SelectedTile.Deselect();
 
-        GameController.Instance.EventBus.RaiseTileDeselected(SelectedTile);
+        Bootstrapper.Instance.EventBus.RaiseTileDeselected(SelectedTile);
         SelectedTile = null;
     }
 }

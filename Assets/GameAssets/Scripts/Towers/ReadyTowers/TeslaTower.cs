@@ -168,7 +168,15 @@ public class TeslaTower : TowerBase, ITowerStats
             if (collider.TryGetComponent(out EnemyBase enemy))
             {
                 if (excludedEnemies.Contains(enemy))
+                {
                     continue;
+                }
+
+                if (enemy.HealthComponent.IsDead)
+                {
+                    _currentTarget = null;
+                    continue;
+                }
 
                 float distance = Vector3.Distance(fromPosition, enemy.transform.position);
                 if (distance < minDistance)

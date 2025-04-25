@@ -2,7 +2,7 @@
 using System;
 using UnityEngine;
 
-public class EnemyFactoryService
+public class EnemyFactoryService : IEnemyFactoryService
 {
     private readonly Dictionary<EnemyType, IEnemyFactory> _factories = new();
 
@@ -19,6 +19,16 @@ public class EnemyFactoryService
         if (_factories.TryGetValue(type, out IEnemyFactory factory))
         {
             return factory.CreateEnemy(spawnPoint);
+        }
+
+        throw new ArgumentException($"No factory registered for type: {type}");
+    }
+
+    public IEnemy CreateEnemyWithParent(EnemyType type, Transform parent)
+    {
+        if (_factories.TryGetValue(type, out IEnemyFactory factory))
+        {
+            return factory.CreateEnemyWithParent(parent);
         }
 
         throw new ArgumentException($"No factory registered for type: {type}");

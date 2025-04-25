@@ -3,8 +3,10 @@ using UnityEngine;
 
 public interface IEnemy
 {
+    EnemyType Type { get; }
     HealthBase HealthComponent { get; }
-    
+    Transform Transform { get; }
+
     int MoneyGathering { get; }
     
     void Initialize(int money, float health);
@@ -12,8 +14,6 @@ public interface IEnemy
     void SetPath(Transform[] path);
     void Stun(float duration);
     void ApplySlow(float multiplier, float duration);
-    void Activate();
-    void Deactivate();
 
     Action OnDeath { get; set; }
 }

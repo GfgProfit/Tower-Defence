@@ -20,4 +20,10 @@ public class FastEnemyFactory : IEnemyFactory
         FastEnemy enemyObj = Object.Instantiate(_prefab);
         return enemyObj.GetComponent<IEnemy>();
     }
+
+    public IEnemy CreateEnemyWithParent(Transform parent)
+    {
+        FastEnemy enemyObj = Object.Instantiate(_prefab, parent);
+        return enemyObj.GetComponent<IEnemy>();
+    }
 }

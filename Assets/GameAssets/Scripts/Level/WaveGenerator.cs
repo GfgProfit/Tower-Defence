@@ -33,20 +33,23 @@ public partial class WaveGenerator : MonoBehaviour
     private bool _isSpawning = false;
     private bool _isGameOver = false;
     private Coroutine _nextWaveCoroutine;
+    private IEnemyFactoryService _enemyFactoryService;
 
     private void Awake()
     {
+        _enemyFactoryService = Bootstrapper.ServiceLocator.Resolve<IEnemyFactoryService>();
+
         StartCoroutine(SpawnWaveCoroutine());
     }
 
     private void OnEnable()
     {
-        GameController.Instance.EventBus.OnGameOver += GameOver;
+        Bootstrapper.Instance.EventBus.OnGameOver += GameOver;
     }
 
     private void OnDisable()
     {
-        GameController.Instance.EventBus.OnGameOver -= GameOver;
+        Bootstrapper.Instance.EventBus.OnGameOver -= GameOver;
     }
 
     private void GameOver()
@@ -77,14 +80,12 @@ public partial class WaveGenerator : MonoBehaviour
             yield return new WaitForSeconds(spawnRate);
         }
 
-        Debug.Log($"Spawned Wave {_currentWave} with {enemiesCount} enemies of types: {string.Join(", ", selectedTypes.ConvertAll(t => t.EnemyType))}");
-
         _isSpawning = false;
     }
 
     private void SpawnEnemy(EnemyWaveType type)
     {
-        IEnemy enemy = GameController.Instance.EnemyFactoryService.CreateEnemy(type.EnemyType, _pathPoints.GetWaypoints()[0]);
+        IEnemy enemy = _enemyFactoryService.CreateEnemy(type.EnemyType);
 
         if (enemy != null)
         {

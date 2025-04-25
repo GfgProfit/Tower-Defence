@@ -9,28 +9,28 @@ public class ShopManager : MonoBehaviour
 
     private void OnEnable()
     {
-        GameController.Instance.EventBus.OnShopBuy += HandleShopBuy;
-        GameController.Instance.EventBus.OnSellTower += HandleSellTower;
-        GameController.Instance.EventBus.OnUpgradeTower += HandleUpgradeTower;
+        Bootstrapper.Instance.EventBus.OnShopBuy += HandleShopBuy;
+        Bootstrapper.Instance.EventBus.OnSellTower += HandleSellTower;
+        Bootstrapper.Instance.EventBus.OnUpgradeTower += HandleUpgradeTower;
     }
 
     private void OnDisable()
     {
-        GameController.Instance.EventBus.OnShopBuy -= HandleShopBuy;
-        GameController.Instance.EventBus.OnSellTower -= HandleSellTower;
-        GameController.Instance.EventBus.OnUpgradeTower -= HandleUpgradeTower;
+        Bootstrapper.Instance.EventBus.OnShopBuy -= HandleShopBuy;
+        Bootstrapper.Instance.EventBus.OnSellTower -= HandleSellTower;
+        Bootstrapper.Instance.EventBus.OnUpgradeTower -= HandleUpgradeTower;
     }
 
     private void HandleShopBuy(ShopItemConfig shopItemConfig)
     {
-        int currentMoney = GameController.Instance.EventBus.RaiseRequestMoney();
+        int currentMoney = Bootstrapper.Instance.EventBus.RaiseRequestMoney();
 
         if (currentMoney < shopItemConfig.Price)
         {
             return;
         }
 
-        GameController.Instance.EventBus.RaiseMoneySpend(shopItemConfig.Price);
+        Bootstrapper.Instance.EventBus.RaiseMoneySpend(shopItemConfig.Price);
 
         var tile = _tileSelector.SelectedTile;
         if (tile == null)
@@ -50,7 +50,7 @@ public class ShopManager : MonoBehaviour
 
         tile.SetTower(tower);
 
-        GameController.Instance.EventBus.RaiseTileSelected(tile);
+        Bootstrapper.Instance.EventBus.RaiseTileSelected(tile);
     }
 
     private void HandleSellTower(TowerTile tile)
@@ -62,13 +62,13 @@ public class ShopManager : MonoBehaviour
 
         int sellPrice = Mathf.RoundToInt(tile.MyTower.TotalInvested * tile.MyTower.ShopItemConfig.SellMultiplier);
 
-        GameController.Instance.EventBus.RaiseMoneyGather(sellPrice);
+        Bootstrapper.Instance.EventBus.RaiseMoneyGather(sellPrice);
 
         Destroy(tile.MyTower.gameObject);
         tile.SetTower(null);
         _tileSelector.DeselectTile();
 
-        GameController.Instance.EventBus.RaiseTileDeselected(tile);
+        Bootstrapper.Instance.EventBus.RaiseTileDeselected(tile);
     }
 
     private void HandleUpgradeTower(TowerTile tile)
@@ -79,16 +79,16 @@ public class ShopManager : MonoBehaviour
         if (tile.MyTower.UpgradeLevel < tile.MyTower.MaxUpgrades)
         {
             int price = tile.MyTower.GetNextUpgradePrice();
-            int playerMoney = GameController.Instance.EventBus.RaiseRequestMoney();
+            int playerMoney = Bootstrapper.Instance.EventBus.RaiseRequestMoney();
 
             if (playerMoney < price)
                 return;
 
-            GameController.Instance.EventBus.RaiseMoneySpend(price);
+            Bootstrapper.Instance.EventBus.RaiseMoneySpend(price);
             tile.MyTower.AddInvestment(price);
             tile.MyTower.Upgrade();
 
-            GameController.Instance.EventBus.RaiseTileSelected(tile);
+            Bootstrapper.Instance.EventBus.RaiseTileSelected(tile);
         }
     }
 }

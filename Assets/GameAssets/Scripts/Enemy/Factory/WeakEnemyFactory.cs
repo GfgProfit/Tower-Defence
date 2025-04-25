@@ -20,4 +20,10 @@ public class WeakEnemyFactory : IEnemyFactory
         WeakEnemy enemyObj = Object.Instantiate(_prefab);
         return enemyObj.GetComponent<IEnemy>();
     }
+
+    public IEnemy CreateEnemyWithParent(Transform parent)
+    {
+        WeakEnemy enemyObj = Object.Instantiate(_prefab, parent);
+        return enemyObj.GetComponent<IEnemy>();
+    }
 }

@@ -90,6 +90,12 @@ public class CannonTower : TowerBase, ITowerStats
 
             if (hit.collider.TryGetComponent(out EnemyBase enemy))
             {
+                if (enemy.HealthComponent.IsDead)
+                {
+                    _currentTarget = null;
+                    return;
+                }
+
                 PlayShotParticles();
                 DealDamage(enemy);
 

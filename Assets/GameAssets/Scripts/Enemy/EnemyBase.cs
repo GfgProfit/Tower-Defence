@@ -7,17 +7,23 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyEffectsHandler))]
 public abstract class EnemyBase : MonoBehaviour, IEnemy
 {
+    [SerializeField] private EnemyType _type;
     [SerializeField] private int _damage = 1;
 
     public Action OnDeath { get; set; }
     public HealthBase HealthComponent { get; private set; }
     public int MoneyGathering { get; private set; }
+    public Transform Transform { get; private set; }
+
+    public EnemyType Type => _type;
 
     protected EnemyMovement _movement;
     protected EnemyEffectsHandler _effects;
  
     protected virtual void Awake()
     {
+        Transform = transform;
+
         HealthComponent = GetComponent<EnemyHealth>();
         _movement = GetComponent<EnemyMovement>();
         _effects = GetComponent<EnemyEffectsHandler>();
@@ -25,13 +31,13 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected virtual void OnEnable()
     {
-        GameController.Instance.EventBus.OnGameOver += OnGameOver;
+        Bootstrapper.Instance.EventBus.OnGameOver += OnGameOver;
         _movement.OnPathComplete += ReachEnd;
     }
 
     protected virtual void OnDisable()
     {
-        GameController.Instance.EventBus.OnGameOver -= OnGameOver;
+        Bootstrapper.Instance.EventBus.OnGameOver -= OnGameOver;
         _movement.OnPathComplete -= ReachEnd;
     }
 
@@ -61,19 +67,6 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
         _movement.InitializeSpeed(speed);
     }
 
-    public void Activate()
-    {
-        gameObject.SetActive(true);
-    }
-
-    public void Deactivate()
-    {
-        _movement.ResetPath();
-        HealthComponent.ResetHealth();
-        _effects.StopEffect();
-        gameObject.SetActive(false);
-    }
-
     protected virtual void OnGameOver()
     {
         Destroy(gameObject);
@@ -81,7 +74,7 @@ public abstract class EnemyBase : MonoBehaviour, IEnemy
 
     protected virtual void ReachEnd()
     {
-        GameController.Instance.EventBus.RaisePortalTakeDamage(_damage);
+        Bootstrapper.Instance.EventBus.RaisePortalTakeDamage(_damage);
         OnDeath?.Invoke();
         Destroy(gameObject);
     }

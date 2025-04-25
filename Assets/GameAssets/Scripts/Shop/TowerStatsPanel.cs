@@ -27,7 +27,7 @@ public class TowerStatsPanel : MonoBehaviour
     private void Awake()
     {
         _sellButton.OnClick.AddListener(OnSellButtonClicked);
-        _upgradeButton.OnClick.AddListener(() => GameController.Instance.EventBus.RaiseUpgradeTower(_currentTile));
+        _upgradeButton.OnClick.AddListener(() => Bootstrapper.Instance.EventBus.RaiseUpgradeTower(_currentTile));
 
         _upgradeHoverHandler = _upgradeButton.GetComponent<UpgradeButtonHoverHandler>();
 
@@ -88,7 +88,7 @@ public class TowerStatsPanel : MonoBehaviour
     {
         if (_currentTile != null)
         {
-            GameController.Instance.EventBus.RaiseSellTower(_currentTile);
+            Bootstrapper.Instance.EventBus.RaiseSellTower(_currentTile);
         }
     }
 

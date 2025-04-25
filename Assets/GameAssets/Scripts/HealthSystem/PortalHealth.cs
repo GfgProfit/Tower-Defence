@@ -11,7 +11,7 @@ public class PortalHealth : HealthBase
     {
         _isDead = true;
 
-        GameController.Instance.EventBus.RaiseGameOver();
+        Bootstrapper.Instance.EventBus.RaiseGameOver();
 
         Debug.Log("Game Over!");
     }

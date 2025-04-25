@@ -25,6 +25,6 @@ public class ShopItemUI : MonoBehaviour
 
     private void OnButtonClick()
     {
-        GameController.Instance.EventBus.RaiseShopBuy(_shopItemConfig);
+        Bootstrapper.Instance.EventBus.RaiseShopBuy(_shopItemConfig);
     }
 }
