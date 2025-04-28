@@ -71,10 +71,9 @@ public class CustomVerticalLayoutGroup : MonoBehaviour
 
     private Vector2 GetPreferredSize(RectTransform child)
     {
-        TMP_Text tmp = child.GetComponent<TMP_Text>();
-        if (tmp != null)
+        if (child.TryGetComponent(out TMP_Text tmp))
         {
-            var size = tmp.GetPreferredValues();
+            Vector2 size = tmp.GetPreferredValues();
             return new Vector2(size.x, size.y);
         }
 

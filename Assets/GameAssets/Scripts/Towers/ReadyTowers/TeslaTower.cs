@@ -143,7 +143,7 @@ public class TeslaTower : TowerBase, ITowerStats
     {
         float actualDamage = enemy.HealthComponent.TakeDamage(damage, this);
         TotalDamageDeal += actualDamage;
-        AddExpirience(Mathf.RoundToInt(actualDamage));
+        AddExpirience(actualDamage);
     }
 
     private void ResetCooldown() => _fireCooldown = 60f / _fireRate;
@@ -194,13 +194,13 @@ public class TeslaTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new(_damage.ToString("F2")),
-            new(_visionRange.ToString("F2")),
-            new(_fireRate.ToString("F2")),
-            new(_damageFalloffPercent.ToString("F2")),
-            new(_stunDuration.ToString("F2")),
-            new(_rotationSpeed.ToString("F2")),
-            new(_maxChainCount.ToString("F2"))
+            new("Damage", _damage.ToString("F2")),
+            new("Fire Rate/min", _fireRate.ToString("F2")),
+            new("Radius", _visionRange.ToString("F2")),
+            new("Damage Falloff %", _damageFalloffPercent.ToString("F2")),
+            new("Stun Duration", _stunDuration.ToString("F2")),
+            new("Rotation Speed", _rotationSpeed.ToString("F2")),
+            new("Max Chains", _maxChainCount.ToString("F2"))
         };
     }
 
@@ -216,13 +216,13 @@ public class TeslaTower : TowerBase, ITowerStats
 
         return new List<StatData>
         {
-            new($"<b><size=20>{upgradeColor}+ {futureDamage:F2}</b></size></color>\n{_damage}"),
-            new($"<b><size=20>{upgradeColor}+ {futureFireRate:F2}</b></size></color>\n{_fireRate}"),
-            new($"<b><size=20>{upgradeColor}+ {futureRadius:F2}</b></size></color>\n{_visionRange}"),
-            new($"<b><size=20>{upgradeColor}+ {futureDamageFalloff:F2}</b></size></color>\n{_damageFalloffPercent}"),
-            new($"<b><size=20>{upgradeColor}+ {futureStunDuration:F2}</b></size></color>\n{_stunDuration}"),
-            new(_rotationSpeed.ToString("F2")),
-            new(_maxChainCount.ToString("F2"))
+            new("Damage", $"{_damage:F2}<b><size=20>{upgradeColor} +{futureDamage:F2}</b></size></color>"),
+            new("Fire Rate/min", $"{_fireRate:F2}<b><size=20>{upgradeColor} +{futureFireRate:F2}</b></size></color>"),
+            new("Radius", $"{_visionRange:F2}<b><size=20>{upgradeColor} +{futureRadius:F2}</b></size></color>"),
+            new("Damage Falloff %", $"{_damageFalloffPercent:F2}<b><size=20>{upgradeColor} {futureDamageFalloff:F2}</b></size></color>"),
+            new("Stun Duration", $"{_stunDuration:F2}<b><size=20>{upgradeColor} +{futureStunDuration:F2}</b></size></color>"),
+            new("Rotation Speed", _rotationSpeed.ToString("F2")),
+            new("Max Chains", _maxChainCount.ToString("F2"))
         };
     }
 }

@@ -9,7 +9,10 @@ EditorBuildSettings:
     path: Assets/Scenes/Bootstrapper.unity
     guid: 60e9f227743957343936a2161e8f529a
   - enabled: 1
-    path: Assets/Scenes/Test.unity
+    path: Assets/Scenes/MainMenu.unity
+    guid: 2a692a0e9ab95ce4eb1c95030d881a6b
+  - enabled: 1
+    path: Assets/Scenes/1.1.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 289c1b55c9541489481df5cc06664110, type: 3}

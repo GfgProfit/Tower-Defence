@@ -1,3 +1,5 @@
+using System;
+using UniRx;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,7 +28,8 @@ public abstract class TowerBase : MonoBehaviour
     public int UpgradeLevel => _upgradeLevel;
     public int MaxUpgrades => _maxUpgrades;
     public int AutomaticLevel { get; private set; } = 1;
-    public int CurrentExpirience { get; private set; } = 0;
+    public float CurrentExpirience { get; private set; } = 0;
+    public float TotalExpirience { get; private set; } = 0;
     public int ExpirienceToNextLevel { get; private set; } = 0;
 
     public int TotalInvested => _totalInvested;
@@ -165,13 +168,14 @@ public abstract class TowerBase : MonoBehaviour
         TotalEnemyKilled++;
     }
 
-    public void AddExpirience(int exp)
+    public void AddExpirience(float exp)
     {
-        CurrentExpirience += exp;
+        CurrentExpirience += exp / 2;
+        TotalExpirience += exp / 2;
 
         if (CurrentExpirience >= ExpirienceToNextLevel)
         {
-            int a = CurrentExpirience - ExpirienceToNextLevel;
+            float a = CurrentExpirience - ExpirienceToNextLevel;
             CurrentExpirience = a;
             AutomaticLevel++;
 

@@ -12,8 +12,6 @@ public class PortalHealth : HealthBase
         _isDead = true;
 
         Bootstrapper.Instance.EventBus.RaiseGameOver();
-
-        Debug.Log("Game Over!");
     }
 
     protected override void DisplayHealth()

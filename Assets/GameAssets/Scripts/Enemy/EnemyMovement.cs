@@ -8,6 +8,7 @@ public class EnemyMovement : MonoBehaviour
     private Transform[] _waypoints;
     private int _waypointIndex;
     private float _speed;
+    private Vector3 _currentOffset;
 
     public event Action OnPathComplete;
     public float CurrentSpeed { get; private set; }
@@ -30,18 +31,43 @@ public class EnemyMovement : MonoBehaviour
         if (_waypoints == null || _waypointIndex >= _waypoints.Length) return;
 
         Transform target = _waypoints[_waypointIndex];
-        enemyTransform.position = Vector3.MoveTowards(enemyTransform.position, target.position, CurrentSpeed * Time.deltaTime);
+
+        if (_currentOffset == Vector3.zero)
+        {
+            _currentOffset = GetRandomOffset();
+        }
+
+        Vector3 targetPositionWithOffset = target.position + _currentOffset;
+
+        enemyTransform.position = Vector3.MoveTowards(
+            enemyTransform.position,
+            targetPositionWithOffset,
+            CurrentSpeed * Time.deltaTime
+        );
 
         RotateTowards(enemyTransform, target);
 
-        if (Vector3.Distance(enemyTransform.position, target.position) < _reachThreshold)
+        if (Vector3.Distance(enemyTransform.position, targetPositionWithOffset) < _reachThreshold)
         {
             _waypointIndex++;
+            _currentOffset = Vector3.zero;
+
             if (_waypointIndex >= _waypoints.Length)
             {
                 OnPathComplete?.Invoke();
             }
         }
+    }
+
+    private Vector3 GetRandomOffset()
+    {
+        float maxOffset = 0.3f;
+
+        return new Vector3(
+            UnityEngine.Random.Range(-maxOffset, maxOffset),
+            0f,
+            UnityEngine.Random.Range(-maxOffset, maxOffset)
+        );
     }
 
     private void RotateTowards(Transform enemyTransform, Transform target)

@@ -79,7 +79,7 @@ public class LaserTower : TowerBase, ITowerStats
             {
                 float actualDamage = enemy.HealthComponent.TakeDamage(_damagePerSecond, this);
                 TotalDamageDeal += actualDamage;
-                AddExpirience(Mathf.RoundToInt(actualDamage));
+                AddExpirience(actualDamage);
 
                 currentDamage *= damageFalloff;
                 enemiesHit++;
@@ -114,11 +114,11 @@ public class LaserTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new(_damagePerSecond.ToString("F2")),
-            new(_rotationSpeed.ToString("F2")),
-            new(_visionRange.ToString("F2")),
-            new(_damageFalloffPercent.ToString("F2")),
-            new(_maxEnemiesHit.ToString("F2"))
+            new("Damage/sec", _damagePerSecond.ToString("F2")),
+            new("Rotation Speed", _rotationSpeed.ToString("F2")),
+            new("Radius", _visionRange.ToString("F2")),
+            new("Damage Falloff %", _damageFalloffPercent.ToString("F2")),
+            new("Penetration", _maxEnemiesHit.ToString("F2"))
         };
     }
 
@@ -133,11 +133,11 @@ public class LaserTower : TowerBase, ITowerStats
 
         return new List<StatData>
         {
-            new($"<b><size=20>{upgradeColor}+ {futureDamage:F2}</b></size></color>\n{_damagePerSecond}"),
-            new($"<b><size=20>{upgradeColor}+ {futureRadius:F2}</b></size></color>\n{_visionRange}"),
-            new($"<b><size=20>{upgradeColor}+ {futureDamageFalloff:F2}</b></size></color>\n{_damageFalloffPercent}"),
-            new($"<b><size=20>{upgradeColor}+ {futureRotationSpeed:F2}</b></size></color>\n{_rotationSpeed}"),
-            new(_maxEnemiesHit.ToString("F2"))
+            new("Damage/sec", $"{_damagePerSecond:F2}<b><size=20>{upgradeColor} +{futureDamage:F2}</b></size></color>"),
+            new("Rotation Speed", $"{_rotationSpeed:F2}<b><size=20>{upgradeColor} +{futureRotationSpeed:F2}</b></size></color>"),
+            new("Radius", $"{_visionRange:F2}<b><size=20>{upgradeColor} +{futureRadius:F2}</b></size></color>"),
+            new("Damage Falloff %", $"{_damageFalloffPercent:F2}<b><size=20>{upgradeColor} {futureDamageFalloff:F2}</b></size></color>"),
+            new("Penetration", _maxEnemiesHit.ToString("F2"))
         };
     }
 }

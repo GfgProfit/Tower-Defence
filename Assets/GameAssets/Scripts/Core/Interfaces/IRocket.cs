@@ -7,5 +7,5 @@ public interface IRocket
     void Launch(Vector3 targetPosition, float flyDuration, float damage, ParticleSystem explosionPrefab);
     void SetDamageCallback(System.Action<float> onDamageDealt);
     void SetOwner(TowerBase owner);
-    void SeeAddExpirienceCallback(System.Action<int> onAddExp);
+    void SeeAddExpirienceCallback(System.Action<float> onAddExp);
 }

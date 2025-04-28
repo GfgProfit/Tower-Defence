@@ -11,7 +11,7 @@ public class Rocket : MonoBehaviour, IRocket
     public Vector3 StartPoint { get; private set; }
     public Quaternion StartRotation { get; private set; }
     private Action<float> _onDamageDealt;
-    private Action<int> _onExpAdd;
+    private Action<float> _onExpAdd;
     private TowerBase _owner;
 
     private void Awake()
@@ -73,7 +73,7 @@ public class Rocket : MonoBehaviour, IRocket
                 float actualDamage = enemy.HealthComponent.TakeDamage(damage, _owner);
                 totalActualDamage += actualDamage;
 
-                _onExpAdd?.Invoke(Mathf.RoundToInt(actualDamage));
+                _onExpAdd?.Invoke(actualDamage);
             }
         }
 
@@ -88,7 +88,7 @@ public class Rocket : MonoBehaviour, IRocket
         _onDamageDealt = onDamageDealt;
     }
 
-    public void SeeAddExpirienceCallback(Action<int> onAddExp)
+    public void SeeAddExpirienceCallback(Action<float> onAddExp)
     {
         _onExpAdd = onAddExp;
     }

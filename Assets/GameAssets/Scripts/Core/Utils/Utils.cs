@@ -78,9 +78,25 @@ public static class Utils
         {
             return $"{value / 1_000_000f:F1}M";
         }
-        else
+        else if (value < 1_000_000_000_000f)
         {
             return $"{value / 1_000_000_000f:F1}B";
         }
+        else
+        {
+            return $"{value / 1_000_000_000_000f:F1}T";
+        }
+    }
+
+    public static string FormatWithoutDot(string input)
+    {
+        int dotIndex = input.IndexOf(',');
+
+        if (dotIndex >= 0)
+        {
+            input = input[..dotIndex];
+        }
+
+        return input;
     }
 }

@@ -156,7 +156,7 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         TotalDamageDeal += damage;
     }
 
-    private void OnAddExpirience(int exp)
+    private void OnAddExpirience(float exp)
     {
         AddExpirience(exp);
     }
@@ -199,13 +199,13 @@ public class RocketLauncherTower : TowerBase, ITowerStats
     {
         return new List<StatData>
         {
-            new(_damagePerRocket.ToString("F2")),
-            new(_rotationSpeed.ToString("F2")),
-            new(_visionRange.ToString("F2")),
-            new(_delayBetweenRocketLaunches.ToString("F2")),
-            new(_reloadTime.ToString("F2")),
-            new(_afterReloadDelay.ToString("F2")),
-            new(_flyDuration.ToString("F2"))
+            new("Damage/Rocket", _damagePerRocket.ToString("F2")),
+            new("Rotation Speed", _rotationSpeed.ToString("F2")),
+            new("Radius", _visionRange.ToString("F2")),
+            new("Delay/Rocket", _delayBetweenRocketLaunches.ToString("F2")),
+            new("Reload Time", _reloadTime.ToString("F2")),
+            new("Rocket Fly Duration", _flyDuration.ToString("F2")),
+            new("After Reload Delay", _afterReloadDelay.ToString("F2"))
         };
     }
 
@@ -216,20 +216,19 @@ public class RocketLauncherTower : TowerBase, ITowerStats
         float futureRotationSpeed = (_rotationSpeed * _upgradeConfig.RotationSpeedMultiplier) - _rotationSpeed;
         float futureDelayBetweenRockets = (_delayBetweenRocketLaunches * _upgradeConfig.DelayBetweenRocketLaunchesMultiplier) - _delayBetweenRocketLaunches;
         float futureReloadTime = (_reloadTime * _upgradeConfig.ReloadTimeMultiplier) - _reloadTime;
-        float futureAfterReloadDelay = (_afterReloadDelay * _upgradeConfig.AfterReloadDelayMultiplier) - _afterReloadDelay;
         float futureFlyDuration = (_flyDuration * _upgradeConfig.FlyDurationMultiplier) - _flyDuration;
 
         string upgradeColor = $"<color={Utils.ColorToHex(Color.green)}>";
 
         return new List<StatData>
         {
-            new($"<b><size=20>{upgradeColor}+ {futureDamage:F2}</b></size></color>\n{_damagePerRocket}"),
-            new($"<b><size=20>{upgradeColor}+ {futureRotationSpeed:F2}</b></size></color>\n{_rotationSpeed}"),
-            new($"<b><size=20>{upgradeColor}+ {futureRadius:F2}</b></size></color>\n{_visionRange}"),
-            new($"<b><size=20>{upgradeColor}+ {futureDelayBetweenRockets:F2}</b></size></color>\n{_delayBetweenRocketLaunches}"),
-            new($"<b><size=20>{upgradeColor}+ {futureReloadTime:F2}</b></size></color>\n{_reloadTime}"),
-            new($"<b><size=20>{upgradeColor}+ {futureAfterReloadDelay:F2}</b></size></color>\n{_afterReloadDelay}"),
-            new($"<b><size=20>{upgradeColor}+ {futureFlyDuration:F2}</b></size></color>\n{_flyDuration}")
+            new("Damage/Rocket", $"{_damagePerRocket:F2}<b><size=20>{upgradeColor} +{futureDamage:F2}</b></size></color>"),
+            new("Rotation Speed", $"{_rotationSpeed:F2}<b><size=20>{upgradeColor} +{futureRotationSpeed:F2}</b></size></color>"),
+            new("Radius", $"{_visionRange:F2}<b><size=20>{upgradeColor} +{futureRadius:F2}</b></size></color>"),
+            new("Delay/Rocket", $"{_delayBetweenRocketLaunches:F2}<b><size=20>{upgradeColor} {futureDelayBetweenRockets:F2}</b></size></color>"),
+            new("Reload Time", $"{_reloadTime:F2}<b><size=20>{upgradeColor} {futureReloadTime:F2}</b></size></color>"),
+            new("Rocket Fly Duration", $"{_flyDuration:F2}<b><size=20>{upgradeColor} {futureFlyDuration:F2}</b></size></color>"),
+            new("After Reload Delay", _afterReloadDelay.ToString("F2"))
         };
     }
 }

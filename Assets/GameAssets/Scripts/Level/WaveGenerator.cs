@@ -28,6 +28,8 @@ public partial class WaveGenerator : MonoBehaviour
     [Header("Enemy Type Progression")]
     [SerializeField] private int _wavesPerTypeChange = 10;
 
+    public int CurrentWave => _currentWave;
+
     private int _currentWave = 0;
     private int _aliveEnemies = 0;
     private bool _isSpawning = false;

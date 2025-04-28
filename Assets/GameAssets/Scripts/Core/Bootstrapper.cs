@@ -69,5 +69,10 @@ namespace GameAssets.Global.Core
 
             return factoryService;
         }
+
+        public static void LoadScene(int id) => SceneManager.LoadScene(id);
+        public static void LoadScene(string name) => SceneManager.LoadScene(name);
+        public static void LoadSceneAsync(int id) => SceneManager.LoadSceneAsync(id);
+        public static void LoadSceneAsync(string name) => SceneManager.LoadSceneAsync(name);
     }
 }
