@@ -66,26 +66,19 @@ public static class Utils
 
     public static string FormatCompactNumber(float value)
     {
-        if (value < 1_000f)
+        double doubleValue = value;
+
+        string[] suffixes = { "", "K", "M", "B", "T" };
+
+        int suffixIndex = 0;
+
+        while (doubleValue >= 1000d && suffixIndex < suffixes.Length - 1)
         {
-            return value.ToString("F1");
+            doubleValue /= 1000d;
+            suffixIndex++;
         }
-        else if (value < 1_000_000f)
-        {
-            return $"{value / 1_000f:F1}K";
-        }
-        else if (value < 1_000_000_000f)
-        {
-            return $"{value / 1_000_000f:F1}M";
-        }
-        else if (value < 1_000_000_000_000f)
-        {
-            return $"{value / 1_000_000_000f:F1}B";
-        }
-        else
-        {
-            return $"{value / 1_000_000_000_000f:F1}T";
-        }
+
+        return $"{doubleValue.ToString("F1", System.Globalization.CultureInfo.InvariantCulture)}{suffixes[suffixIndex]}";
     }
 
     public static string FormatWithoutDot(string input)

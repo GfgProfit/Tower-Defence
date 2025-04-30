@@ -115,6 +115,7 @@ public class CannonTower : TowerBase, ITowerStats
     {
         float actualDamage = enemy.HealthComponent.TakeDamage(_damage, this);
         TotalDamageDeal += actualDamage;
+        _sceneTotalHandler.TotalDamageDeal += actualDamage;
         AddExpirience(actualDamage);
     }
 

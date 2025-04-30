@@ -10,6 +10,7 @@ public class GameOverMenuUI : MonoBehaviour
     [SerializeField] private TMP_Text _statsText;
     [SerializeField] private CustomButton _quitButton;
     [SerializeField] private WaveGenerator _waveGenerator;
+    [SerializeField] private SceneTotalHandler _sceneTotalHandler;
 
     private void Awake()
     {
@@ -32,24 +33,10 @@ public class GameOverMenuUI : MonoBehaviour
 
         _gameOverScreen.gameObject.SetActive(true);
 
-        TowerBase[] allTowers = FindObjectsByType<TowerBase>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-
-        float totalKills = 0;
-        float totalXP = 0;
-        float totalDamage = 0;
-        float totalScore = (totalDamage + totalKills + totalXP) / 2;
-
-        foreach (TowerBase tower in allTowers)
-        {
-            totalKills += tower.TotalEnemyKilled;
-            totalXP += tower.TotalExpirience;
-            totalDamage += tower.TotalDamageDeal;
-        }
-
-        _statsText.text = $"Total Kills: <color=#D66E74>{totalKills}</color>\n" +
-                          $"Total XP Earned: <color=#6E9FD6>{Utils.FormatCompactNumber(totalXP)}</color>\n" +
-                          $"Total Damage Deal: <color=#D6A26E>{Utils.FormatCompactNumber(totalDamage)}</color>\n\n" +
-                          $"Wave Survived: {_waveGenerator.CurrentWave - 1}\n" +
-                          $"Total Score: {Utils.FormatCompactNumber(totalScore)}";
+        _statsText.text = $"Total Kills: <color=#D66E74>{_sceneTotalHandler.TotalKills}</color>\n" +
+                          $"Total XP Earned: <color=#6E9FD6>{Utils.FormatCompactNumber(_sceneTotalHandler.TotalXPEarned)}</color>\n" +
+                          $"Total Damage Deal: <color=#D6A26E>{Utils.FormatCompactNumber(_sceneTotalHandler.TotalDamageDeal)}</color>\n\n" +
+                          $"Wave Survived: <color=#5600FF>{_waveGenerator.CurrentWave - 1}</color>\n" +
+                          $"Total Score: <color=#8BFFD5>{Utils.FormatCompactNumber((_sceneTotalHandler.TotalDamageDeal + _sceneTotalHandler.TotalKills + _sceneTotalHandler.TotalXPEarned) / 2)}</color>";
     }
 }

@@ -79,6 +79,7 @@ public class LaserTower : TowerBase, ITowerStats
             {
                 float actualDamage = enemy.HealthComponent.TakeDamage(_damagePerSecond, this);
                 TotalDamageDeal += actualDamage;
+                _sceneTotalHandler.TotalDamageDeal += actualDamage;
                 AddExpirience(actualDamage);
 
                 currentDamage *= damageFalloff;

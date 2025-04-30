@@ -29,14 +29,15 @@ public abstract class TowerBase : MonoBehaviour
     public int MaxUpgrades => _maxUpgrades;
     public int AutomaticLevel { get; private set; } = 1;
     public float CurrentExpirience { get; private set; } = 0;
-    public float TotalExpirience { get; private set; } = 0;
     public int ExpirienceToNextLevel { get; private set; } = 0;
 
     public int TotalInvested => _totalInvested;
     public float TotalDamageDeal { get; protected set; } = 0.0f;
     public int TotalEnemyKilled { get; protected set; } = 0;
+    public float TotalExpirience { get; private set; } = 0;
 
     protected Transform _currentTarget;
+    protected SceneTotalHandler _sceneTotalHandler;
     protected bool CanAttack { get; private set; }
 
     private int _upgradeLevel = 0;
@@ -45,6 +46,7 @@ public abstract class TowerBase : MonoBehaviour
     protected virtual void Awake()
     {
         ExpirienceToNextLevel = _baseExpToLevel;
+        _sceneTotalHandler = FindAnyObjectByType<SceneTotalHandler>();
     }
 
     protected virtual void Update()
@@ -166,12 +168,14 @@ public abstract class TowerBase : MonoBehaviour
     public void NotifyKill()
     {
         TotalEnemyKilled++;
+        _sceneTotalHandler.TotalKills++;
     }
 
     public void AddExpirience(float exp)
     {
         CurrentExpirience += exp / 2;
         TotalExpirience += exp / 2;
+        _sceneTotalHandler.TotalXPEarned += exp / 2;
 
         if (CurrentExpirience >= ExpirienceToNextLevel)
         {

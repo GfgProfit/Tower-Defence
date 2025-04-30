@@ -143,6 +143,7 @@ public class TeslaTower : TowerBase, ITowerStats
     {
         float actualDamage = enemy.HealthComponent.TakeDamage(damage, this);
         TotalDamageDeal += actualDamage;
+        _sceneTotalHandler.TotalDamageDeal += actualDamage;
         AddExpirience(actualDamage);
     }
 
@@ -199,8 +200,7 @@ public class TeslaTower : TowerBase, ITowerStats
             new("Radius", _visionRange.ToString("F2")),
             new("Damage Falloff %", _damageFalloffPercent.ToString("F2")),
             new("Stun Duration", _stunDuration.ToString("F2")),
-            new("Rotation Speed", _rotationSpeed.ToString("F2")),
-            new("Max Chains", _maxChainCount.ToString("F2"))
+            new("Max Chains", _maxChainCount.ToString("F0"))
         };
     }
 
@@ -221,8 +221,7 @@ public class TeslaTower : TowerBase, ITowerStats
             new("Radius", $"{_visionRange:F2}<b><size=20>{upgradeColor} +{futureRadius:F2}</b></size></color>"),
             new("Damage Falloff %", $"{_damageFalloffPercent:F2}<b><size=20>{upgradeColor} {futureDamageFalloff:F2}</b></size></color>"),
             new("Stun Duration", $"{_stunDuration:F2}<b><size=20>{upgradeColor} +{futureStunDuration:F2}</b></size></color>"),
-            new("Rotation Speed", _rotationSpeed.ToString("F2")),
-            new("Max Chains", _maxChainCount.ToString("F2"))
+            new("Max Chains", _maxChainCount.ToString("F0"))
         };
     }
 }

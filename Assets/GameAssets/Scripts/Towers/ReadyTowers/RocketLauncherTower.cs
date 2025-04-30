@@ -154,6 +154,7 @@ public class RocketLauncherTower : TowerBase, ITowerStats
     private void OnRocketDamageDealt(float damage)
     {
         TotalDamageDeal += damage;
+        _sceneTotalHandler.TotalDamageDeal += damage;
     }
 
     private void OnAddExpirience(float exp)
